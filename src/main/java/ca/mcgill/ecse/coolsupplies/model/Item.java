@@ -27,6 +27,7 @@ public class Item
   //Item Associations
   private Admin admin;
   private List<Order> order;
+  private List<Bundle> bundle;
 
   //------------------------
   // CONSTRUCTOR
@@ -43,6 +44,7 @@ public class Item
       throw new RuntimeException("Unable to create item due to admin. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     order = new ArrayList<Order>();
+    bundle = new ArrayList<Bundle>();
   }
 
   //------------------------
@@ -133,6 +135,36 @@ public class Item
   public int indexOfOrder(Order aOrder)
   {
     int index = order.indexOf(aOrder);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public Bundle getBundle(int index)
+  {
+    Bundle aBundle = bundle.get(index);
+    return aBundle;
+  }
+
+  public List<Bundle> getBundle()
+  {
+    List<Bundle> newBundle = Collections.unmodifiableList(bundle);
+    return newBundle;
+  }
+
+  public int numberOfBundle()
+  {
+    int number = bundle.size();
+    return number;
+  }
+
+  public boolean hasBundle()
+  {
+    boolean has = bundle.size() > 0;
+    return has;
+  }
+
+  public int indexOfBundle(Bundle aBundle)
+  {
+    int index = bundle.indexOf(aBundle);
     return index;
   }
   /* Code from template association_SetOneToMany */
@@ -236,6 +268,88 @@ public class Item
     }
     return wasAdded;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfBundle()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addBundle(Bundle aBundle)
+  {
+    boolean wasAdded = false;
+    if (bundle.contains(aBundle)) { return false; }
+    bundle.add(aBundle);
+    if (aBundle.indexOfItem(this) != -1)
+    {
+      wasAdded = true;
+    }
+    else
+    {
+      wasAdded = aBundle.addItem(this);
+      if (!wasAdded)
+      {
+        bundle.remove(aBundle);
+      }
+    }
+    return wasAdded;
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeBundle(Bundle aBundle)
+  {
+    boolean wasRemoved = false;
+    if (!bundle.contains(aBundle))
+    {
+      return wasRemoved;
+    }
+
+    int oldIndex = bundle.indexOf(aBundle);
+    bundle.remove(oldIndex);
+    if (aBundle.indexOfItem(this) == -1)
+    {
+      wasRemoved = true;
+    }
+    else
+    {
+      wasRemoved = aBundle.removeItem(this);
+      if (!wasRemoved)
+      {
+        bundle.add(oldIndex,aBundle);
+      }
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addBundleAt(Bundle aBundle, int index)
+  {  
+    boolean wasAdded = false;
+    if(addBundle(aBundle))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfBundle()) { index = numberOfBundle() - 1; }
+      bundle.remove(aBundle);
+      bundle.add(index, aBundle);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveBundleAt(Bundle aBundle, int index)
+  {
+    boolean wasAdded = false;
+    if(bundle.contains(aBundle))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfBundle()) { index = numberOfBundle() - 1; }
+      bundle.remove(aBundle);
+      bundle.add(index, aBundle);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addBundleAt(aBundle, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
@@ -250,6 +364,12 @@ public class Item
     for(Order aOrder : copyOfOrder)
     {
       aOrder.removeItem(this);
+    }
+    ArrayList<Bundle> copyOfBundle = new ArrayList<Bundle>(bundle);
+    bundle.clear();
+    for(Bundle aBundle : copyOfBundle)
+    {
+      aBundle.removeItem(this);
     }
   }
 

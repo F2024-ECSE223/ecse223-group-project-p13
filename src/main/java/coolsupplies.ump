@@ -68,6 +68,7 @@ association{
   * Guardian guardian -- * Student child;
   * Order order -- * Item item;
   * Order order -- * Bundle bundle;
+  * Bundle bundle -- * Item item;
   1 Order order -- * Student student;
   1 School school -- 0..12 GradeLevel gradeLevel;
   1 GradeLevel gradeLevel -- * Student student;

@@ -19,6 +19,7 @@ public class Bundle
   //Bundle Associations
   private Admin admin;
   private List<Order> order;
+  private List<Item> item;
   private List<GradeLevel> gradeLevel;
 
   //------------------------
@@ -35,6 +36,7 @@ public class Bundle
       throw new RuntimeException("Unable to create bundle due to admin. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     order = new ArrayList<Order>();
+    item = new ArrayList<Item>();
     gradeLevel = new ArrayList<GradeLevel>();
   }
 
@@ -105,6 +107,36 @@ public class Bundle
   public int indexOfOrder(Order aOrder)
   {
     int index = order.indexOf(aOrder);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public Item getItem(int index)
+  {
+    Item aItem = item.get(index);
+    return aItem;
+  }
+
+  public List<Item> getItem()
+  {
+    List<Item> newItem = Collections.unmodifiableList(item);
+    return newItem;
+  }
+
+  public int numberOfItem()
+  {
+    int number = item.size();
+    return number;
+  }
+
+  public boolean hasItem()
+  {
+    boolean has = item.size() > 0;
+    return has;
+  }
+
+  public int indexOfItem(Item aItem)
+  {
+    int index = item.indexOf(aItem);
     return index;
   }
   /* Code from template association_GetMany */
@@ -239,6 +271,88 @@ public class Bundle
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfItem()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addItem(Item aItem)
+  {
+    boolean wasAdded = false;
+    if (item.contains(aItem)) { return false; }
+    item.add(aItem);
+    if (aItem.indexOfBundle(this) != -1)
+    {
+      wasAdded = true;
+    }
+    else
+    {
+      wasAdded = aItem.addBundle(this);
+      if (!wasAdded)
+      {
+        item.remove(aItem);
+      }
+    }
+    return wasAdded;
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeItem(Item aItem)
+  {
+    boolean wasRemoved = false;
+    if (!item.contains(aItem))
+    {
+      return wasRemoved;
+    }
+
+    int oldIndex = item.indexOf(aItem);
+    item.remove(oldIndex);
+    if (aItem.indexOfBundle(this) == -1)
+    {
+      wasRemoved = true;
+    }
+    else
+    {
+      wasRemoved = aItem.removeBundle(this);
+      if (!wasRemoved)
+      {
+        item.add(oldIndex,aItem);
+      }
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addItemAt(Item aItem, int index)
+  {  
+    boolean wasAdded = false;
+    if(addItem(aItem))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfItem()) { index = numberOfItem() - 1; }
+      item.remove(aItem);
+      item.add(index, aItem);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveItemAt(Item aItem, int index)
+  {
+    boolean wasAdded = false;
+    if(item.contains(aItem))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfItem()) { index = numberOfItem() - 1; }
+      item.remove(aItem);
+      item.add(index, aItem);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addItemAt(aItem, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfGradeLevel()
   {
     return 0;
@@ -341,6 +455,12 @@ public class Bundle
     for(Order aOrder : copyOfOrder)
     {
       aOrder.removeBundle(this);
+    }
+    ArrayList<Item> copyOfItem = new ArrayList<Item>(item);
+    item.clear();
+    for(Item aItem : copyOfItem)
+    {
+      aItem.removeBundle(this);
     }
     for(int i=gradeLevel.size(); i > 0; i--)
     {
