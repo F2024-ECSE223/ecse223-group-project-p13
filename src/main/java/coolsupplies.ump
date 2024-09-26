@@ -3,19 +3,19 @@ namespace ca.mcgill.ecse.coolsupplies.model;
 enum Importance { mandatory, recommended, optional };
 
 class Application {
-	1 <@>- * User user;
+  1 <@>- * User user;
 }
 
 class User {
-	abstract;
+  abstract;
   immutable name;
   password;
 }
 
-class Admin {
   isA User;
   name = "admin@cool.ca";
   password = "admin";
+class Admin {
 }
 
 class Guardian {
@@ -25,7 +25,7 @@ class Guardian {
 }
 
 class Order {
-	Boolean studentPickup;
+  Boolean studentPickup;
   Date date;
   Double fee;
   Integer authorizationCode;
@@ -35,26 +35,26 @@ class Order {
 }
 
 class School {
-	Date startDate;
+  Date startDate;
   Date endDate;
 }
 
+name;
 class Student {
-	name;
 }
 
 class GradeLevel {
   Integer index;
-	levelName;
+  levelName;
 }
 
 class Bundle {
-	Double discountAmount;
+  Double discountAmount;
   Boolean discount;
 }
 
 class Item {
-	name;
+  name;
   Double price;
   lazy Integer count;
   lazy Importance importance;
