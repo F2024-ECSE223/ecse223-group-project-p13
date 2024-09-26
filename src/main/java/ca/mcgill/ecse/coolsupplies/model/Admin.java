@@ -20,7 +20,7 @@ public class Admin extends User
   //------------------------
 
   //Admin Attributes
-  private String name;
+  private String email;
   private String password;
 
   //Admin Associations
@@ -33,10 +33,10 @@ public class Admin extends User
   // CONSTRUCTOR
   //------------------------
 
-  public Admin(String aName, String aPassword, Application aApplication, School aSchool)
+  public Admin(String aEmail, String aPassword, Application aApplication, School aSchool)
   {
-    super(aName, aPassword, aApplication);
-    name = "admin@cool.ca";
+    super(aEmail, aPassword, aApplication);
+    email = "admin@cool.ca";
     password = "admin";
     if (aSchool == null || aSchool.getAdmin() != null)
     {
@@ -48,10 +48,10 @@ public class Admin extends User
     guardian = new ArrayList<Guardian>();
   }
 
-  public Admin(String aName, String aPassword, Application aApplication, Date aStartDateForSchool, Date aEndDateForSchool)
+  public Admin(String aEmail, String aPassword, Application aApplication, Date aStartDateForSchool, Date aEndDateForSchool)
   {
-    super(aName, aPassword, aApplication);
-    name = "admin@cool.ca";
+    super(aEmail, aPassword, aApplication);
+    email = "admin@cool.ca";
     password = "admin";
     school = new School(aStartDateForSchool, aEndDateForSchool, this);
     bundle = new ArrayList<Bundle>();
@@ -63,10 +63,10 @@ public class Admin extends User
   // INTERFACE
   //------------------------
 
-  public boolean setName(String aName)
+  public boolean setEmail(String aEmail)
   {
     boolean wasSet = false;
-    name = aName;
+    email = aEmail;
     wasSet = true;
     return wasSet;
   }
@@ -79,9 +79,9 @@ public class Admin extends User
     return wasSet;
   }
 
-  public String getName()
+  public String getEmail()
   {
-    return name;
+    return email;
   }
 
   public String getPassword()
@@ -333,9 +333,9 @@ public class Admin extends User
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Guardian addGuardian(String aName, String aPassword, Application aApplication)
+  public Guardian addGuardian(String aEmail, String aPassword, Application aApplication)
   {
-    return new Guardian(aName, aPassword, aApplication, this);
+    return new Guardian(aEmail, aPassword, aApplication, this);
   }
 
   public boolean addGuardian(Guardian aGuardian)
@@ -430,7 +430,7 @@ public class Admin extends User
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "," +
+            "email" + ":" + getEmail()+ "," +
             "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "school = "+(getSchool()!=null?Integer.toHexString(System.identityHashCode(getSchool())):"null");
   }

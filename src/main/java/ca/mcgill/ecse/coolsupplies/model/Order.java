@@ -5,7 +5,7 @@ package ca.mcgill.ecse.coolsupplies.model;
 import java.sql.Date;
 import java.util.*;
 
-// line 27 "../../../../../coolsupplies.ump"
+// line 28 "../../../../../coolsupplies.ump"
 public class Order
 {
 

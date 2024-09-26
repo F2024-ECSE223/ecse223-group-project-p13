@@ -12,7 +12,7 @@ public abstract class User
   //------------------------
 
   //User Attributes
-  private String name;
+  private String email;
   private String password;
 
   //User Associations
@@ -22,9 +22,9 @@ public abstract class User
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aName, String aPassword, Application aApplication)
+  public User(String aEmail, String aPassword, Application aApplication)
   {
-    name = aName;
+    email = aEmail;
     password = aPassword;
     boolean didAddApplication = setApplication(aApplication);
     if (!didAddApplication)
@@ -37,6 +37,14 @@ public abstract class User
   // INTERFACE
   //------------------------
 
+  public boolean setEmail(String aEmail)
+  {
+    boolean wasSet = false;
+    email = aEmail;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setPassword(String aPassword)
   {
     boolean wasSet = false;
@@ -45,9 +53,9 @@ public abstract class User
     return wasSet;
   }
 
-  public String getName()
+  public String getEmail()
   {
-    return name;
+    return email;
   }
 
   public String getPassword()
@@ -93,7 +101,7 @@ public abstract class User
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "," +
+            "email" + ":" + getEmail()+ "," +
             "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "application = "+(getApplication()!=null?Integer.toHexString(System.identityHashCode(getApplication())):"null");
   }

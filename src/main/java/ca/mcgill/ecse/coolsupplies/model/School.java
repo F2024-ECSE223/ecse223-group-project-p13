@@ -5,7 +5,7 @@ package ca.mcgill.ecse.coolsupplies.model;
 import java.sql.Date;
 import java.util.*;
 
-// line 37 "../../../../../coolsupplies.ump"
+// line 38 "../../../../../coolsupplies.ump"
 public class School
 {
 
@@ -37,11 +37,11 @@ public class School
     gradeLevel = new ArrayList<GradeLevel>();
   }
 
-  public School(Date aStartDate, Date aEndDate, String aNameForAdmin, String aPasswordForAdmin, Application aApplicationForAdmin)
+  public School(Date aStartDate, Date aEndDate, String aEmailForAdmin, String aPasswordForAdmin, Application aApplicationForAdmin)
   {
     startDate = aStartDate;
     endDate = aEndDate;
-    admin = new Admin(aNameForAdmin, aPasswordForAdmin, aApplicationForAdmin, this);
+    admin = new Admin(aEmailForAdmin, aPasswordForAdmin, aApplicationForAdmin, this);
     gradeLevel = new ArrayList<GradeLevel>();
   }
 

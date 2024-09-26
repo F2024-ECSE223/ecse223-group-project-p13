@@ -8,18 +8,19 @@ class Application {
 
 class User {
   abstract;
-  immutable name;
+  email;
   password;
 }
 
 class Admin {
   isA User;
-  name = "admin@cool.ca";
+  email = "admin@cool.ca";
   password = "admin";
 }
 
 class Guardian {
   isA User;
+  email;
   lazy name;
   lazy phoneNumber;
 }

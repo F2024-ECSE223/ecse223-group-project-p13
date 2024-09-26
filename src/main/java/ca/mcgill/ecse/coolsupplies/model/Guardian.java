@@ -13,6 +13,7 @@ public class Guardian extends User
   //------------------------
 
   //Guardian Attributes
+  private String name;
   private String phoneNumber;
 
   //Guardian Associations
@@ -23,9 +24,10 @@ public class Guardian extends User
   // CONSTRUCTOR
   //------------------------
 
-  public Guardian(String aName, String aPassword, Application aApplication, Admin aAdmin)
+  public Guardian(String aEmail, String aPassword, Application aApplication, Admin aAdmin)
   {
-    super(aName, aPassword, aApplication);
+    super(aEmail, aPassword, aApplication);
+    name = null;
     phoneNumber = null;
     boolean didAddAdmin = setAdmin(aAdmin);
     if (!didAddAdmin)
@@ -39,12 +41,25 @@ public class Guardian extends User
   // INTERFACE
   //------------------------
 
+  public boolean setName(String aName)
+  {
+    boolean wasSet = false;
+    name = aName;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setPhoneNumber(String aPhoneNumber)
   {
     boolean wasSet = false;
     phoneNumber = aPhoneNumber;
     wasSet = true;
     return wasSet;
+  }
+
+  public String getName()
+  {
+    return name;
   }
 
   public String getPhoneNumber()
@@ -209,6 +224,7 @@ public class Guardian extends User
   public String toString()
   {
     return super.toString() + "["+
+            "name" + ":" + getName()+ "," +
             "phoneNumber" + ":" + getPhoneNumber()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "admin = "+(getAdmin()!=null?Integer.toHexString(System.identityHashCode(getAdmin())):"null");
   }

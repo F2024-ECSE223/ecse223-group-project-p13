@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.coolsupplies.model;
 import java.util.*;
 
-// line 42 "../../../../../coolsupplies.ump"
+// line 43 "../../../../../coolsupplies.ump"
 public class Student
 {
 
