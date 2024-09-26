@@ -1,8 +1,6 @@
 # No need for class files (can recompile from .java)
 *.class 
 
-.gradle/
-
 # OS generated files
 .DS_Store*
 
