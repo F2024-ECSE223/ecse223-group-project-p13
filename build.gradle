@@ -1,0 +1,15 @@
+plugins {
+  id 'java'
+
+  id 'application'
+}
+
+repositories {
+  mavenCentral()
+}
+
+application {
+  mainClass.set('ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication')
+  sourceCompatibility = 17
+  targetCompatibility = 17
+}
