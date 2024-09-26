@@ -12,10 +12,10 @@ class User {
   password;
 }
 
+class Admin {
   isA User;
   name = "admin@cool.ca";
   password = "admin";
-class Admin {
 }
 
 class Guardian {
@@ -39,8 +39,8 @@ class School {
   Date endDate;
 }
 
-name;
 class Student {
+  name;
 }
 
 class GradeLevel {
