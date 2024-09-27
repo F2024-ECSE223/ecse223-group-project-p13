@@ -4,33 +4,39 @@
 package ca.mcgill.ecse.coolsupplies.model;
 import java.util.*;
 
-// line 61 "../../../../../CoolSupplies.ump"
-public class Item extends InventoryItem
+// line 66 "../../../../../CoolSupplies.ump"
+public class GradeBundle extends InventoryItem
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Item Attributes
-  private int price;
+  //GradeBundle Attributes
+  private int discount;
 
-  //Item Associations
+  //GradeBundle Associations
   private CoolSupplies coolSupplies;
+  private Grade grade;
   private List<BundleItem> bundleItems;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Item(String aName, int aPrice, CoolSupplies aCoolSupplies)
+  public GradeBundle(String aName, int aDiscount, CoolSupplies aCoolSupplies, Grade aGrade)
   {
     super(aName);
-    price = aPrice;
+    discount = aDiscount;
     boolean didAddCoolSupplies = setCoolSupplies(aCoolSupplies);
     if (!didAddCoolSupplies)
     {
-      throw new RuntimeException("Unable to create item due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create bundle due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    boolean didAddGrade = setGrade(aGrade);
+    if (!didAddGrade)
+    {
+      throw new RuntimeException("Unable to create bundle due to grade. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     bundleItems = new ArrayList<BundleItem>();
   }
@@ -39,22 +45,27 @@ public class Item extends InventoryItem
   // INTERFACE
   //------------------------
 
-  public boolean setPrice(int aPrice)
+  public boolean setDiscount(int aDiscount)
   {
     boolean wasSet = false;
-    price = aPrice;
+    discount = aDiscount;
     wasSet = true;
     return wasSet;
   }
 
-  public int getPrice()
+  public int getDiscount()
   {
-    return price;
+    return discount;
   }
   /* Code from template association_GetOne */
   public CoolSupplies getCoolSupplies()
   {
     return coolSupplies;
+  }
+  /* Code from template association_GetOne */
+  public Grade getGrade()
+  {
+    return grade;
   }
   /* Code from template association_GetMany */
   public BundleItem getBundleItem(int index)
@@ -99,9 +110,37 @@ public class Item extends InventoryItem
     coolSupplies = aCoolSupplies;
     if (existingCoolSupplies != null && !existingCoolSupplies.equals(aCoolSupplies))
     {
-      existingCoolSupplies.removeItem(this);
+      existingCoolSupplies.removeBundle(this);
     }
-    coolSupplies.addItem(this);
+    coolSupplies.addBundle(this);
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_SetOneToOptionalOne */
+  public boolean setGrade(Grade aNewGrade)
+  {
+    boolean wasSet = false;
+    if (aNewGrade == null)
+    {
+      //Unable to setGrade to null, as bundle must always be associated to a grade
+      return wasSet;
+    }
+    
+    GradeBundle existingBundle = aNewGrade.getBundle();
+    if (existingBundle != null && !equals(existingBundle))
+    {
+      //Unable to setGrade, the current grade already has a bundle, which would be orphaned if it were re-assigned
+      return wasSet;
+    }
+    
+    Grade anOldGrade = grade;
+    grade = aNewGrade;
+    grade.setBundle(this);
+
+    if (anOldGrade != null)
+    {
+      anOldGrade.setBundle(null);
+    }
     wasSet = true;
     return wasSet;
   }
@@ -111,20 +150,20 @@ public class Item extends InventoryItem
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public BundleItem addBundleItem(int aQuantity, BundleItem.PurchaseLevel aLevel, CoolSupplies aCoolSupplies, GradeBundle aBundle)
+  public BundleItem addBundleItem(int aQuantity, BundleItem.PurchaseLevel aLevel, CoolSupplies aCoolSupplies, Item aItem)
   {
-    return new BundleItem(aQuantity, aLevel, aCoolSupplies, aBundle, this);
+    return new BundleItem(aQuantity, aLevel, aCoolSupplies, this, aItem);
   }
 
   public boolean addBundleItem(BundleItem aBundleItem)
   {
     boolean wasAdded = false;
     if (bundleItems.contains(aBundleItem)) { return false; }
-    Item existingItem = aBundleItem.getItem();
-    boolean isNewItem = existingItem != null && !this.equals(existingItem);
-    if (isNewItem)
+    GradeBundle existingBundle = aBundleItem.getBundle();
+    boolean isNewBundle = existingBundle != null && !this.equals(existingBundle);
+    if (isNewBundle)
     {
-      aBundleItem.setItem(this);
+      aBundleItem.setBundle(this);
     }
     else
     {
@@ -137,8 +176,8 @@ public class Item extends InventoryItem
   public boolean removeBundleItem(BundleItem aBundleItem)
   {
     boolean wasRemoved = false;
-    //Unable to remove aBundleItem, as it must always have a item
-    if (!this.equals(aBundleItem.getItem()))
+    //Unable to remove aBundleItem, as it must always have a bundle
+    if (!this.equals(aBundleItem.getBundle()))
     {
       bundleItems.remove(aBundleItem);
       wasRemoved = true;
@@ -184,7 +223,13 @@ public class Item extends InventoryItem
     this.coolSupplies = null;
     if(placeholderCoolSupplies != null)
     {
-      placeholderCoolSupplies.removeItem(this);
+      placeholderCoolSupplies.removeBundle(this);
+    }
+    Grade existingGrade = grade;
+    grade = null;
+    if (existingGrade != null)
+    {
+      existingGrade.setBundle(null);
     }
     for(int i=bundleItems.size(); i > 0; i--)
     {
@@ -198,7 +243,8 @@ public class Item extends InventoryItem
   public String toString()
   {
     return super.toString() + "["+
-            "price" + ":" + getPrice()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "coolSupplies = "+(getCoolSupplies()!=null?Integer.toHexString(System.identityHashCode(getCoolSupplies())):"null");
+            "discount" + ":" + getDiscount()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "coolSupplies = "+(getCoolSupplies()!=null?Integer.toHexString(System.identityHashCode(getCoolSupplies())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "grade = "+(getGrade()!=null?Integer.toHexString(System.identityHashCode(getGrade())):"null");
   }
 }

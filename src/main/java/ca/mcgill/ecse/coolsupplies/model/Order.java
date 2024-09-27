@@ -2,63 +2,89 @@
 /*This code was generated using the UMPLE 1.34.0.7242.6b8819789 modeling language!*/
 
 package ca.mcgill.ecse.coolsupplies.model;
-import java.sql.Date;
+import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import java.util.*;
+import java.sql.Date;
 
-// line 28 "../../../../../coolsupplies.ump"
+// line 39 "../../../../../CoolSupplies.ump"
 public class Order
 {
 
   //------------------------
-  // ENUMERATIONS
+  // STATIC VARIABLES
   //------------------------
 
-  public enum Importance { Mandatory, Recommended, Optional }
+  private static Map<Integer, Order> ordersByNumber = new HashMap<Integer, Order>();
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Order Attributes
-  private boolean studentPickup;
+  private int number;
   private Date date;
-  private double fee;
-  private int authorizationCode;
-  private int lateAuthorizationCode;
-  private Importance importance;
-  private int orderNumber;
+  private PurchaseLevel level;
+  private String authorizationCode;
+  private String penaltyAuthorizationCode;
 
   //Order Associations
-  private List<Item> item;
-  private List<Bundle> bundle;
-  private List<Student> student;
+  private Parent parent;
+  private Student student;
+  private CoolSupplies coolSupplies;
+  private List<OrderItem> orderItems;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Order(boolean aStudentPickup, Date aDate, double aFee, int aAuthorizationCode, int aLateAuthorizationCode, int aOrderNumber)
+  public Order(int aNumber, Date aDate, PurchaseLevel aLevel, Parent aParent, Student aStudent, CoolSupplies aCoolSupplies)
   {
-    studentPickup = aStudentPickup;
     date = aDate;
-    fee = aFee;
-    authorizationCode = aAuthorizationCode;
-    lateAuthorizationCode = aLateAuthorizationCode;
-    orderNumber = aOrderNumber;
-    item = new ArrayList<Item>();
-    bundle = new ArrayList<Bundle>();
-    student = new ArrayList<Student>();
+    level = aLevel;
+    authorizationCode = null;
+    penaltyAuthorizationCode = null;
+    if (!setNumber(aNumber))
+    {
+      throw new RuntimeException("Cannot create due to duplicate number. See https://manual.umple.org?RE003ViolationofUniqueness.html");
+    }
+    boolean didAddParent = setParent(aParent);
+    if (!didAddParent)
+    {
+      throw new RuntimeException("Unable to create order due to parent. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    boolean didAddStudent = setStudent(aStudent);
+    if (!didAddStudent)
+    {
+      throw new RuntimeException("Unable to create order due to student. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    boolean didAddCoolSupplies = setCoolSupplies(aCoolSupplies);
+    if (!didAddCoolSupplies)
+    {
+      throw new RuntimeException("Unable to create order due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    orderItems = new ArrayList<OrderItem>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setStudentPickup(boolean aStudentPickup)
+  public boolean setNumber(int aNumber)
   {
     boolean wasSet = false;
-    studentPickup = aStudentPickup;
+    Integer anOldNumber = getNumber();
+    if (anOldNumber != null && anOldNumber.equals(aNumber)) {
+      return true;
+    }
+    if (hasWithNumber(aNumber)) {
+      return wasSet;
+    }
+    number = aNumber;
     wasSet = true;
+    if (anOldNumber != null) {
+      ordersByNumber.remove(anOldNumber);
+    }
+    ordersByNumber.put(aNumber, this);
     return wasSet;
   }
 
@@ -70,15 +96,15 @@ public class Order
     return wasSet;
   }
 
-  public boolean setFee(double aFee)
+  public boolean setLevel(PurchaseLevel aLevel)
   {
     boolean wasSet = false;
-    fee = aFee;
+    level = aLevel;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setAuthorizationCode(int aAuthorizationCode)
+  public boolean setAuthorizationCode(String aAuthorizationCode)
   {
     boolean wasSet = false;
     authorizationCode = aAuthorizationCode;
@@ -86,33 +112,27 @@ public class Order
     return wasSet;
   }
 
-  public boolean setLateAuthorizationCode(int aLateAuthorizationCode)
+  public boolean setPenaltyAuthorizationCode(String aPenaltyAuthorizationCode)
   {
     boolean wasSet = false;
-    lateAuthorizationCode = aLateAuthorizationCode;
+    penaltyAuthorizationCode = aPenaltyAuthorizationCode;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setImportance(Importance aImportance)
+  public int getNumber()
   {
-    boolean wasSet = false;
-    importance = aImportance;
-    wasSet = true;
-    return wasSet;
+    return number;
   }
-
-  public boolean setOrderNumber(int aOrderNumber)
+  /* Code from template attribute_GetUnique */
+  public static Order getWithNumber(int aNumber)
   {
-    boolean wasSet = false;
-    orderNumber = aOrderNumber;
-    wasSet = true;
-    return wasSet;
+    return ordersByNumber.get(aNumber);
   }
-
-  public boolean getStudentPickup()
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithNumber(int aNumber)
   {
-    return studentPickup;
+    return getWithNumber(aNumber) != null;
   }
 
   public Date getDate()
@@ -120,380 +140,220 @@ public class Order
     return date;
   }
 
-  public double getFee()
+  public PurchaseLevel getLevel()
   {
-    return fee;
+    return level;
   }
 
-  public int getAuthorizationCode()
+  public String getAuthorizationCode()
   {
     return authorizationCode;
   }
 
-  public int getLateAuthorizationCode()
+  public String getPenaltyAuthorizationCode()
   {
-    return lateAuthorizationCode;
+    return penaltyAuthorizationCode;
   }
-
-  public Importance getImportance()
+  /* Code from template association_GetOne */
+  public Parent getParent()
   {
-    return importance;
+    return parent;
   }
-
-  public int getOrderNumber()
+  /* Code from template association_GetOne */
+  public Student getStudent()
   {
-    return orderNumber;
+    return student;
   }
-  /* Code from template attribute_IsBoolean */
-  public boolean isStudentPickup()
+  /* Code from template association_GetOne */
+  public CoolSupplies getCoolSupplies()
   {
-    return studentPickup;
+    return coolSupplies;
   }
   /* Code from template association_GetMany */
-  public Item getItem(int index)
+  public OrderItem getOrderItem(int index)
   {
-    Item aItem = item.get(index);
-    return aItem;
+    OrderItem aOrderItem = orderItems.get(index);
+    return aOrderItem;
   }
 
-  public List<Item> getItem()
+  public List<OrderItem> getOrderItems()
   {
-    List<Item> newItem = Collections.unmodifiableList(item);
-    return newItem;
+    List<OrderItem> newOrderItems = Collections.unmodifiableList(orderItems);
+    return newOrderItems;
   }
 
-  public int numberOfItem()
+  public int numberOfOrderItems()
   {
-    int number = item.size();
+    int number = orderItems.size();
     return number;
   }
 
-  public boolean hasItem()
+  public boolean hasOrderItems()
   {
-    boolean has = item.size() > 0;
+    boolean has = orderItems.size() > 0;
     return has;
   }
 
-  public int indexOfItem(Item aItem)
+  public int indexOfOrderItem(OrderItem aOrderItem)
   {
-    int index = item.indexOf(aItem);
+    int index = orderItems.indexOf(aOrderItem);
     return index;
   }
-  /* Code from template association_GetMany */
-  public Bundle getBundle(int index)
+  /* Code from template association_SetOneToMany */
+  public boolean setParent(Parent aParent)
   {
-    Bundle aBundle = bundle.get(index);
-    return aBundle;
-  }
+    boolean wasSet = false;
+    if (aParent == null)
+    {
+      return wasSet;
+    }
 
-  public List<Bundle> getBundle()
-  {
-    List<Bundle> newBundle = Collections.unmodifiableList(bundle);
-    return newBundle;
+    Parent existingParent = parent;
+    parent = aParent;
+    if (existingParent != null && !existingParent.equals(aParent))
+    {
+      existingParent.removeOrder(this);
+    }
+    parent.addOrder(this);
+    wasSet = true;
+    return wasSet;
   }
+  /* Code from template association_SetOneToMany */
+  public boolean setStudent(Student aStudent)
+  {
+    boolean wasSet = false;
+    if (aStudent == null)
+    {
+      return wasSet;
+    }
 
-  public int numberOfBundle()
-  {
-    int number = bundle.size();
-    return number;
+    Student existingStudent = student;
+    student = aStudent;
+    if (existingStudent != null && !existingStudent.equals(aStudent))
+    {
+      existingStudent.removeOrder(this);
+    }
+    student.addOrder(this);
+    wasSet = true;
+    return wasSet;
   }
+  /* Code from template association_SetOneToMany */
+  public boolean setCoolSupplies(CoolSupplies aCoolSupplies)
+  {
+    boolean wasSet = false;
+    if (aCoolSupplies == null)
+    {
+      return wasSet;
+    }
 
-  public boolean hasBundle()
-  {
-    boolean has = bundle.size() > 0;
-    return has;
-  }
-
-  public int indexOfBundle(Bundle aBundle)
-  {
-    int index = bundle.indexOf(aBundle);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Student getStudent(int index)
-  {
-    Student aStudent = student.get(index);
-    return aStudent;
-  }
-
-  public List<Student> getStudent()
-  {
-    List<Student> newStudent = Collections.unmodifiableList(student);
-    return newStudent;
-  }
-
-  public int numberOfStudent()
-  {
-    int number = student.size();
-    return number;
-  }
-
-  public boolean hasStudent()
-  {
-    boolean has = student.size() > 0;
-    return has;
-  }
-
-  public int indexOfStudent(Student aStudent)
-  {
-    int index = student.indexOf(aStudent);
-    return index;
+    CoolSupplies existingCoolSupplies = coolSupplies;
+    coolSupplies = aCoolSupplies;
+    if (existingCoolSupplies != null && !existingCoolSupplies.equals(aCoolSupplies))
+    {
+      existingCoolSupplies.removeOrder(this);
+    }
+    coolSupplies.addOrder(this);
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfItem()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addItem(Item aItem)
-  {
-    boolean wasAdded = false;
-    if (item.contains(aItem)) { return false; }
-    item.add(aItem);
-    if (aItem.indexOfOrder(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aItem.addOrder(this);
-      if (!wasAdded)
-      {
-        item.remove(aItem);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeItem(Item aItem)
-  {
-    boolean wasRemoved = false;
-    if (!item.contains(aItem))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = item.indexOf(aItem);
-    item.remove(oldIndex);
-    if (aItem.indexOfOrder(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aItem.removeOrder(this);
-      if (!wasRemoved)
-      {
-        item.add(oldIndex,aItem);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addItemAt(Item aItem, int index)
-  {  
-    boolean wasAdded = false;
-    if(addItem(aItem))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfItem()) { index = numberOfItem() - 1; }
-      item.remove(aItem);
-      item.add(index, aItem);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveItemAt(Item aItem, int index)
-  {
-    boolean wasAdded = false;
-    if(item.contains(aItem))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfItem()) { index = numberOfItem() - 1; }
-      item.remove(aItem);
-      item.add(index, aItem);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addItemAt(aItem, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfBundle()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addBundle(Bundle aBundle)
-  {
-    boolean wasAdded = false;
-    if (bundle.contains(aBundle)) { return false; }
-    bundle.add(aBundle);
-    if (aBundle.indexOfOrder(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aBundle.addOrder(this);
-      if (!wasAdded)
-      {
-        bundle.remove(aBundle);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeBundle(Bundle aBundle)
-  {
-    boolean wasRemoved = false;
-    if (!bundle.contains(aBundle))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = bundle.indexOf(aBundle);
-    bundle.remove(oldIndex);
-    if (aBundle.indexOfOrder(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aBundle.removeOrder(this);
-      if (!wasRemoved)
-      {
-        bundle.add(oldIndex,aBundle);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addBundleAt(Bundle aBundle, int index)
-  {  
-    boolean wasAdded = false;
-    if(addBundle(aBundle))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfBundle()) { index = numberOfBundle() - 1; }
-      bundle.remove(aBundle);
-      bundle.add(index, aBundle);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveBundleAt(Bundle aBundle, int index)
-  {
-    boolean wasAdded = false;
-    if(bundle.contains(aBundle))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfBundle()) { index = numberOfBundle() - 1; }
-      bundle.remove(aBundle);
-      bundle.add(index, aBundle);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addBundleAt(aBundle, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfStudent()
+  public static int minimumNumberOfOrderItems()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Student addStudent(String aName, GradeLevel aGradeLevel)
+  public OrderItem addOrderItem(int aQuantity, CoolSupplies aCoolSupplies, InventoryItem aItem)
   {
-    return new Student(aName, this, aGradeLevel);
+    return new OrderItem(aQuantity, aCoolSupplies, this, aItem);
   }
 
-  public boolean addStudent(Student aStudent)
+  public boolean addOrderItem(OrderItem aOrderItem)
   {
     boolean wasAdded = false;
-    if (student.contains(aStudent)) { return false; }
-    Order existingOrder = aStudent.getOrder();
+    if (orderItems.contains(aOrderItem)) { return false; }
+    Order existingOrder = aOrderItem.getOrder();
     boolean isNewOrder = existingOrder != null && !this.equals(existingOrder);
     if (isNewOrder)
     {
-      aStudent.setOrder(this);
+      aOrderItem.setOrder(this);
     }
     else
     {
-      student.add(aStudent);
+      orderItems.add(aOrderItem);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeStudent(Student aStudent)
+  public boolean removeOrderItem(OrderItem aOrderItem)
   {
     boolean wasRemoved = false;
-    //Unable to remove aStudent, as it must always have a order
-    if (!this.equals(aStudent.getOrder()))
+    //Unable to remove aOrderItem, as it must always have a order
+    if (!this.equals(aOrderItem.getOrder()))
     {
-      student.remove(aStudent);
+      orderItems.remove(aOrderItem);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addStudentAt(Student aStudent, int index)
+  public boolean addOrderItemAt(OrderItem aOrderItem, int index)
   {  
     boolean wasAdded = false;
-    if(addStudent(aStudent))
+    if(addOrderItem(aOrderItem))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfStudent()) { index = numberOfStudent() - 1; }
-      student.remove(aStudent);
-      student.add(index, aStudent);
+      if(index > numberOfOrderItems()) { index = numberOfOrderItems() - 1; }
+      orderItems.remove(aOrderItem);
+      orderItems.add(index, aOrderItem);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveStudentAt(Student aStudent, int index)
+  public boolean addOrMoveOrderItemAt(OrderItem aOrderItem, int index)
   {
     boolean wasAdded = false;
-    if(student.contains(aStudent))
+    if(orderItems.contains(aOrderItem))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfStudent()) { index = numberOfStudent() - 1; }
-      student.remove(aStudent);
-      student.add(index, aStudent);
+      if(index > numberOfOrderItems()) { index = numberOfOrderItems() - 1; }
+      orderItems.remove(aOrderItem);
+      orderItems.add(index, aOrderItem);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addStudentAt(aStudent, index);
+      wasAdded = addOrderItemAt(aOrderItem, index);
     }
     return wasAdded;
   }
 
   public void delete()
   {
-    ArrayList<Item> copyOfItem = new ArrayList<Item>(item);
-    item.clear();
-    for(Item aItem : copyOfItem)
+    ordersByNumber.remove(getNumber());
+    Parent placeholderParent = parent;
+    this.parent = null;
+    if(placeholderParent != null)
     {
-      aItem.removeOrder(this);
+      placeholderParent.removeOrder(this);
     }
-    ArrayList<Bundle> copyOfBundle = new ArrayList<Bundle>(bundle);
-    bundle.clear();
-    for(Bundle aBundle : copyOfBundle)
+    Student placeholderStudent = student;
+    this.student = null;
+    if(placeholderStudent != null)
     {
-      aBundle.removeOrder(this);
+      placeholderStudent.removeOrder(this);
     }
-    for(int i=student.size(); i > 0; i--)
+    CoolSupplies placeholderCoolSupplies = coolSupplies;
+    this.coolSupplies = null;
+    if(placeholderCoolSupplies != null)
     {
-      Student aStudent = student.get(i - 1);
-      aStudent.delete();
+      placeholderCoolSupplies.removeOrder(this);
+    }
+    for(int i=orderItems.size(); i > 0; i--)
+    {
+      OrderItem aOrderItem = orderItems.get(i - 1);
+      aOrderItem.delete();
     }
   }
 
@@ -501,12 +361,13 @@ public class Order
   public String toString()
   {
     return super.toString() + "["+
-            "studentPickup" + ":" + getStudentPickup()+ "," +
-            "fee" + ":" + getFee()+ "," +
+            "number" + ":" + getNumber()+ "," +
             "authorizationCode" + ":" + getAuthorizationCode()+ "," +
-            "lateAuthorizationCode" + ":" + getLateAuthorizationCode()+ "," +
-            "orderNumber" + ":" + getOrderNumber()+ "]" + System.getProperties().getProperty("line.separator") +
+            "penaltyAuthorizationCode" + ":" + getPenaltyAuthorizationCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "importance" + "=" + (getImportance() != null ? !getImportance().equals(this)  ? getImportance().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "level" + "=" + (getLevel() != null ? !getLevel().equals(this)  ? getLevel().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "parent = "+(getParent()!=null?Integer.toHexString(System.identityHashCode(getParent())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "student = "+(getStudent()!=null?Integer.toHexString(System.identityHashCode(getStudent())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "coolSupplies = "+(getCoolSupplies()!=null?Integer.toHexString(System.identityHashCode(getCoolSupplies())):"null");
   }
 }

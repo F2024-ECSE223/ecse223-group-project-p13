@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>coolsupplies</name>
-	<comment>Project coolsupplies created by Buildship.</comment>
+	<name>ca.mcgill.ecse.coolsupplies</name>
+	<comment>Project ecse223-group-project-testing created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1727376015521</id>
+			<id>1695178338261</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

@@ -2,10 +2,17 @@
 /*This code was generated using the UMPLE 1.34.0.7242.6b8819789 modeling language!*/
 
 package ca.mcgill.ecse.coolsupplies.model;
+import java.util.*;
 
-// line 9 "../../../../../coolsupplies.ump"
+// line 16 "../../../../../CoolSupplies.ump"
 public abstract class User
 {
+
+  //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static Map<String, User> usersByEmail = new HashMap<String, User>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -15,33 +22,45 @@ public abstract class User
   private String email;
   private String password;
 
-  //User Associations
-  private Application application;
+  //Helper Variables
+  private boolean canSetEmail;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aEmail, String aPassword, Application aApplication)
+  public User(String aEmail, String aPassword)
   {
-    email = aEmail;
+    canSetEmail = true;
     password = aPassword;
-    boolean didAddApplication = setApplication(aApplication);
-    if (!didAddApplication)
+    if (!setEmail(aEmail))
     {
-      throw new RuntimeException("Unable to create user due to application. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Cannot create due to duplicate email. See https://manual.umple.org?RE003ViolationofUniqueness.html");
     }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-
+  /* Code from template attribute_SetImmutable */
   public boolean setEmail(String aEmail)
   {
     boolean wasSet = false;
+    if (!canSetEmail) { return false; }
+    String anOldEmail = getEmail();
+    if (anOldEmail != null && anOldEmail.equals(aEmail)) {
+      return true;
+    }
+    if (hasWithEmail(aEmail)) {
+      return wasSet;
+    }
+    canSetEmail = false;
     email = aEmail;
     wasSet = true;
+    if (anOldEmail != null) {
+      usersByEmail.remove(anOldEmail);
+    }
+    usersByEmail.put(aEmail, this);
     return wasSet;
   }
 
@@ -57,44 +76,25 @@ public abstract class User
   {
     return email;
   }
+  /* Code from template attribute_GetUnique */
+  public static User getWithEmail(String aEmail)
+  {
+    return usersByEmail.get(aEmail);
+  }
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithEmail(String aEmail)
+  {
+    return getWithEmail(aEmail) != null;
+  }
 
   public String getPassword()
   {
     return password;
   }
-  /* Code from template association_GetOne */
-  public Application getApplication()
-  {
-    return application;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setApplication(Application aApplication)
-  {
-    boolean wasSet = false;
-    if (aApplication == null)
-    {
-      return wasSet;
-    }
-
-    Application existingApplication = application;
-    application = aApplication;
-    if (existingApplication != null && !existingApplication.equals(aApplication))
-    {
-      existingApplication.removeUser(this);
-    }
-    application.addUser(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
-    Application placeholderApplication = application;
-    this.application = null;
-    if(placeholderApplication != null)
-    {
-      placeholderApplication.removeUser(this);
-    }
+    usersByEmail.remove(getEmail());
   }
 
 
@@ -102,7 +102,6 @@ public abstract class User
   {
     return super.toString() + "["+
             "email" + ":" + getEmail()+ "," +
-            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "application = "+(getApplication()!=null?Integer.toHexString(System.identityHashCode(getApplication())):"null");
+            "password" + ":" + getPassword()+ "]";
   }
 }

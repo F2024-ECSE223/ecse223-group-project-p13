@@ -1,7 +1,20 @@
-# Cool Supplies Application
-## Building
-### Eclipse
-To use this project in eclipse, open the IDE go to file->import project from file system. Then use the browse button to find wherever you cloned this repo. Then confirm all the defaults and you should be able to build and run this project.
+# :triangular_ruler::books: ECSE223 CoolSupplies Project: Team N
 
-### VSCode/Gradle
-Follow the tutorial instructions to setup gradle+VSCode. If you want to do it from the command line, type `gradle build` to build the project and then `gradle run` to run the project.
+_(Edit this file as needed, then remove this sentence)._
+
+## Project Overview
+
+_Provide a one-sentence overview of your project here._
+
+For more information about the CoolSupplies application, please consult the [wiki](../../wiki).
+
+## Team Members
+
+| Name          | GitHub username |
+| ------------- | --------------- |
+| Team Member A | ...             |
+| Team Member B | ...             |
+| Team Member C | ...             |
+| Team Member D | ...             |
+| Team Member E | ...             |
+| Team Member F | ...             |
