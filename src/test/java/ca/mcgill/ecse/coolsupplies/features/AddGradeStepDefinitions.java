@@ -1,9 +1,12 @@
-﻿package ca.mcgill.ecse.coolsupplies.features;
+package ca.mcgill.ecse.coolsupplies.features;
 
-//Project Imports
+// Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
 
+import ca.mcgill.ecse.coolsupplies.controller.*;
+
 //JUnit Imports
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -16,6 +19,14 @@ import java.util.Map;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+// CAN WE ADD IMPORTS ???
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.Grade;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 
 public class AddGradeStepDefinitions {
   private CoolSupplies coolSupplies;
@@ -43,14 +54,20 @@ public class AddGradeStepDefinitions {
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
     // Write code here that turns the phrase above into concrete actions
-    CoolSuppliesFeatureSet7Controller.addGrade(level);
+    CoolSuppliesFeatureSet7Controller.addGrade(string);
     
   }
 
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
   public void the_number_of_grade_entities_in_the_system_shall_be_p13(String string) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+
+    // Get number of grades
+    List<Grade> grades = coolSupplies.getGrades();
+    int num_grades = grades.size();
+
+    // Test case
+    assertEquals(num_grades, Integer.parseInt(string));
   }
 
   @Then("the error {string} shall be raised \\(p13)")

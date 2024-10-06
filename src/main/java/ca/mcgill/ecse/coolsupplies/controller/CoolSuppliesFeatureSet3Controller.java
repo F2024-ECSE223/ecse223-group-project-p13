@@ -1,10 +1,12 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
 import java.util.List;
+import ca.mcgill.ecse.coolsupplies.model.*;  //del
 
 public class CoolSuppliesFeatureSet3Controller {
 
   public static String addItem(String name, int price) {
+    //Item new_item = new Item(name, price);
     throw new UnsupportedOperationException("Not implemented yet.");
   }
 
