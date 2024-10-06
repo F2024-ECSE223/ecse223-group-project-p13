@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.coolsupplies.features;
+﻿package ca.mcgill.ecse.coolsupplies.features;
 
 //Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
@@ -15,7 +15,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-// CAN WE ADD IMPORTS ???
+
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.Grade;
 
@@ -42,8 +42,6 @@ public class AddGradeStepDefinitions {
       String level = entity.get("level");
       coolsupplies.addGrade(level);
     }
-    
-    throw new io.cucumber.java.PendingException();
   }
 
   @When("the school admin attempts to add a new grade in the system with level {string} \\(p13)")
