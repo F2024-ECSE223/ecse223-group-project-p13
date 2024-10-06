@@ -1,7 +1,9 @@
-﻿package ca.mcgill.ecse.coolsupplies.features;
+package ca.mcgill.ecse.coolsupplies.features;
 
-//Project Imports
+// Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
+
+import ca.mcgill.ecse.coolsupplies.controller.*;
 
 //JUnit Imports
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,7 +55,8 @@ public class AddGradeStepDefinitions {
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    CoolSuppliesFeatureSet7Controller.addGrade(string);
+    
   }
 
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
