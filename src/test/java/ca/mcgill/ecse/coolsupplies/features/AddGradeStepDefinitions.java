@@ -3,6 +3,8 @@
 //Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
 
+import ca.mcgill.ecse.coolsupplies.controller.*;
+
 //JUnit Imports
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,7 +43,7 @@ public class AddGradeStepDefinitions {
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
     // Write code here that turns the phrase above into concrete actions
-    CoolSuppliesFeatureSet7Controller.addGrade(level);
+    CoolSuppliesFeatureSet7Controller.addGrade(string);
     
   }
 
