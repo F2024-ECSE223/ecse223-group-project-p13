@@ -4,17 +4,35 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+// CAN WE ADD IMPORTS ???
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.Grade;
+
+import java.util.Map;
+import java.util.List;
+
 public class AddGradeStepDefinitions {
+
+  private CoolSupplies coolsupplies;
+
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
       io.cucumber.datatable.DataTable dataTable) {
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
+    // Map<K, List<V>>. E,K,V muss.javat be a String, Integer, Float,
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
+
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String level = entity.get("level");
+      coolsupplies.addGrade(level);
+    }
+    
     throw new io.cucumber.java.PendingException();
   }
 
