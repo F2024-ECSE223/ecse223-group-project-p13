@@ -2,25 +2,18 @@
 
 //Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
-import ca.mcgill.ecse.coolsupplies.model.Grade;
 
 //JUnit Imports
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //Java Imports
 import java.util.List;
+import java.util.Map;
 
 //Cucumber Imports
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-
-import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
-import ca.mcgill.ecse.coolsupplies.model.Grade;
-
-import java.util.Map;
-import java.util.List;
 
 public class AddGradeStepDefinitions {
   private CoolSupplies coolSupplies;
@@ -40,7 +33,7 @@ public class AddGradeStepDefinitions {
 
     for (var entity : entities) {
       String level = entity.get("level");
-      coolsupplies.addGrade(level);
+      coolSupplies.addGrade(level);
     }
   }
 
