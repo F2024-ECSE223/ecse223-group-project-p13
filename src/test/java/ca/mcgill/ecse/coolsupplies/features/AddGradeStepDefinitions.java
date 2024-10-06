@@ -4,6 +4,7 @@
 import ca.mcgill.ecse.coolsupplies.model.*;
 
 //JUnit Imports
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //Java Imports
@@ -15,6 +16,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+<<<<<<< Updated upstream
+=======
+// CAN WE ADD IMPORTS ???
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.Grade;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
+
+>>>>>>> Stashed changes
 public class AddGradeStepDefinitions {
   private CoolSupplies coolSupplies;
 
@@ -47,7 +59,13 @@ public class AddGradeStepDefinitions {
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
   public void the_number_of_grade_entities_in_the_system_shall_be_p13(String string) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+
+    // Get number of grades
+    List<Grade> grades = coolSupplies.getGrades();
+    int num_grades = grades.size();
+
+    // Test case
+    assertEquals(num_grades, Integer.parseInt(string));
   }
 
   @Then("the error {string} shall be raised \\(p13)")
