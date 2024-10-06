@@ -41,7 +41,8 @@ public class AddGradeStepDefinitions {
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    CoolSuppliesFeatureSet7Controller.addGrade(level);
+    
   }
 
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
