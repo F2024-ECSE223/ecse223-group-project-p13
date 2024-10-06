@@ -1,6 +1,6 @@
-﻿package ca.mcgill.ecse.coolsupplies.features;
+package ca.mcgill.ecse.coolsupplies.features;
 
-//Project Imports
+// Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
 
 import ca.mcgill.ecse.coolsupplies.controller.*;
