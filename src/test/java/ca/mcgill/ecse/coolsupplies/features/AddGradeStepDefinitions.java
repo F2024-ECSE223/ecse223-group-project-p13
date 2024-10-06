@@ -40,7 +40,7 @@ public class AddGradeStepDefinitions {
 
     for (var entity : entities) {
       String level = entity.get("level");
-      coolsupplies.addGrade(level);
+      coolSupplies.addGrade(level);
     }
   }
 
