@@ -63,9 +63,10 @@ public class CoolSuppliesFeatureSet1Controller {
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
         parent.delete(); // NOT SURE RIGHT METHOD
+        return "Parent account was deleted.";
       }
     }
-    return "Parent account was deleted.";
+    return "Parent account wasn't deleted as it does not exist. ";
   }
 
   public static TOParent getParent(String email) {
