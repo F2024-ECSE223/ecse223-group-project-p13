@@ -1,10 +1,23 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
+//Project Imports
+import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.model.Grade;
+
+//JUnit Imports
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+//Java Imports
+import java.util.List;
+
+//Cucumber Imports
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class AddGradeStepDefinitions {
+  private CoolSupplies coolSupplies;
+
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
       io.cucumber.datatable.DataTable dataTable) {
@@ -39,8 +52,11 @@ public class AddGradeStepDefinitions {
 
   @Then("the grade {string} shall exist in the system \\(p13)")
   public void the_grade_shall_exist_in_the_system_p13(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
-  }
+    List<Grade> grades = coolSupplies.getGrades();
 
+    for (int i = 0; i < grades.size(); i++){
+      assertTrue(grades.get(i).getLevel() == string);
+
+    }
+  }
 }
