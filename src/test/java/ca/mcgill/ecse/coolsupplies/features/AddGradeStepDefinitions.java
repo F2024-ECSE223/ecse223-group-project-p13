@@ -5,6 +5,8 @@ import ca.mcgill.ecse.coolsupplies.model.*;
 
 //JUnit Imports
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 //Java Imports
 import java.util.List;
@@ -53,8 +55,14 @@ public class AddGradeStepDefinitions {
 
   @Then("the error {string} shall be raised \\(p13)")
   public void the_error_shall_be_raised_p13(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    coolSupplies.addGrade("A");
+    try{
+      coolSupplies.addGrade("A");
+      fail("Expected RuntimeException failed to be raised.");
+    }
+    catch(RuntimeException e){
+      assertEquals(string, e.getMessage());
+    }
   }
 
   @Then("the grade {string} shall exist in the system \\(p13)")
