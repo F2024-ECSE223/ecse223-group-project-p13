@@ -18,8 +18,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-<<<<<<< Updated upstream
-=======
 // CAN WE ADD IMPORTS ???
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.Grade;
@@ -28,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 
->>>>>>> Stashed changes
 public class AddGradeStepDefinitions {
   private CoolSupplies coolSupplies;
 
