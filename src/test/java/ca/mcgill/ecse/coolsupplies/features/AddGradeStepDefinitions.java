@@ -73,14 +73,7 @@ public class AddGradeStepDefinitions {
 
   @Then("the error {string} shall be raised \\(p13)")
   public void the_error_shall_be_raised_p13(String string) {
-    coolSupplies.addGrade("A");
-    try{
-      coolSupplies.addGrade("A");
-      fail("Expected RuntimeException failed to be raised.");
-    }
-    catch(RuntimeException e){
-      assertEquals(string, e.getMessage());
-    }
+    assertTrue(error.contains(string));
   }
 
   @Then("the grade {string} shall exist in the system \\(p13)")
