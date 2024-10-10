@@ -86,11 +86,13 @@ public class AddGradeStepDefinitions {
   @Then("the grade {string} shall exist in the system \\(p13)")
   public void the_grade_shall_exist_in_the_system_p13(String string) {
     List<Grade> grades = coolSupplies.getGrades();
+    List<String>  levels = new ArrayList<>();
 
     for (int i = 0; i < grades.size(); i++){
-      assertTrue(grades.get(i).getLevel() == string);
-
+      levels.add(grades.get(i).getLevel());
     }
+
+    assertTrue(levels.contains(string));
   }
 
   private void callController(String result){
