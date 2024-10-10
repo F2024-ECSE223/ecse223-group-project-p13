@@ -2,8 +2,8 @@ package ca.mcgill.ecse.coolsupplies.features;
 
 // Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
-
 import ca.mcgill.ecse.coolsupplies.controller.*;
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
 //JUnit Imports
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.List;
 
 public class AddGradeStepDefinitions {
-  private CoolSupplies coolSupplies;
-  private String error;
-  private int errorCntr;
+  private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
+  public static String error = "";
+  
 
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
@@ -55,7 +55,7 @@ public class AddGradeStepDefinitions {
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
     // Write code here that turns the phrase above into concrete actions
-    CallController(CoolSuppliesFeatureSet7Controller.addGrade(string));
+    callController(CoolSuppliesFeatureSet7Controller.addGrade(string));
     
   }
 
@@ -79,18 +79,18 @@ public class AddGradeStepDefinitions {
   @Then("the grade {string} shall exist in the system \\(p13)")
   public void the_grade_shall_exist_in_the_system_p13(String string) {
     List<Grade> grades = coolSupplies.getGrades();
+    List<String>  levels = new ArrayList<>();
 
     for (int i = 0; i < grades.size(); i++){
-      assertTrue(grades.get(i).getLevel() == string);
-
+      levels.add(grades.get(i).getLevel());
     }
+
+    assertTrue(levels.contains(string));
   }
 
-  private void CallController(String result){
+  private void callController(String result){
     if (!result.isEmpty()){
       error += result;
-      errorCntr += 1;
-
     }
   }
 }
