@@ -76,6 +76,12 @@ public class AddGradeStepDefinitions {
     assertTrue(error.contains(string));
   }
 
+  /**
+   * @author Edouard Dupont
+   * @param string is a specific grade we want to check
+   * @return void
+   * This test verifies if if a specific grade exists in the system
+   */
   @Then("the grade {string} shall exist in the system \\(p13)")
   public void the_grade_shall_exist_in_the_system_p13(String string) {
     List<Grade> grades = coolSupplies.getGrades();
