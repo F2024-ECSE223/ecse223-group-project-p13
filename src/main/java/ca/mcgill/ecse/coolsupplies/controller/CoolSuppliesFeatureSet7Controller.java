@@ -16,7 +16,7 @@ public class CoolSuppliesFeatureSet7Controller {
     try {
       new Grade(level,CoolSuppliesApplication.getCoolSupplies());
     } catch (RuntimeException e) {
-      if (e.getMessage().equals("Cannot create due to duplicate level. See https://manual.umple.org?RE003ViolationofUniqueness.html")) return "The level must be unique";
+      if (e.getMessage().equals("Cannot create due to duplicate level. See https://manual.umple.org?RE003ViolationofUniqueness.html")) return "The level must be unique.";
     }
     return "";
    } else return "The level must not be empty.";
@@ -38,11 +38,16 @@ public class CoolSuppliesFeatureSet7Controller {
   }
 
   public static String deleteGrade(String level) {
-    //Calls delete level on the instance of grade
-    //Checks if grade was successfully removed, then displays status message accordingly
-    Grade.getWithLevel(level).delete();
-    if (!Grade.hasWithLevel(level)) return "Grade successfully deleted";
-    else return "Error: Grade was not deleted";
+    //Checks if level is empty
+    //Checks if grade exists
+    //If no issues arise, it deletes the grade and displays status message accordingly
+    if (!level.equals("")) {
+      if (Grade.getWithLevel(level) != null) {
+        Grade.getWithLevel(level).delete();
+        return "";
+      } else return "The grade does not exist.";
+      
+    } else return "The level must not be empty.";
   }
 
   public static TOGrade getGrade(String level) {
