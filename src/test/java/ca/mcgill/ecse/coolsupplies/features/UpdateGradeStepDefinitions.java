@@ -21,12 +21,18 @@ import java.util.Map;
 public class UpdateGradeStepDefinitions {
   private CoolSupplies coolSupplies;
 
+  /**
+   * @author Kenny-Alexander Joseph
+   * @param string the level that is going to be updated in the system
+   * @param string2 the new level that the old level is going to be updated to in the system
+   * @return void
+   * This gherkin step verifies that the first given level is updated with the second given level.
+   */
   @When("the school admin attempts to update grade {string} in the system with level {string} \\(p13)")
   public void the_school_admin_attempts_to_update_grade_in_the_system_with_level_p13(String string,
       String string2) {
     // Write code here that turns the phrase above into concrete actions
-    String result = CoolSuppliesFeatureSet7Controller.updateGrade(string,string2);
-    assertTrue(!result.equals("Error: Grade was not updated"));
+    callController(CoolSuppliesFeatureSet7Controller.updateGrade(string,string2));
   }
 
   /**
