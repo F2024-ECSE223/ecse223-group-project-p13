@@ -30,7 +30,7 @@ import java.util.List;
 public class AddGradeStepDefinitions {
   private CoolSupplies coolSupplies;
   private String error;
-  private int errorCntr;
+  
 
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
@@ -55,7 +55,7 @@ public class AddGradeStepDefinitions {
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
     // Write code here that turns the phrase above into concrete actions
-    CallController(CoolSuppliesFeatureSet7Controller.addGrade(string));
+    callController(CoolSuppliesFeatureSet7Controller.addGrade(string));
     
   }
 
@@ -93,10 +93,9 @@ public class AddGradeStepDefinitions {
     }
   }
 
-  private void CallController(String result){
+  private void callController(String result){
     if (!result.isEmpty()){
       error += result;
-      errorCntr += 1;
 
     }
   }
