@@ -2,8 +2,8 @@ package ca.mcgill.ecse.coolsupplies.features;
 
 // Project Imports
 import ca.mcgill.ecse.coolsupplies.model.*;
-
 import ca.mcgill.ecse.coolsupplies.controller.*;
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
 //JUnit Imports
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.List;
 
 public class AddGradeStepDefinitions {
-  private CoolSupplies coolSupplies;
-  private String error;
+  private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
+  public static String error = "";
   
 
   @Given("the following grade entities exists in the system \\(p13)")
@@ -98,7 +98,6 @@ public class AddGradeStepDefinitions {
   private void callController(String result){
     if (!result.isEmpty()){
       error += result;
-
     }
   }
 }
