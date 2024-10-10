@@ -29,12 +29,11 @@ public class CoolSuppliesFeatureSet7Controller {
     Grade.getWithLevel(level).delete();
     if (!Grade.hasWithLevel(level)) return "Grade successfully deleted";
     else return "Error: Grade was not deleted";
-
   }
 
   public static TOGrade getGrade(String level) {
     //Creates TO from string level to be sent to UI
-    return new TOGrade(level);
+    return new TOGrade(Grade.getWithLevel(level).getLevel());
   }
 
   // returns all grades
