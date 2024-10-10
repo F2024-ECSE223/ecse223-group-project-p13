@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.List;
 
 public class AddGradeStepDefinitions {
-  private CoolSupplies coolSupplies;
+  private CoolSupplies coolSupplies = new CoolSuppliesApplication().getCoolSupplies();
 
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
