@@ -78,6 +78,12 @@ public class AddGradeStepDefinitions {
     assertEquals(num_grades, Integer.parseInt(string));
   }
 
+  /**
+   *verifies if the expected error message matches the error message in the log
+   * @author Nil Akkurt
+   * @param string
+   * @throws AssertionError if the error message is not found in the error log
+   */
   @Then("the error {string} shall be raised \\(p13)")
   public void the_error_shall_be_raised_p13(String string) {
     assertTrue(error.contains(string));
