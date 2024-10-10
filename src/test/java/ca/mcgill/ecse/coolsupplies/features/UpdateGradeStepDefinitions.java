@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class UpdateGradeStepDefinitions {
-  private CoolSupplies coolSupplies;
+  private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
   /**
    * @author Kenny-Alexander Joseph
