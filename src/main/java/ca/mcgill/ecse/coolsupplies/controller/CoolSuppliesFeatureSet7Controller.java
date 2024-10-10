@@ -9,18 +9,32 @@ import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 public class CoolSuppliesFeatureSet7Controller {
 
   public static String addGrade(String level) {
-    //Initializes newgrade, then checks if initialization succeeded and displays status message accordingly
-    new Grade(level,CoolSuppliesApplication.getCoolSupplies());
-    if (!Grade.hasWithLevel(level)) return "Grade successfully added";
-    else return "Error: Grade was not added";
+    //Checks if level is empty
+    //Checks if level isnt a duplicate
+    //If no errors arise, initializes newgrade and displays status message accordingly
+   if (!level.equals("")) {
+    try {
+      new Grade(level,CoolSuppliesApplication.getCoolSupplies());
+    } catch (RuntimeException e) {
+      if (e.getMessage().equals("Cannot create due to duplicate level. See https://manual.umple.org?RE003ViolationofUniqueness.html")) return "The level must be unique";
+    }
+    return "";
+   } else return "The level must not be empty.";
   }
 
   public static String updateGrade(String level, String newLevel) {
-    //Gets the grade with the string level, then sets the level to new level.
-    //If it executes successfully, setLevel returns true, false otherwise.
-    //Error message is displayed accordingly. 
-    if (Grade.getWithLevel(level).setLevel(newLevel)) return "Grade updated successfully";
-    else return "Error: Grade was not updated";
+    //Checks if newLevel is empty
+    //Checks if level exists
+    //Checks if level was set to newlevel successfully
+    //If it executes successfully, setLevel returns true and method returns empty string
+    //Otherwise, error message is displayed accordingly. 
+    if (!newLevel.equals("")){
+      if (Grade.getWithLevel(level) != null) {
+        if (!Grade.getWithLevel(level).setLevel(newLevel)) return "The level must be unique.";
+        return "";
+      } else return "The grade does not exist.";
+    }
+    else return "The level must not be empty.";
   }
 
   public static String deleteGrade(String level) {
