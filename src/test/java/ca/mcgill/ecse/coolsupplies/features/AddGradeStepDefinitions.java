@@ -59,6 +59,13 @@ public class AddGradeStepDefinitions {
     
   }
 
+  /**
+   * Tests if the number of grades in the system is correct
+   * @author Dimitri Christopoulos
+   * @param string What the number of grades in the system is supposed to be
+   * @return void
+   * @throws AssertionError If the number of grades in the system does not match the expected value
+   */
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
   public void the_number_of_grade_entities_in_the_system_shall_be_p13(String string) {
     // Write code here that turns the phrase above into concrete actions
