@@ -39,9 +39,9 @@ public class AddGradeStepDefinitions {
   }
 
   /**
-   * Attempts to add a new grade in the system and intercepts any error that might occur
+   * This test attempts to add a new grade in the system and intercepts any error that might occur
    * @author Clara Dupuis
-   * @param string represents the name of the grade added to the system
+   * @param string represents the name of the grade that we wish to add to the system
    * @return void
    */
 
@@ -85,10 +85,10 @@ public class AddGradeStepDefinitions {
   }
 
   /**
+   * This test verifies if a specific grade exists in the system
    * @author Edouard Dupont
    * @param string is a specific grade we want to check
    * @return void
-   * This test verifies if if a specific grade exists in the system
    */
   @Then("the grade {string} shall exist in the system \\(p13)")
   public void the_grade_shall_exist_in_the_system_p13(String string) {
@@ -103,7 +103,7 @@ public class AddGradeStepDefinitions {
   }
 
   /**
-   * verifies if there is an error and appends the error to the error string
+   * This test verifies if there is an error and if so, appends the error to the error string
    * @author Clara Dupuis
    * @param result The result string returned by the controller. It will be empty if there is no error
    * return void
