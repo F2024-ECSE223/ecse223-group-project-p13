@@ -1,31 +1,18 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
 // Project Imports
-import ca.mcgill.ecse.coolsupplies.model.*;
-import ca.mcgill.ecse.coolsupplies.controller.*;
+
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
-
-//JUnit Imports
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.Assert.fail;
-
-//Java Imports
-import java.util.List;
-import java.util.Map;
-
-//Cucumber Imports
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.Grade;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-// CAN WE ADD IMPORTS ???
-import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
-import ca.mcgill.ecse.coolsupplies.model.Grade;
-
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class AddGradeStepDefinitions {
   private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
@@ -50,6 +37,13 @@ public class AddGradeStepDefinitions {
       coolSupplies.addGrade(level);
     }
   }
+
+  /**
+   * Attempts to add a new grade in the system and intercepts any error that might occur
+   * @author Clara Dupuis
+   * @param string represents the name of the grade added to the system
+   * @return void
+   */
 
   @When("the school admin attempts to add a new grade in the system with level {string} \\(p13)")
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
@@ -108,6 +102,12 @@ public class AddGradeStepDefinitions {
     assertTrue(levels.contains(string));
   }
 
+  /**
+   * verifies if there is an error and appends the error to the error string
+   * @author Clara Dupuis
+   * @param result The result string returned by the controller. It will be empty if there is no error
+   * return void
+   */
   private void callController(String result){
     if (!result.isEmpty()){
       error += result;
