@@ -82,6 +82,7 @@ public class AddGradeStepDefinitions {
    *verifies if the expected error message matches the error message in the log
    * @author Nil Akkurt
    * @param string
+   * @return void 
    * @throws AssertionError if the error message is not found in the error log
    */
   @Then("the error {string} shall be raised \\(p13)")
