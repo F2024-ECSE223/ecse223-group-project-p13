@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.controller;
-
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.model.*;
 import java.util.List;
 
 public class CoolSuppliesFeatureSet4Controller {
@@ -8,8 +9,7 @@ public class CoolSuppliesFeatureSet4Controller {
     throw new UnsupportedOperationException("Not implemented yet.");
   }
 
-  public static String updateBundle(String name, String newName, int newDiscount,
-      String newGradeLevel) {
+  public static String updateBundle(String name, String newName, int newDiscount, String newGradeLevel) {
     throw new UnsupportedOperationException("Not implemented yet.");
   }
 
