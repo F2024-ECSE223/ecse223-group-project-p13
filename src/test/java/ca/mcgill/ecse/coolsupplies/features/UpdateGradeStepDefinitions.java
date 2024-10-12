@@ -14,6 +14,7 @@ import io.cucumber.java.en.Given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/* Helper Imports */
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,7 +32,6 @@ public class UpdateGradeStepDefinitions {
   @When("the school admin attempts to update grade {string} in the system with level {string} \\(p13)")
   public void the_school_admin_attempts_to_update_grade_in_the_system_with_level_p13(String string,
       String string2) {
-    // Write code here that turns the phrase above into concrete actions
     callController(CoolSuppliesFeatureSet7Controller.updateGrade(string,string2));
   }
 

@@ -1,23 +1,26 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
-// Project Imports
-
+/* Project Imports */
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.Grade;
+
+/* Cucumber Imports */
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+/* JUnit Imports */
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/* Helper Imports */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class AddGradeStepDefinitions {
-<<<<<<< HEAD
-  private CoolSupplies coolSupplies = new CoolSuppliesApplication().getCoolSupplies();
-=======
   private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
   public static String error = "";
 
@@ -30,14 +33,6 @@ public class AddGradeStepDefinitions {
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V muss.javat be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-
     List<Map<String, String>> entities = dataTable.asMaps();
 
     for (var entity : entities) {
@@ -52,11 +47,9 @@ public class AddGradeStepDefinitions {
    * @param string represents the name of the grade that we wish to add to the system
    * @return void
    */
-
   @When("the school admin attempts to add a new grade in the system with level {string} \\(p13)")
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
       String string) {
-    // Write code here that turns the phrase above into concrete actions
     callController(CoolSuppliesFeatureSet7Controller.addGrade(string));
     
   }
@@ -70,8 +63,6 @@ public class AddGradeStepDefinitions {
    */
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
   public void the_number_of_grade_entities_in_the_system_shall_be_p13(String string) {
-    // Write code here that turns the phrase above into concrete actions
-
     // Get number of grades
     List<Grade> grades = coolSupplies.getGrades();
     int num_grades = grades.size();
