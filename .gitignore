@@ -1,14 +1,13 @@
-# No need for class files (can recompile from .java)
-*.class 
+# Ignore Gradle project-specific cache directory
+.gradle
 
-# OS generated files
-.DS_Store*
+# Ignore Gradle build output directory
+build
+*/**/build
 
-# Build specific
-build/
-*/build
+bin
 
-# Eclipse Specific
-src/.classpath
-src/.project
-src/.settings/
+
+*/**/__pycache__
+
+**/*.class

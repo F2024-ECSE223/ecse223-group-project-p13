@@ -2,11 +2,19 @@
 /*This code was generated using the UMPLE 1.34.0.7242.6b8819789 modeling language!*/
 
 package ca.mcgill.ecse.coolsupplies.model;
+import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import java.util.*;
+import java.sql.Date;
 
-// line 43 "../../../../../coolsupplies.ump"
+// line 34 "../../../../../CoolSupplies.ump"
 public class Student
 {
+
+  //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static Map<String, Student> studentsByName = new HashMap<String, Student>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -16,27 +24,31 @@ public class Student
   private String name;
 
   //Student Associations
-  private List<Guardian> guardian;
-  private Order order;
-  private GradeLevel gradeLevel;
+  private CoolSupplies coolSupplies;
+  private Parent parent;
+  private List<Order> orders;
+  private Grade grade;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Student(String aName, Order aOrder, GradeLevel aGradeLevel)
+  public Student(String aName, CoolSupplies aCoolSupplies, Grade aGrade)
   {
-    name = aName;
-    guardian = new ArrayList<Guardian>();
-    boolean didAddOrder = setOrder(aOrder);
-    if (!didAddOrder)
+    if (!setName(aName))
     {
-      throw new RuntimeException("Unable to create student due to order. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Cannot create due to duplicate name. See https://manual.umple.org?RE003ViolationofUniqueness.html");
     }
-    boolean didAddGradeLevel = setGradeLevel(aGradeLevel);
-    if (!didAddGradeLevel)
+    boolean didAddCoolSupplies = setCoolSupplies(aCoolSupplies);
+    if (!didAddCoolSupplies)
     {
-      throw new RuntimeException("Unable to create student due to gradeLevel. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create student due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    orders = new ArrayList<Order>();
+    boolean didAddGrade = setGrade(aGrade);
+    if (!didAddGrade)
+    {
+      throw new RuntimeException("Unable to create student due to grade. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -47,8 +59,19 @@ public class Student
   public boolean setName(String aName)
   {
     boolean wasSet = false;
+    String anOldName = getName();
+    if (anOldName != null && anOldName.equals(aName)) {
+      return true;
+    }
+    if (hasWithName(aName)) {
+      return wasSet;
+    }
     name = aName;
     wasSet = true;
+    if (anOldName != null) {
+      studentsByName.remove(anOldName);
+    }
+    studentsByName.put(aName, this);
     return wasSet;
   }
 
@@ -56,186 +79,220 @@ public class Student
   {
     return name;
   }
+  /* Code from template attribute_GetUnique */
+  public static Student getWithName(String aName)
+  {
+    return studentsByName.get(aName);
+  }
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithName(String aName)
+  {
+    return getWithName(aName) != null;
+  }
+  /* Code from template association_GetOne */
+  public CoolSupplies getCoolSupplies()
+  {
+    return coolSupplies;
+  }
+  /* Code from template association_GetOne */
+  public Parent getParent()
+  {
+    return parent;
+  }
+
+  public boolean hasParent()
+  {
+    boolean has = parent != null;
+    return has;
+  }
   /* Code from template association_GetMany */
-  public Guardian getGuardian(int index)
+  public Order getOrder(int index)
   {
-    Guardian aGuardian = guardian.get(index);
-    return aGuardian;
+    Order aOrder = orders.get(index);
+    return aOrder;
   }
 
-  public List<Guardian> getGuardian()
+  public List<Order> getOrders()
   {
-    List<Guardian> newGuardian = Collections.unmodifiableList(guardian);
-    return newGuardian;
+    List<Order> newOrders = Collections.unmodifiableList(orders);
+    return newOrders;
   }
 
-  public int numberOfGuardian()
+  public int numberOfOrders()
   {
-    int number = guardian.size();
+    int number = orders.size();
     return number;
   }
 
-  public boolean hasGuardian()
+  public boolean hasOrders()
   {
-    boolean has = guardian.size() > 0;
+    boolean has = orders.size() > 0;
     return has;
   }
 
-  public int indexOfGuardian(Guardian aGuardian)
+  public int indexOfOrder(Order aOrder)
   {
-    int index = guardian.indexOf(aGuardian);
+    int index = orders.indexOf(aOrder);
     return index;
   }
   /* Code from template association_GetOne */
-  public Order getOrder()
+  public Grade getGrade()
   {
-    return order;
+    return grade;
   }
-  /* Code from template association_GetOne */
-  public GradeLevel getGradeLevel()
+  /* Code from template association_SetOneToMany */
+  public boolean setCoolSupplies(CoolSupplies aCoolSupplies)
   {
-    return gradeLevel;
+    boolean wasSet = false;
+    if (aCoolSupplies == null)
+    {
+      return wasSet;
+    }
+
+    CoolSupplies existingCoolSupplies = coolSupplies;
+    coolSupplies = aCoolSupplies;
+    if (existingCoolSupplies != null && !existingCoolSupplies.equals(aCoolSupplies))
+    {
+      existingCoolSupplies.removeStudent(this);
+    }
+    coolSupplies.addStudent(this);
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_SetOptionalOneToMany */
+  public boolean setParent(Parent aParent)
+  {
+    boolean wasSet = false;
+    Parent existingParent = parent;
+    parent = aParent;
+    if (existingParent != null && !existingParent.equals(aParent))
+    {
+      existingParent.removeStudent(this);
+    }
+    if (aParent != null)
+    {
+      aParent.addStudent(this);
+    }
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfGuardian()
+  public static int minimumNumberOfOrders()
   {
     return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addGuardian(Guardian aGuardian)
+  /* Code from template association_AddManyToOne */
+  public Order addOrder(int aNumber, Date aDate, PurchaseLevel aLevel, Parent aParent, CoolSupplies aCoolSupplies)
+  {
+    return new Order(aNumber, aDate, aLevel, aParent, this, aCoolSupplies);
+  }
+
+  public boolean addOrder(Order aOrder)
   {
     boolean wasAdded = false;
-    if (guardian.contains(aGuardian)) { return false; }
-    guardian.add(aGuardian);
-    if (aGuardian.indexOfChild(this) != -1)
+    if (orders.contains(aOrder)) { return false; }
+    Student existingStudent = aOrder.getStudent();
+    boolean isNewStudent = existingStudent != null && !this.equals(existingStudent);
+    if (isNewStudent)
     {
-      wasAdded = true;
+      aOrder.setStudent(this);
     }
     else
     {
-      wasAdded = aGuardian.addChild(this);
-      if (!wasAdded)
-      {
-        guardian.remove(aGuardian);
-      }
+      orders.add(aOrder);
     }
+    wasAdded = true;
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
-  public boolean removeGuardian(Guardian aGuardian)
+
+  public boolean removeOrder(Order aOrder)
   {
     boolean wasRemoved = false;
-    if (!guardian.contains(aGuardian))
+    //Unable to remove aOrder, as it must always have a student
+    if (!this.equals(aOrder.getStudent()))
     {
-      return wasRemoved;
-    }
-
-    int oldIndex = guardian.indexOf(aGuardian);
-    guardian.remove(oldIndex);
-    if (aGuardian.indexOfChild(this) == -1)
-    {
+      orders.remove(aOrder);
       wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aGuardian.removeChild(this);
-      if (!wasRemoved)
-      {
-        guardian.add(oldIndex,aGuardian);
-      }
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addGuardianAt(Guardian aGuardian, int index)
+  public boolean addOrderAt(Order aOrder, int index)
   {  
     boolean wasAdded = false;
-    if(addGuardian(aGuardian))
+    if(addOrder(aOrder))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfGuardian()) { index = numberOfGuardian() - 1; }
-      guardian.remove(aGuardian);
-      guardian.add(index, aGuardian);
+      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
+      orders.remove(aOrder);
+      orders.add(index, aOrder);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveGuardianAt(Guardian aGuardian, int index)
+  public boolean addOrMoveOrderAt(Order aOrder, int index)
   {
     boolean wasAdded = false;
-    if(guardian.contains(aGuardian))
+    if(orders.contains(aOrder))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfGuardian()) { index = numberOfGuardian() - 1; }
-      guardian.remove(aGuardian);
-      guardian.add(index, aGuardian);
+      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
+      orders.remove(aOrder);
+      orders.add(index, aOrder);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addGuardianAt(aGuardian, index);
+      wasAdded = addOrderAt(aOrder, index);
     }
     return wasAdded;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setOrder(Order aOrder)
+  public boolean setGrade(Grade aGrade)
   {
     boolean wasSet = false;
-    if (aOrder == null)
+    if (aGrade == null)
     {
       return wasSet;
     }
 
-    Order existingOrder = order;
-    order = aOrder;
-    if (existingOrder != null && !existingOrder.equals(aOrder))
+    Grade existingGrade = grade;
+    grade = aGrade;
+    if (existingGrade != null && !existingGrade.equals(aGrade))
     {
-      existingOrder.removeStudent(this);
+      existingGrade.removeStudent(this);
     }
-    order.addStudent(this);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setGradeLevel(GradeLevel aGradeLevel)
-  {
-    boolean wasSet = false;
-    if (aGradeLevel == null)
-    {
-      return wasSet;
-    }
-
-    GradeLevel existingGradeLevel = gradeLevel;
-    gradeLevel = aGradeLevel;
-    if (existingGradeLevel != null && !existingGradeLevel.equals(aGradeLevel))
-    {
-      existingGradeLevel.removeStudent(this);
-    }
-    gradeLevel.addStudent(this);
+    grade.addStudent(this);
     wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    ArrayList<Guardian> copyOfGuardian = new ArrayList<Guardian>(guardian);
-    guardian.clear();
-    for(Guardian aGuardian : copyOfGuardian)
+    studentsByName.remove(getName());
+    CoolSupplies placeholderCoolSupplies = coolSupplies;
+    this.coolSupplies = null;
+    if(placeholderCoolSupplies != null)
     {
-      aGuardian.removeChild(this);
+      placeholderCoolSupplies.removeStudent(this);
     }
-    Order placeholderOrder = order;
-    this.order = null;
-    if(placeholderOrder != null)
+    if (parent != null)
     {
-      placeholderOrder.removeStudent(this);
+      Parent placeholderParent = parent;
+      this.parent = null;
+      placeholderParent.removeStudent(this);
     }
-    GradeLevel placeholderGradeLevel = gradeLevel;
-    this.gradeLevel = null;
-    if(placeholderGradeLevel != null)
+    for(int i=orders.size(); i > 0; i--)
     {
-      placeholderGradeLevel.removeStudent(this);
+      Order aOrder = orders.get(i - 1);
+      aOrder.delete();
+    }
+    Grade placeholderGrade = grade;
+    this.grade = null;
+    if(placeholderGrade != null)
+    {
+      placeholderGrade.removeStudent(this);
     }
   }
 
@@ -244,7 +301,8 @@ public class Student
   {
     return super.toString() + "["+
             "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "order = "+(getOrder()!=null?Integer.toHexString(System.identityHashCode(getOrder())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gradeLevel = "+(getGradeLevel()!=null?Integer.toHexString(System.identityHashCode(getGradeLevel())):"null");
+            "  " + "coolSupplies = "+(getCoolSupplies()!=null?Integer.toHexString(System.identityHashCode(getCoolSupplies())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "parent = "+(getParent()!=null?Integer.toHexString(System.identityHashCode(getParent())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "grade = "+(getGrade()!=null?Integer.toHexString(System.identityHashCode(getGrade())):"null");
   }
 }

@@ -4,62 +4,42 @@
 package ca.mcgill.ecse.coolsupplies.model;
 import java.util.*;
 
-// line 57 "../../../../../coolsupplies.ump"
-public class Item
+// line 61 "../../../../../CoolSupplies.ump"
+public class Item extends InventoryItem
 {
-
-  //------------------------
-  // ENUMERATIONS
-  //------------------------
-
-  public enum Importance { Mandatory, Recommended, Optional }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Item Attributes
-  private String name;
-  private double price;
-  private int count;
-  private Importance importance;
+  private int price;
 
   //Item Associations
-  private Admin admin;
-  private List<Order> order;
-  private List<Bundle> bundle;
+  private CoolSupplies coolSupplies;
+  private List<BundleItem> bundleItems;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Item(String aName, double aPrice, Admin aAdmin)
+  public Item(String aName, int aPrice, CoolSupplies aCoolSupplies)
   {
-    name = aName;
+    super(aName);
     price = aPrice;
-    count = 0;
-    boolean didAddAdmin = setAdmin(aAdmin);
-    if (!didAddAdmin)
+    boolean didAddCoolSupplies = setCoolSupplies(aCoolSupplies);
+    if (!didAddCoolSupplies)
     {
-      throw new RuntimeException("Unable to create item due to admin. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create item due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    order = new ArrayList<Order>();
-    bundle = new ArrayList<Bundle>();
+    bundleItems = new ArrayList<BundleItem>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setName(String aName)
-  {
-    boolean wasSet = false;
-    name = aName;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setPrice(double aPrice)
+  public boolean setPrice(int aPrice)
   {
     boolean wasSet = false;
     price = aPrice;
@@ -67,320 +47,158 @@ public class Item
     return wasSet;
   }
 
-  public boolean setCount(int aCount)
-  {
-    boolean wasSet = false;
-    count = aCount;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setImportance(Importance aImportance)
-  {
-    boolean wasSet = false;
-    importance = aImportance;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
-
-  public double getPrice()
+  public int getPrice()
   {
     return price;
   }
-
-  public int getCount()
-  {
-    return count;
-  }
-
-  public Importance getImportance()
-  {
-    return importance;
-  }
   /* Code from template association_GetOne */
-  public Admin getAdmin()
+  public CoolSupplies getCoolSupplies()
   {
-    return admin;
+    return coolSupplies;
   }
   /* Code from template association_GetMany */
-  public Order getOrder(int index)
+  public BundleItem getBundleItem(int index)
   {
-    Order aOrder = order.get(index);
-    return aOrder;
+    BundleItem aBundleItem = bundleItems.get(index);
+    return aBundleItem;
   }
 
-  public List<Order> getOrder()
+  public List<BundleItem> getBundleItems()
   {
-    List<Order> newOrder = Collections.unmodifiableList(order);
-    return newOrder;
+    List<BundleItem> newBundleItems = Collections.unmodifiableList(bundleItems);
+    return newBundleItems;
   }
 
-  public int numberOfOrder()
+  public int numberOfBundleItems()
   {
-    int number = order.size();
+    int number = bundleItems.size();
     return number;
   }
 
-  public boolean hasOrder()
+  public boolean hasBundleItems()
   {
-    boolean has = order.size() > 0;
+    boolean has = bundleItems.size() > 0;
     return has;
   }
 
-  public int indexOfOrder(Order aOrder)
+  public int indexOfBundleItem(BundleItem aBundleItem)
   {
-    int index = order.indexOf(aOrder);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Bundle getBundle(int index)
-  {
-    Bundle aBundle = bundle.get(index);
-    return aBundle;
-  }
-
-  public List<Bundle> getBundle()
-  {
-    List<Bundle> newBundle = Collections.unmodifiableList(bundle);
-    return newBundle;
-  }
-
-  public int numberOfBundle()
-  {
-    int number = bundle.size();
-    return number;
-  }
-
-  public boolean hasBundle()
-  {
-    boolean has = bundle.size() > 0;
-    return has;
-  }
-
-  public int indexOfBundle(Bundle aBundle)
-  {
-    int index = bundle.indexOf(aBundle);
+    int index = bundleItems.indexOf(aBundleItem);
     return index;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setAdmin(Admin aAdmin)
+  public boolean setCoolSupplies(CoolSupplies aCoolSupplies)
   {
     boolean wasSet = false;
-    if (aAdmin == null)
+    if (aCoolSupplies == null)
     {
       return wasSet;
     }
 
-    Admin existingAdmin = admin;
-    admin = aAdmin;
-    if (existingAdmin != null && !existingAdmin.equals(aAdmin))
+    CoolSupplies existingCoolSupplies = coolSupplies;
+    coolSupplies = aCoolSupplies;
+    if (existingCoolSupplies != null && !existingCoolSupplies.equals(aCoolSupplies))
     {
-      existingAdmin.removeItem(this);
+      existingCoolSupplies.removeItem(this);
     }
-    admin.addItem(this);
+    coolSupplies.addItem(this);
     wasSet = true;
     return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfOrder()
+  public static int minimumNumberOfBundleItems()
   {
     return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addOrder(Order aOrder)
+  /* Code from template association_AddManyToOne */
+  public BundleItem addBundleItem(int aQuantity, BundleItem.PurchaseLevel aLevel, CoolSupplies aCoolSupplies, GradeBundle aBundle)
+  {
+    return new BundleItem(aQuantity, aLevel, aCoolSupplies, aBundle, this);
+  }
+
+  public boolean addBundleItem(BundleItem aBundleItem)
   {
     boolean wasAdded = false;
-    if (order.contains(aOrder)) { return false; }
-    order.add(aOrder);
-    if (aOrder.indexOfItem(this) != -1)
+    if (bundleItems.contains(aBundleItem)) { return false; }
+    Item existingItem = aBundleItem.getItem();
+    boolean isNewItem = existingItem != null && !this.equals(existingItem);
+    if (isNewItem)
     {
-      wasAdded = true;
+      aBundleItem.setItem(this);
     }
     else
     {
-      wasAdded = aOrder.addItem(this);
-      if (!wasAdded)
-      {
-        order.remove(aOrder);
-      }
+      bundleItems.add(aBundleItem);
     }
+    wasAdded = true;
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
-  public boolean removeOrder(Order aOrder)
+
+  public boolean removeBundleItem(BundleItem aBundleItem)
   {
     boolean wasRemoved = false;
-    if (!order.contains(aOrder))
+    //Unable to remove aBundleItem, as it must always have a item
+    if (!this.equals(aBundleItem.getItem()))
     {
-      return wasRemoved;
-    }
-
-    int oldIndex = order.indexOf(aOrder);
-    order.remove(oldIndex);
-    if (aOrder.indexOfItem(this) == -1)
-    {
+      bundleItems.remove(aBundleItem);
       wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aOrder.removeItem(this);
-      if (!wasRemoved)
-      {
-        order.add(oldIndex,aOrder);
-      }
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addOrderAt(Order aOrder, int index)
+  public boolean addBundleItemAt(BundleItem aBundleItem, int index)
   {  
     boolean wasAdded = false;
-    if(addOrder(aOrder))
+    if(addBundleItem(aBundleItem))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfOrder()) { index = numberOfOrder() - 1; }
-      order.remove(aOrder);
-      order.add(index, aOrder);
+      if(index > numberOfBundleItems()) { index = numberOfBundleItems() - 1; }
+      bundleItems.remove(aBundleItem);
+      bundleItems.add(index, aBundleItem);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveOrderAt(Order aOrder, int index)
+  public boolean addOrMoveBundleItemAt(BundleItem aBundleItem, int index)
   {
     boolean wasAdded = false;
-    if(order.contains(aOrder))
+    if(bundleItems.contains(aBundleItem))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfOrder()) { index = numberOfOrder() - 1; }
-      order.remove(aOrder);
-      order.add(index, aOrder);
+      if(index > numberOfBundleItems()) { index = numberOfBundleItems() - 1; }
+      bundleItems.remove(aBundleItem);
+      bundleItems.add(index, aBundleItem);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addOrderAt(aOrder, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfBundle()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addBundle(Bundle aBundle)
-  {
-    boolean wasAdded = false;
-    if (bundle.contains(aBundle)) { return false; }
-    bundle.add(aBundle);
-    if (aBundle.indexOfItem(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aBundle.addItem(this);
-      if (!wasAdded)
-      {
-        bundle.remove(aBundle);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeBundle(Bundle aBundle)
-  {
-    boolean wasRemoved = false;
-    if (!bundle.contains(aBundle))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = bundle.indexOf(aBundle);
-    bundle.remove(oldIndex);
-    if (aBundle.indexOfItem(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aBundle.removeItem(this);
-      if (!wasRemoved)
-      {
-        bundle.add(oldIndex,aBundle);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addBundleAt(Bundle aBundle, int index)
-  {  
-    boolean wasAdded = false;
-    if(addBundle(aBundle))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfBundle()) { index = numberOfBundle() - 1; }
-      bundle.remove(aBundle);
-      bundle.add(index, aBundle);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveBundleAt(Bundle aBundle, int index)
-  {
-    boolean wasAdded = false;
-    if(bundle.contains(aBundle))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfBundle()) { index = numberOfBundle() - 1; }
-      bundle.remove(aBundle);
-      bundle.add(index, aBundle);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addBundleAt(aBundle, index);
+      wasAdded = addBundleItemAt(aBundleItem, index);
     }
     return wasAdded;
   }
 
   public void delete()
   {
-    Admin placeholderAdmin = admin;
-    this.admin = null;
-    if(placeholderAdmin != null)
+    CoolSupplies placeholderCoolSupplies = coolSupplies;
+    this.coolSupplies = null;
+    if(placeholderCoolSupplies != null)
     {
-      placeholderAdmin.removeItem(this);
+      placeholderCoolSupplies.removeItem(this);
     }
-    ArrayList<Order> copyOfOrder = new ArrayList<Order>(order);
-    order.clear();
-    for(Order aOrder : copyOfOrder)
+    for(int i=bundleItems.size(); i > 0; i--)
     {
-      aOrder.removeItem(this);
+      BundleItem aBundleItem = bundleItems.get(i - 1);
+      aBundleItem.delete();
     }
-    ArrayList<Bundle> copyOfBundle = new ArrayList<Bundle>(bundle);
-    bundle.clear();
-    for(Bundle aBundle : copyOfBundle)
-    {
-      aBundle.removeItem(this);
-    }
+    super.delete();
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "," +
-            "price" + ":" + getPrice()+ "," +
-            "count" + ":" + getCount()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "importance" + "=" + (getImportance() != null ? !getImportance().equals(this)  ? getImportance().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "admin = "+(getAdmin()!=null?Integer.toHexString(System.identityHashCode(getAdmin())):"null");
+            "price" + ":" + getPrice()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "coolSupplies = "+(getCoolSupplies()!=null?Integer.toHexString(System.identityHashCode(getCoolSupplies())):"null");
   }
 }
