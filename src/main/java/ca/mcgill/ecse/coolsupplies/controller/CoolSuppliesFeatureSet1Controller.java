@@ -8,13 +8,29 @@ public class CoolSuppliesFeatureSet1Controller {
 
   // can i create a static instance ?
   public static String updateAdmin(String password) {
+    /**
+     * This method updates the Admin's password with the one provided.
+     * @author Lune Letailleur
+     * @param password is a String containing the new password.
+     * @return String: the exit status message
+     **/
       // do I need to check if the old password is right
       // need to call the setPassword() method on the admin instance not a new admin
     CoolSuppliesApplication.getCoolSupplies().getAdmin().setPassword(password);
-      return "Admin password updated!";
+    return "Admin password updated!";
   }
 
   public static String addParent(String email, String password, String name, int phoneNumber) {
+    /**
+     * This method adds a Parent entity with the given values for its attributes.
+     * @author Lune Letailleur
+     * @param email: a string with the parent's email
+     * @param password: a string with the parent's password
+     * @param name: a string with the parent's name
+     * @param phoneNumber: a integer corresponding to the parent's phone number
+     * @return String: the exit status message correspondong to the right situation.
+     **/
+
     // need to check for the constraints
     // DO I NEED TO CHECK IF THE PARENT ALREADY EXIST
     // if two conditions are not valid whch one do i return
@@ -34,6 +50,15 @@ public class CoolSuppliesFeatureSet1Controller {
 
   public static String updateParent(String email, String newPassword, String newName,
       int newPhoneNumber) {
+    /**
+     * This method updates a Parent entity with the given values for its attributes (password, name and phone number).
+     * @author Lune Letailleur
+     * @param email: a string with the parent's email
+     * @param password: a string with the parent's new password
+     * @param name: a string with the parent's new name
+     * @param phoneNumber: a integer corresponding to the parent's new phone number
+     * @return String: the exit status message correspondong to the right situation.
+     **/
 
     // checking all constraints of the Parent's attributes
     if (email.contains(" ") || email.equals("admin@cool.ca") || email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
@@ -59,6 +84,14 @@ public class CoolSuppliesFeatureSet1Controller {
   }
 
   public static String deleteParent(String email) {
+
+    /**
+     * This method find the corresponding parent to the given email and deletes the parent entity
+     * @author Lune Letailleur
+     * @param email: a string with the parent's email
+     * @return String: the exit status message correspondong to the right situation.
+     **/
+
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
         parent.delete(); // NOT SURE RIGHT METHOD
@@ -69,6 +102,13 @@ public class CoolSuppliesFeatureSet1Controller {
   }
 
   public static TOParent getParent(String email) {
+    /**
+     * This method creates the transfer object, TO, for a certain parent of a given email
+     * @author Lune Letailleur
+     * @param email: a string with the parent's email
+     * @return TOParent: trasnfer object for the parent entity
+     **/
+
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
         Parent parent_to_return = parent;
@@ -79,6 +119,12 @@ public class CoolSuppliesFeatureSet1Controller {
 
   // returns all parents
   public static List<TOParent> getParents() {
+    /**
+     * This method iterates through the list of parent entities, adds them to a list of transfer objects and returns that list.
+     * @author Lune Letailleur
+     * @param none
+     * @return List<TOParent>, the list of the parents's transfer objects
+     **/
     // creating an array list of parents and adding the TOs to it
     List<TOParent> parents = new ArrayList<TOParent>();
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
