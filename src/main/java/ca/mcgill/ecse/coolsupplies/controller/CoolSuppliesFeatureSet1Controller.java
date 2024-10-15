@@ -35,7 +35,7 @@ public class CoolSuppliesFeatureSet1Controller {
   public static String updateParent(String email, String newPassword, String newName,
       int newPhoneNumber) {
 
-    // check if parent exist
+    // checking all constraints of the Parent's attributes
     if (email.contains(" ") || email.equals("admin@cool.ca") || email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
       return "Email must not contain any spaces and not be admin@cool.ca, and should follow the general email format 'xxxx@xx.xxx'";
     }
@@ -47,8 +47,7 @@ public class CoolSuppliesFeatureSet1Controller {
       return "Phone number must be 7 digits without any leading 0s. PLease input a valid phone number."
     }
 
-    // can i call the getParent function defined bellow ??
-
+    // finding the Parent withing the Parents list and setting the attributes
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
         parent.setName(newName);
@@ -70,14 +69,22 @@ public class CoolSuppliesFeatureSet1Controller {
   }
 
   public static TOParent getParent(String email) {
-
-    // NEED TO CREATE TO object
-    throw new UnsupportedOperationException("Not implemented yet.");
+    for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
+      if (parent.getEmail().equals(email)) {
+        Parent parent_to_return = parent;
+      }
+    }
+    return new TOParent(parent_to_return.getEmail(), parent_to_return.getPassword(), parent_to_return.getName(), parent_to_return.getPhoneNumber());
   }
 
   // returns all parents
   public static List<TOParent> getParents() {
-    throw new UnsupportedOperationException("Not implemented yet.");
+    // creating an array list of parents and adding the TOs to it
+    List<TOParent> parents = new ArrayList<TOParent>();
+    for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
+      parents.add(getParent(parent.getEmail()));
+    }
+    return parents;
   }
-
 }
+
