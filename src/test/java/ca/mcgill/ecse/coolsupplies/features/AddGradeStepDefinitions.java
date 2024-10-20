@@ -13,7 +13,7 @@ import io.cucumber.java.en.When;
 
 /* JUnit Imports */
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /* Helper Imports */
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ public class AddGradeStepDefinitions {
    */
   @Given("the following grade entities exists in the system \\(p13)")
   public void the_following_grade_entities_exists_in_the_system_p13(
-      io.cucumber.datatable.DataTable dataTable) {
-    List<Map<String, String>> entities = dataTable.asMaps();
+      io.cucumber.datatable.DataTable grades) {
+    List<Map<String, String>> entities = grades.asMaps();
 
     for (var entity : entities) {
       String level = entity.get("level");
@@ -44,53 +44,54 @@ public class AddGradeStepDefinitions {
   /**
    * This test attempts to add a new grade in the system and intercepts any error that might occur
    * @author Clara Dupuis
-   * @param string represents the name of the grade that we wish to add to the system
+   * @param level represents the name of the grade that we wish to add to the system
    * @return void
    */
   @When("the school admin attempts to add a new grade in the system with level {string} \\(p13)")
   public void the_school_admin_attempts_to_add_a_new_grade_in_the_system_with_level_p13(
-      String string) {
-    callController(CoolSuppliesFeatureSet7Controller.addGrade(string));
+      String level) {
+    callController(CoolSuppliesFeatureSet7Controller.addGrade(level));
     
   }
 
   /**
    * Tests if the number of grades in the system is correct
    * @author Dimitri Christopoulos
-   * @param string What the number of grades in the system is supposed to be
+   * @param expectedNumberOfGrades What the number of grades in the system is supposed to be
    * @return void
    * @throws AssertionError If the number of grades in the system does not match the expected value
    */
   @Then("the number of grade entities in the system shall be {string} \\(p13)")
-  public void the_number_of_grade_entities_in_the_system_shall_be_p13(String string) {
+  public void the_number_of_grade_entities_in_the_system_shall_be_p13(String expectedNumberOfGrades) {
     // Get number of grades
     List<Grade> grades = coolSupplies.getGrades();
-    int num_grades = grades.size();
+    int numGrades = grades.size();
 
     // Test case
-    assertEquals(num_grades, Integer.parseInt(string));
+    assertEquals(Integer.parseInt(expectedNumberOfGrades), numGrades);
   }
 
   /**
    *verifies if the expected error message matches the error message in the log
    * @author Nil Akkurt
-   * @param string
+   * @param errorMessage
    * @return void 
    * @throws AssertionError if the error message is not found in the error log
    */
   @Then("the error {string} shall be raised \\(p13)")
-  public void the_error_shall_be_raised_p13(String string) {
-    assertTrue(error.contains(string));
+  public void the_error_shall_be_raised_p13(String errorMessage) {
+    assertTrue("Expected error to contain " + errorMessage + " but was: " + error,
+        error.contains(errorMessage));
   }
 
   /**
    * This test verifies if a specific grade exists in the system
    * @author Edouard Dupont
-   * @param string is a specific grade we want to check
+   * @param level is a specific grade we want to check
    * @return void
    */
   @Then("the grade {string} shall exist in the system \\(p13)")
-  public void the_grade_shall_exist_in_the_system_p13(String string) {
+  public void the_grade_shall_exist_in_the_system_p13(String level) {
     List<Grade> grades = coolSupplies.getGrades();
     List<String>  levels = new ArrayList<>();
 
@@ -98,7 +99,7 @@ public class AddGradeStepDefinitions {
       levels.add(grades.get(i).getLevel());
     }
 
-    assertTrue(levels.contains(string));
+    assertTrue("Expected levels to contain " + level, levels.contains(level));
   }
 
   /**
