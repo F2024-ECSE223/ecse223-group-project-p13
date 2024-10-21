@@ -1,94 +1,132 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.mcgill.ecse.coolsupplies.model.BundleItem;
+import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.GradeBundle;
 import ca.mcgill.ecse.coolsupplies.model.Item;
 
 public class CoolSuppliesFeatureSet5Controller {
 
   public static String addBundleItem(int quantity, String level, String itemName,
-      String bundleName) {
-    //find bundle by name
-    GradeBundle bundle = GradeBundle.getBundleName(bundleName);
+  String bundleName) {
+    /**
+     * @author Edouard Dupont
+     * @param int quantity: XXX
+     * @param String level: XXX
+     * @param String itemName: XXX
+     * @param String bundleName: XXX
+     * This method BLAHHH
+     */
+      
+    if (quantity <= 0) {
+      return "Quantity must be greater than zero";
+    }
+
+    // Convert the level string to PurchaseLevel enum
+    PurchaseLevel purchaseLevel;
+    try {
+      purchaseLevel = PurchaseLevel.valueOf(level);
+    } catch (IllegalArgumentException e) {
+      return "Invalid purchase level";
+        }
+
+    CoolSupplies cs = CoolSuppliesApplication.getCoolSupplies();
+
+    // Find the GradeBundle with the specified name
+    GradeBundle bundle = null;
+    for (GradeBundle b : cs.getBundles()) {
+      if (b.getName().equals(bundleName)) {
+        bundle = b;
+        break;
+      }
+    }
     if (bundle == null) {
       return "Bundle not found";
     }
 
-    //find item by name
-    Item item = Item.getItemName(itemName);
-    if (item == null){
-      return "Item not found";
-    }
+    // Find the Item with the specified name
+        Item item = null;
+        for (Item i : cs.getItems()) {
+            if (i.getName().equals(itemName)) {
+                item = i;
+                break;
+            }
+        }
+        if (item == null) {
+            return "Item not found";
+        }
 
-    //Add item to bundle
-    TOBundleItem bundleitem = new TOBundleItem(quantity, level, itemName, bundleName);
-    bundle.addBundleItem(bundleitem);
-    return "Bundle Item added successfully";
+        // Check if the BundleItem already exists
+        for (BundleItem bi : cs.getBundleItems()) {
+            if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
+                return "BundleItem already exists";
+            }
+        }
+
+        // Create new BundleItem
+        try {
+            new BundleItem(quantity, purchaseLevel, cs, bundle, item);
+            return "BundleItem successfully added";
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
+
   }
 
   public static String updateBundleItem(String itemName, String bundleName, int newQuantity,
       String newLevel) {
-    // Find the bundle by name
-    GradeBundle bundle = GradeBundle.getBundleName(bundleName);
-    if (bundle == null) {
-        return "Bundle not found.";
-    }
+    /**
+     * @author Edouard Dupont
+     * @param String itemName: XXX
+     * @param String bundleName: XXX
+     * @param int newQuantity: XXX
+     * @param String newLevel: XXX
+     * This method BLAHHH
+     */
 
-    // Find the item within the bundle
-    TOBundleItem bundleItem = bundle.getBundleItemWithName(itemName);
-    if (bundleItem == null) {
-        return "Item not found in the bundle.";
-    }
 
-    // Update quantity and level
-    bundleItem.setQuantity(newQuantity);
-    bundleItem.setLevel(newLevel);
-    return "Bundle item updated successfully.";
-  }
+      
+    }
 
   public static String deleteBundleItem(String itemName, String bundleName) {
-    // Find the bundle by name
-    GradeBundle bundle = GradeBundle.getBundleName(bundleName);
-    if (bundle == null) {
-        return "Bundle not found.";
-    }
+    /**
+     * @author Edouard Dupont
+     * @param String itemName: XXX
+     * @param String bundleName: XXX
+     * This method BLAHHH
+     */
 
-    // Find the item within the bundle and remove it
-    TOBundleItem bundleItem = bundle.getBundleItemWithName(itemName);
-    if (bundleItem == null) {
-        return "Item not found in the bundle.";
-    }
-
-    bundle.removeBundleItem(bundleItem);
-    return "Bundle item removed successfully.";
+     BundleItem.getBundleItem(itemName, bundleName).delete();
   }
 
   public static TOBundleItem getBundleItem(String itemName, String bundleName) {
-    // Find the bundle
-    GradeBundle bundle = GradeBundle.getBundleName(bundleName);
-    if (bundle == null) {
-        throw new IllegalArgumentException("Bundle not found.");
-    }
-
-    // Find and return the item
-    TOBundleItem bundleItem = bundle.getBundleItemWithName(itemName);
-    if (bundleItem == null) {
-        throw new IllegalArgumentException("Item not found in the bundle.");
-    }
-
-    return bundleItem;
+    /**
+     * @author Edouard Dupont
+     * @param String itemName: XXX
+     * @param String bundleName: XXX
+     * This method BLAHHH
+     */
+    
+    return new TOBundleItem(1,level, itemName, bundleName);
   }
 
   // returns all bundle items of a bundle
   public static List<TOBundleItem> getBundleItems(String bundleName) {
-    // Find the bundle
-        GradeBundle bundle = GradeBundle.getBundleName(bundleName);
-        if (bundle == null) {
-            throw new IllegalArgumentException("Bundle not found.");
-        }
+    /**
+     * @author Edouard Dupont
+     * @param String bundleName: XXX
+     * This method BLAHHH
+     */
 
-        return new ArrayList<>(bundle.getBundleItems());
+    List<TOBundleItem> bundleItems = new ArrayList<TOBundleItem>();
+    //for items in bundle name, add item to bundleitem FIND WHAT TO DO HERE
+    return bundleItems;
 
   }
 
