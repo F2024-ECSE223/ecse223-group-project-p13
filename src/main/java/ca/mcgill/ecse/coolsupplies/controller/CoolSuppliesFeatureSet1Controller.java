@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
@@ -69,7 +70,7 @@ public class CoolSuppliesFeatureSet1Controller {
     } else if (newPassword == null || newPassword.equals("")){
       return "Password must not be empty or null. Please input a valid password.";
     } else if (newPhoneNumber <= 999999 || newPhoneNumber >= 10000000){
-      return "Phone number must be 7 digits without any leading 0s. PLease input a valid phone number."
+      return "Phone number must be 7 digits without any leading 0s. PLease input a valid phone number.";
     }
 
     // finding the Parent withing the Parents list and setting the attributes
@@ -108,13 +109,11 @@ public class CoolSuppliesFeatureSet1Controller {
      * @param email: a string with the parent's email
      * @return TOParent: trasnfer object for the parent entity
      **/
-
-    for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
-      if (parent.getEmail().equals(email)) {
-        Parent parent_to_return = parent;
-      }
+    if (User.hasWithEmail(email)) {
+      Parent parent_to_return = (Parent) User.getWithEmail(email);
+      return new TOParent(parent_to_return.getEmail(), parent_to_return.getPassword(), parent_to_return.getName(), parent_to_return.getPhoneNumber());
     }
-    return new TOParent(parent_to_return.getEmail(), parent_to_return.getPassword(), parent_to_return.getName(), parent_to_return.getPhoneNumber());
+    return null;
   }
 
   // returns all parents
