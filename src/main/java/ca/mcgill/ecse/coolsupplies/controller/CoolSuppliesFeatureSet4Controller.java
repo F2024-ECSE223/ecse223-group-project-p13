@@ -24,40 +24,40 @@ public class CoolSuppliesFeatureSet4Controller {
     List<GradeBundle> bundlesInSystem = CoolSuppliesApplication.getCoolSupplies().getBundles();
     for(GradeBundle bundle : bundlesInSystem){
       if(bundle.getName().equals(name)){
-        throw new RuntimeException("The name must be unique.");
+        return "The name must be unique.";
       }
     }
 
     if (name == null || name.trim().isEmpty()){
-      throw new RuntimeException("The name must not be empty.");
+      return "The name must not be empty.";
     }
 
     if (!(0 <= discount && discount <= 100)){
-      throw new RuntimeException("The discount must be greater than or equal to 0 and less than or equal to 100.");
+      return "The discount must be greater than or equal to 0 and less than or equal to 100.";
     }
 
     boolean gradeExists = false;
     List<Grade> gradesInSystem = CoolSuppliesApplication.getCoolSupplies().getGrades();
     Grade myGrade = null;
     for(Grade grade: gradesInSystem) {
-      if (grade.getLevel().equals(gradeLevel)) {   //best way of string comparison?
+      if (grade.getLevel().equals(gradeLevel)) {
         gradeExists = true;
-        myGrade = grade;      // is this legal?
+        myGrade = grade;
       }
     }
     if(!gradeExists){
-      throw new RuntimeException("The grade does not exist.");
+      return "The grade does not exist.";
     }
 
     if(gradeExists){
       if (myGrade.hasBundle()){
-        throw new RuntimeException("A bundle already exists for the grade.");
+        return "A bundle already exists for the grade.";
       }
     }
 
     GradeBundle myBundle= new GradeBundle(name, discount, CoolSuppliesApplication.getCoolSupplies(), myGrade);
     myGrade.setBundle(myBundle);
-    return "";  // what to return?
+    return "";
 
   }
 
@@ -69,9 +69,7 @@ public class CoolSuppliesFeatureSet4Controller {
    * @param newDiscount
    * @param newGradeLevel
    * @return String
-   * @throws RuntimeException if the GradeBundle does not exist, if the new name is empty or not unique (a bundle of that name
-   * already exists in the system), if the newDiscount is not in the interval [0,100], or if the newGradeLevel does not exist
-   * in the system, or if it already has a GradeBundle associated to it.
+   *
    */
   public static String updateBundle(String name, String newName, int newDiscount,
       String newGradeLevel) {
@@ -82,19 +80,19 @@ public class CoolSuppliesFeatureSet4Controller {
         bundleToUpdate = bundle;
       }
       if(newName.equals(bundle.getName())){
-        throw new RuntimeException("The name must be unique.");
+        return "The name must be unique.";
       }
     }
     if(bundleToUpdate == null){
-      throw new RuntimeException("The bundle does not exist.");
+      return "The bundle does not exist.";
     }
 
     if(newName==null || newName.trim().isEmpty()){
-      throw new RuntimeException("The name must not be empty");
+      return "The name must not be empty";
     }
 
     if(newDiscount < 0 || newDiscount > 100){
-      throw new RuntimeException("The discount must be greater than or equal to 0 and less than or equal to 100.");
+     return "The discount must be greater than or equal to 0 and less than or equal to 100.";
     }
 
     List<Grade> gradesInSystem = CoolSuppliesApplication.getCoolSupplies().getGrades();
@@ -105,10 +103,10 @@ public class CoolSuppliesFeatureSet4Controller {
       }
     }
     if(gradeToUpdate == null){
-      throw new RuntimeException("The grade does not exist.");
+      return "The grade does not exist.";
     }
     if(gradeToUpdate.hasBundle()){
-      throw new RuntimeException("A bundle already exists for the grade.");
+      return "A bundle already exists for the grade.";
     }
 
     bundleToUpdate.setName(newName);
@@ -133,9 +131,9 @@ public class CoolSuppliesFeatureSet4Controller {
       }
     }
     if(bundleToDelete == null){
-      throw new RuntimeException("The grade bundle does not exist.");
+      return ("The grade bundle does not exist.");
     }
-    bundleToDelete.delete();    //CONFIRM THIS?
+    bundleToDelete.delete();   
     return "";
   }
 
