@@ -79,7 +79,7 @@ public class CoolSuppliesFeatureSet6Controller {
 
     for (Student student : parent.getStudents()) {
       if (student.getName().equals(studentName)) {
-        return new TOStudent(studentName, parentEmail);
+        return new TOStudent(studentName, student.getGrade().getLevel());
       }
     }
 
@@ -102,7 +102,7 @@ public class CoolSuppliesFeatureSet6Controller {
     }
 
     for (Student student : parent.getStudents()) {
-      TOStudent toStudent = new TOStudent(student.getName(), parentEmail);
+      TOStudent toStudent = new TOStudent(student.getName(), student.getGrade().getLevel());
       students.add(toStudent);
     }
 
