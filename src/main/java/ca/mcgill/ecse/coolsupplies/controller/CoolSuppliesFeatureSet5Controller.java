@@ -25,6 +25,11 @@ public class CoolSuppliesFeatureSet5Controller {
     * 
     * This method adds a new BundleItem to the specified GradeBundle.
     */
+
+    //if (itemName == null || itemName.trim().isEmpty()) {
+      //return "Item name cannot be empty";
+    //}
+    //Should I add checks like this?
       
     if (quantity <= 0) {
       return "Quantity must be greater than zero";
@@ -58,7 +63,7 @@ public class CoolSuppliesFeatureSet5Controller {
     for (Item i : cs.getItems()) {
       if (i.getName().equals(itemName)) {
         item = i;
-          break;
+        break;
       }
     }
     if (item == null) {
@@ -112,37 +117,37 @@ public class CoolSuppliesFeatureSet5Controller {
     // Find the GradeBundle
     GradeBundle bundle = null;
     for (GradeBundle b : cs.getBundles()) {
-        if (b.getName().equals(bundleName)) {
-            bundle = b;
-            break;
-        }
+      if (b.getName().equals(bundleName)) {
+        bundle = b;
+        break;
+      }
     }
     if (bundle == null) {
-        return "Bundle not found";
+      return "Bundle not found";
     }
 
     // Find the Item
     Item item = null;
     for (Item i : cs.getItems()) {
-        if (i.getName().equals(itemName)) {
-            item = i;
-            break;
+      if (i.getName().equals(itemName)) {
+        item = i;
+        break;
         }
     }
     if (item == null) {
-        return "Item not found";
+      return "Item not found";
     }
 
     // Find the BundleItem
     BundleItem bundleItem = null;
     for (BundleItem bi : cs.getBundleItems()) {
-        if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
-            bundleItem = bi;
-            break;
-        }
+      if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
+        bundleItem = bi;
+        break;
+      }
     }
     if (bundleItem == null) {
-        return "BundleItem not found";
+      return "BundleItem not found";
     }
 
     // Update the bundleItem
@@ -150,7 +155,6 @@ public class CoolSuppliesFeatureSet5Controller {
     bundleItem.setLevel(purchaseLevel);
     return "BundleItem successfully updated";
 
-      
     }
 
   public static String deleteBundleItem(String itemName, String bundleName) {
@@ -168,13 +172,13 @@ public class CoolSuppliesFeatureSet5Controller {
     // Find the GradeBundle
     GradeBundle bundle = null;
     for (GradeBundle b : cs.getBundles()) {
-        if (b.getName().equals(bundleName)) {
-            bundle = b;
-            break;
-        }
+      if (b.getName().equals(bundleName)) {
+        bundle = b;
+        break;
+      }
     }
     if (bundle == null) {
-        return "Bundle not found";
+      return "Bundle not found";
     }
 
     // Find the Item
