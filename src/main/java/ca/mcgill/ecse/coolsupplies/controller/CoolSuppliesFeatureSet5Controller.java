@@ -153,7 +153,7 @@ public class CoolSuppliesFeatureSet5Controller {
        }
    }
    if (item == null) {
-     return "The item does not exist.";
+     return "The bundle item does not exist.";
    }
 
 
@@ -166,7 +166,7 @@ public class CoolSuppliesFeatureSet5Controller {
      }
    }
    if (bundleItem == null) {
-     return "The bundle item does not exist."; //The bundle item does not exist for the grade bundle.?
+     return "The bundle item does not exist for the grade bundle."; 
    }
 
 
@@ -215,7 +215,7 @@ public class CoolSuppliesFeatureSet5Controller {
      }
    }
    if (item == null) {
-     return "The item does not exist.";
+     return "The bundle item does not exist.";
    }
 
 
