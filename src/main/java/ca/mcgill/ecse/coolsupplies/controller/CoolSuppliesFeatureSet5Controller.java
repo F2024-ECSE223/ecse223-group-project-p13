@@ -25,9 +25,14 @@ public class CoolSuppliesFeatureSet5Controller {
     * 
     * This method adds a new BundleItem to the specified GradeBundle.
     */
+
+    //if (itemName == null || itemName.trim().isEmpty()) {
+      //return "Item name cannot be empty";
+    //}
+    //Should I add checks like this?
       
     if (quantity <= 0) {
-      return "Quantity must be greater than zero";
+      return "The quantity must be greater than 0.";
     }
 
     // Convert the level string to PurchaseLevel enum
@@ -35,7 +40,7 @@ public class CoolSuppliesFeatureSet5Controller {
     try {
       purchaseLevel = PurchaseLevel.valueOf(level);
     } catch (IllegalArgumentException e) {
-      return "Invalid purchase level";
+      return "The level must be Mandatory, Recommended, or Optional.";
     }
 
     CoolSupplies cs = CoolSuppliesApplication.getCoolSupplies();
@@ -50,7 +55,7 @@ public class CoolSuppliesFeatureSet5Controller {
     }
     
     if (bundle == null) {
-      return "Bundle not found";
+      return "The grade bundle does not exist.";
     }
 
     // Find the Item with the specified name
@@ -58,17 +63,17 @@ public class CoolSuppliesFeatureSet5Controller {
     for (Item i : cs.getItems()) {
       if (i.getName().equals(itemName)) {
         item = i;
-          break;
+        break;
       }
     }
     if (item == null) {
-      return "Item not found";
+      return "The item does not exist.";
     }
 
     // Check if the BundleItem already exists
     for (BundleItem bi : cs.getBundleItems()) {
       if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
-        return "BundleItem already exists";
+        return "The item already exists for the bundle.";
       }
     }
 
@@ -96,7 +101,7 @@ public class CoolSuppliesFeatureSet5Controller {
     */
     
     if (newQuantity <= 0) {
-      return "Quantity must be greater than zero";
+      return "The quantity must be greater than 0.";
     }
 
     // Convert the level string to PurchaseLevel enum
@@ -104,7 +109,7 @@ public class CoolSuppliesFeatureSet5Controller {
     try {
         purchaseLevel = PurchaseLevel.valueOf(newLevel);
     } catch (IllegalArgumentException e) {
-        return "Invalid purchase level";
+        return "The level must be Mandatory, Recommended, or Optional.";
     }
 
     CoolSupplies cs = CoolSuppliesApplication.getCoolSupplies();
@@ -112,37 +117,37 @@ public class CoolSuppliesFeatureSet5Controller {
     // Find the GradeBundle
     GradeBundle bundle = null;
     for (GradeBundle b : cs.getBundles()) {
-        if (b.getName().equals(bundleName)) {
-            bundle = b;
-            break;
-        }
+      if (b.getName().equals(bundleName)) {
+        bundle = b;
+        break;
+      }
     }
     if (bundle == null) {
-        return "Bundle not found";
+      return "The grade bundle does not exist.";
     }
 
     // Find the Item
     Item item = null;
     for (Item i : cs.getItems()) {
-        if (i.getName().equals(itemName)) {
-            item = i;
-            break;
+      if (i.getName().equals(itemName)) {
+        item = i;
+        break;
         }
     }
     if (item == null) {
-        return "Item not found";
+      return "The item does not exist.";
     }
 
     // Find the BundleItem
     BundleItem bundleItem = null;
     for (BundleItem bi : cs.getBundleItems()) {
-        if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
-            bundleItem = bi;
-            break;
-        }
+      if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
+        bundleItem = bi;
+        break;
+      }
     }
     if (bundleItem == null) {
-        return "BundleItem not found";
+      return "The bundle item does not exist."; //The bundle item does not exist for the grade bundle.?
     }
 
     // Update the bundleItem
@@ -150,7 +155,6 @@ public class CoolSuppliesFeatureSet5Controller {
     bundleItem.setLevel(purchaseLevel);
     return "BundleItem successfully updated";
 
-      
     }
 
   public static String deleteBundleItem(String itemName, String bundleName) {
@@ -168,13 +172,13 @@ public class CoolSuppliesFeatureSet5Controller {
     // Find the GradeBundle
     GradeBundle bundle = null;
     for (GradeBundle b : cs.getBundles()) {
-        if (b.getName().equals(bundleName)) {
-            bundle = b;
-            break;
-        }
+      if (b.getName().equals(bundleName)) {
+        bundle = b;
+        break;
+      }
     }
     if (bundle == null) {
-        return "Bundle not found";
+      return "The grade bundle does not exist.";
     }
 
     // Find the Item
@@ -186,7 +190,7 @@ public class CoolSuppliesFeatureSet5Controller {
       }
     }
     if (item == null) {
-      return "Item not found";
+      return "The item does not exist.";
     }
 
     // Find the BundleItem
