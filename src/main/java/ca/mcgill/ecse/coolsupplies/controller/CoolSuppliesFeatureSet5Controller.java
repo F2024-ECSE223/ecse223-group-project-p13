@@ -32,7 +32,7 @@ public class CoolSuppliesFeatureSet5Controller {
     //Should I add checks like this?
       
     if (quantity <= 0) {
-      return "Quantity must be greater than zero";
+      return "The quantity must be greater than 0.";
     }
 
     // Convert the level string to PurchaseLevel enum
@@ -40,7 +40,7 @@ public class CoolSuppliesFeatureSet5Controller {
     try {
       purchaseLevel = PurchaseLevel.valueOf(level);
     } catch (IllegalArgumentException e) {
-      return "Invalid purchase level";
+      return "The level must be Mandatory, Recommended, or Optional.";
     }
 
     CoolSupplies cs = CoolSuppliesApplication.getCoolSupplies();
@@ -55,7 +55,7 @@ public class CoolSuppliesFeatureSet5Controller {
     }
     
     if (bundle == null) {
-      return "Bundle not found";
+      return "The grade bundle does not exist.";
     }
 
     // Find the Item with the specified name
@@ -67,13 +67,13 @@ public class CoolSuppliesFeatureSet5Controller {
       }
     }
     if (item == null) {
-      return "Item not found";
+      return "The item does not exist.";
     }
 
     // Check if the BundleItem already exists
     for (BundleItem bi : cs.getBundleItems()) {
       if (bi.getBundle().equals(bundle) && bi.getItem().equals(item)) {
-        return "BundleItem already exists";
+        return "The item already exists for the bundle.";
       }
     }
 
@@ -101,7 +101,7 @@ public class CoolSuppliesFeatureSet5Controller {
     */
     
     if (newQuantity <= 0) {
-      return "Quantity must be greater than zero";
+      return "The quantity must be greater than 0.";
     }
 
     // Convert the level string to PurchaseLevel enum
@@ -109,7 +109,7 @@ public class CoolSuppliesFeatureSet5Controller {
     try {
         purchaseLevel = PurchaseLevel.valueOf(newLevel);
     } catch (IllegalArgumentException e) {
-        return "Invalid purchase level";
+        return "The level must be Mandatory, Recommended, or Optional.";
     }
 
     CoolSupplies cs = CoolSuppliesApplication.getCoolSupplies();
@@ -123,7 +123,7 @@ public class CoolSuppliesFeatureSet5Controller {
       }
     }
     if (bundle == null) {
-      return "Bundle not found";
+      return "The grade bundle does not exist.";
     }
 
     // Find the Item
@@ -135,7 +135,7 @@ public class CoolSuppliesFeatureSet5Controller {
         }
     }
     if (item == null) {
-      return "Item not found";
+      return "The item does not exist.";
     }
 
     // Find the BundleItem
@@ -147,7 +147,7 @@ public class CoolSuppliesFeatureSet5Controller {
       }
     }
     if (bundleItem == null) {
-      return "BundleItem not found";
+      return "The bundle item does not exist."; //The bundle item does not exist for the grade bundle.?
     }
 
     // Update the bundleItem
@@ -178,7 +178,7 @@ public class CoolSuppliesFeatureSet5Controller {
       }
     }
     if (bundle == null) {
-      return "Bundle not found";
+      return "The grade bundle does not exist.";
     }
 
     // Find the Item
@@ -190,7 +190,7 @@ public class CoolSuppliesFeatureSet5Controller {
       }
     }
     if (item == null) {
-      return "Item not found";
+      return "The item does not exist.";
     }
 
     // Find the BundleItem
@@ -289,13 +289,4 @@ public class CoolSuppliesFeatureSet5Controller {
 
     // Iterate through BundleItems and create TOBundleItems
     for (BundleItem bi : bundle.getBundleItems()) {
-      String itemName = bi.getItem().getName();
-      TOBundleItem toBundleItem = new TOBundleItem(bi.getQuantity(), bi.getLevel().toString(), itemName, bundleName);
-      toBundleItems.add(toBundleItem);
-     }
-
-     return toBundleItems;
-
-  }
-
-}
+      String itemName
