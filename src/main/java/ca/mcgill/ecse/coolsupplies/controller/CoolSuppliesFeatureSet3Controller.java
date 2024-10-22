@@ -98,6 +98,12 @@ public class CoolSuppliesFeatureSet3Controller {
   public static TOItem getItem(String name) {
 
     Item item = (Item) Item.getWithName(name);
+
+    // If item not found, return null
+    if (item == null) {
+      return null;
+    }
+
     TOItem to_item = new TOItem(item.getName(), item.getPrice());
     return to_item;
 
