@@ -289,4 +289,13 @@ public class CoolSuppliesFeatureSet5Controller {
 
     // Iterate through BundleItems and create TOBundleItems
     for (BundleItem bi : bundle.getBundleItems()) {
-      String itemName
+      String itemName = bi.getItem().getName();
+      TOBundleItem toBundleItem = new TOBundleItem(bi.getQuantity(), bi.getLevel().toString(), itemName, bundleName);
+      toBundleItems.add(toBundleItem);
+     }
+
+     return toBundleItems;
+
+  }
+
+}
