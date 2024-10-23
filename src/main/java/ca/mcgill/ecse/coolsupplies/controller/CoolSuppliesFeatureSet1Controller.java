@@ -15,8 +15,24 @@ public class CoolSuppliesFeatureSet1Controller {
      * @param password is a String containing the new password.
      * @return String: the exit status message
      **/
-      // do I need to check if the old password is right
-      // need to call the setPassword() method on the admin instance not a new admin
+    // checking for lower and upper case
+    boolean hasLower = false;
+    boolean hasUpper = false;
+
+    for(char c : password.toCharArray()){
+      if(Character.isLowerCase(c)){
+        hasLower = true;
+      }
+      if(Character.isUpperCase(c)){
+        hasUpper = true;
+      }
+    }
+
+    if (password.length() < 4){
+      return "Password must be at least four characters long.";
+    } else if (!password.contains("!") || !password.contains("#") || !password.contains("$") || !hasLower || !hasUpper){
+      return "Password must contain a special character out of !#$, an upper case character, and a lower case character.";
+    }
     CoolSuppliesApplication.getCoolSupplies().getAdmin().setPassword(password);
     return "Admin password updated!";
   }
@@ -35,18 +51,30 @@ public class CoolSuppliesFeatureSet1Controller {
     // need to check for the constraints
     // DO I NEED TO CHECK IF THE PARENT ALREADY EXIST
     // if two conditions are not valid whch one do i return
-      if (email.contains(" ") || email.equals("admin@cool.ca") || email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
-        return "Email must not contain any spaces and not be admin@cool.ca, and should follow the general email format 'xxxx@xx.xxx'";
+      if (User.hasWithEmail(email)){
+       return "The email must be unique.";
+      }
+      else if (email.contains(" ")){
+        return "The email must not contain spaces.";
+      }
+      else if (email == null || email.equals("")){
+        return "The email must not be empty.";
+      }
+      else if (email.equals("admin@cool.ca")){
+        return "The email must not be admin@cool.ca.";
+      }
+      else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
+        return "The email must be well-formed.";
       }
       else if (name == null || name.equals("")){
-        return "Name must not be empty or null. Please input a valid name.";
+        return "The name must not be empty.";
       } else if (password == null || password.equals("")){
-        return "Password must not be empty or null. Please input a valid password.";
+        return "The password must not be empty.";
       } else if (phoneNumber <= 999999 || phoneNumber >= 10000000){
-        return "Phone number must be 7 digits without any leading 0s. PLease input a valid phone number.";
+        return "The phone number must be seven digits.";
       }
       Parent new_parent = new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
-      return "New parent is registered!";
+      return "";
   }
 
   public static String updateParent(String email, String newPassword, String newName,
@@ -62,15 +90,12 @@ public class CoolSuppliesFeatureSet1Controller {
      **/
 
     // checking all constraints of the Parent's attributes
-    if (email.contains(" ") || email.equals("admin@cool.ca") || email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
-      return "Email must not contain any spaces and not be admin@cool.ca, and should follow the general email format 'xxxx@xx.xxx'";
-    }
-    else if (newName == null || newName.equals("")){
-      return "Name must not be empty or null. Please input a valid name.";
+    if (newName == null || newName.equals("")){
+      return "The name must not be empty.";
     } else if (newPassword == null || newPassword.equals("")){
-      return "Password must not be empty or null. Please input a valid password.";
+      return "The password must not be empty.";
     } else if (newPhoneNumber <= 999999 || newPhoneNumber >= 10000000){
-      return "Phone number must be 7 digits without any leading 0s. PLease input a valid phone number.";
+      return "The phone number must be seven digits.";
     }
 
     // finding the Parent withing the Parents list and setting the attributes
@@ -81,7 +106,7 @@ public class CoolSuppliesFeatureSet1Controller {
         parent.setPhoneNumber(newPhoneNumber);
       }
     }
-    return "Parent account information was updated.";
+    return "";
   }
 
   public static String deleteParent(String email) {
@@ -96,10 +121,10 @@ public class CoolSuppliesFeatureSet1Controller {
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
         parent.delete(); // NOT SURE RIGHT METHOD
-        return "Parent account was deleted.";
+        return "";
       }
     }
-    return "Parent account wasn't deleted as it does not exist. ";
+    return "The parent does not exist.";
   }
 
   public static TOParent getParent(String email) {

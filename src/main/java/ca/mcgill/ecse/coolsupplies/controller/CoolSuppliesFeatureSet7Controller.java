@@ -70,7 +70,13 @@ public class CoolSuppliesFeatureSet7Controller {
     * @return TOGrade: Transfer object of the given level
     * This method creates the tranfer object from string level to be sent to UI
     */
-    return new TOGrade(Grade.getWithLevel(level).getLevel());
+    Grade grade = Grade.getWithLevel(level);
+
+    if (grade == null) {
+      return null;
+    }
+
+    return new TOGrade(grade.getLevel());
   }
 
   // returns all grades
