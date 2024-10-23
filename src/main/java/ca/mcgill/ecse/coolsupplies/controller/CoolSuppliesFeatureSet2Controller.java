@@ -12,31 +12,55 @@ public class CoolSuppliesFeatureSet2Controller {
   public static String addStudent(String name, String gradeLevel) {
 
 
-    if (!(name == null) && !(name.equals("") && !(gradeLevel == null)&&!(gradeLevel.equals(""))) ) {
-      try {
-        Grade grade = new Grade(gradeLevel, CoolSuppliesApplication.getCoolSupplies());
-        new Student(name, CoolSuppliesApplication.getCoolSupplies(), grade);
-      } catch (RuntimeException e){
+    if (name.equals("")) {
+      return "The name must not be empty.";
 
+    }else{
+      try {
+        if (Grade.getWithLevel(gradeLevel) != null) {
+          new Student(name, CoolSuppliesApplication.getCoolSupplies(), Grade.getWithLevel(gradeLevel));
+        }
+        else {
+          return "The grade does not exist.";
+        }
+      } catch (RuntimeException e){
+        if (e.getMessage().equals("Cannot create due to duplicate name. See https://manual.umple.org?RE003ViolationofUniqueness.html")) {
+          return "The name must be unique.";
+        }
       }
       return "";
 
-    } else return "The name or the level cannot be empty or null.";
+    }
 
   }
-
   public static String updateStudent(String name, String newName, String newGradeLevel) {
 
-    if (!name.isEmpty() && !newGradeLevel.isEmpty() && !newName.isEmpty() && !(name == null) && !(newName == null) && !(newGradeLevel == null)) {
-      if (Student.getWithName(name) != null) {
-        if (!Student.getWithName(name).setName(newName)) return "The student's name could not be changed.";
-        if (!Student.getWithName(name).setGrade(new Grade(newGradeLevel, CoolSuppliesApplication.getCoolSupplies()))) return "The student's garde could not be modified.";
-        return "";
+    Student student = Student.getWithName(name);
 
-      }else return "the Student does not exist.";
-
+    if (student == null) {
+      return "The student does not exist.";
     }
-    else return "The name or the level cannot be empty or null.";
+
+    Grade grade = Grade.getWithLevel(newGradeLevel);
+
+    if (grade == null) {
+      return "The grade does not exist.";
+    }
+
+    if (newName.isEmpty()) {
+      return "The name must not be empty.";
+    }
+
+    if (!student.setName(newName)) {
+      return "The name must be unique.";
+    }
+
+    if (!student.setGrade(grade)) {
+      return "The grade could not be updated.";
+    }
+
+    return "";
+
   }
 
   public static String deleteStudent(String name) {
@@ -46,12 +70,14 @@ public class CoolSuppliesFeatureSet2Controller {
         Student.getWithName(name).delete();
         return "";
       }
-      else return "The Student could not be found.";
-    } else return "The name of the student cannot be empty or null.";
+      else return "The student does not exist.";
+    } else return "The name must not be empty.";
   }
 
   public static TOStudent getStudent(String name) {
-    return new TOStudent(name, Student.getWithName(name).getGrade().getLevel());
+    if (Student.getWithName(name) != null) {
+      return new TOStudent(name, Student.getWithName(name).getGrade().getLevel());
+    } else return null;
   }
 
   // returns all students
@@ -60,7 +86,7 @@ public class CoolSuppliesFeatureSet2Controller {
     for (Student s : CoolSuppliesApplication.getCoolSupplies().getStudents()) {
       students.add(getStudent(s.getName()));
     }
-      return students;
+    return students;
 
   }
 
