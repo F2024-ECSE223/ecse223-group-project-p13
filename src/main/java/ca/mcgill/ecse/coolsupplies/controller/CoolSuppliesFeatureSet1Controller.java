@@ -30,7 +30,7 @@ public class CoolSuppliesFeatureSet1Controller {
 
     if (password.length() < 4){
       return "Password must be at least four characters long.";
-    } else if (!password.contains("!") || !password.contains("#") || !password.contains("$") || !hasLower || !hasUpper){
+    } else if (!(password.contains("!") || password.contains("#") || password.contains("$")) || !hasLower || !hasUpper){
       return "Password must contain a special character out of !#$, an upper case character, and a lower case character.";
     } else if (!CoolSuppliesApplication.getCoolSupplies().hasAdmin()){
       return "The admin does not exist.";
@@ -50,34 +50,34 @@ public class CoolSuppliesFeatureSet1Controller {
      * @return String: the exit status message correspondong to the right situation.
      **/
 
-      if (User.hasWithEmail(email)){
-       return "The email must be unique.";
-      }
-      else if (email.contains(" ")){
-        return "The email must not contain spaces.";
-      }
-      else if (email == null || email.equals("")){
-        return "The email must not be empty.";
-      }
-      else if (email.equals("admin@cool.ca")){
-        return "The email must not be admin@cool.ca.";
-      }
-      else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
-        return "The email must be well-formed.";
-      }
-      else if (name == null || name.equals("")){
-        return "The name must not be empty.";
-      } else if (password == null || password.equals("")){
-        return "The password must not be empty.";
-      } else if (phoneNumber <= 999999 || phoneNumber >= 10000000){
-        return "The phone number must be seven digits.";
-      }
-      Parent new_parent = new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
-      return "";
+    if (User.hasWithEmail(email)){
+      return "The email must be unique.";
+    }
+    else if (email.contains(" ")){
+      return "The email must not contain spaces.";
+    }
+    else if (email == null || email.equals("")){
+      return "The email must not be empty.";
+    }
+    else if (email.equals("admin@cool.ca")){
+      return "The email must not be admin@cool.ca.";
+    }
+    else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
+      return "The email must be well-formed.";
+    }
+    else if (name == null || name.equals("")){
+      return "The name must not be empty.";
+    } else if (password == null || password.equals("")){
+      return "The password must not be empty.";
+    } else if (phoneNumber <= 999999 || phoneNumber >= 10000000){
+      return "The phone number must be seven digits.";
+    }
+    Parent new_parent = new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
+    return "";
   }
 
   public static String updateParent(String email, String newPassword, String newName,
-      int newPhoneNumber) {
+                                    int newPhoneNumber) {
     /**
      * This method updates a Parent entity with the given values for its attributes (password, name and phone number).
      * @author Lune Letailleur
@@ -95,6 +95,8 @@ public class CoolSuppliesFeatureSet1Controller {
       return "The password must not be empty.";
     } else if (newPhoneNumber <= 999999 || newPhoneNumber >= 10000000){
       return "The phone number must be seven digits.";
+    } else if (!User.hasWithEmail(email)){
+      return "The parent does not exist.";
     }
 
     // finding the Parent withing the Parents list and setting the attributes
@@ -156,4 +158,3 @@ public class CoolSuppliesFeatureSet1Controller {
     return parents;
   }
 }
-
