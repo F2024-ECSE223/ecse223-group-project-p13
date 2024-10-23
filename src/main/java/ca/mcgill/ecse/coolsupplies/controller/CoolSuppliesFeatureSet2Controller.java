@@ -32,24 +32,34 @@ public class CoolSuppliesFeatureSet2Controller {
     }
 
   }
+
   public static String updateStudent(String name, String newName, String newGradeLevel) {
-    System.out.println(name);
-    System.out.println(newName);
-    System.out.println(newGradeLevel);
+    Student student = Student.getWithName(name);
 
-    if (!name.isEmpty() && !newGradeLevel.isEmpty() && !newName.isEmpty() && !(name == null) && !(newName == null) && !(newGradeLevel == null)) {
-      if (Student.getWithName(name) != null) {
-        Student student = Student.getWithName(name);
-        if (!student.setName(newName)) return "The name must be unique.";
-        if (Grade.getWithLevel(newGradeLevel) == null || student.setGrade(Grade.getWithLevel(newGradeLevel))){
-          return "The grade does not exist.";
-        }
-        return "";
-
-      }else return "The student does not exist.";
-
+    if (student == null) {
+      return "The student does not exist.";
     }
-    else return "The name must not be empty.";
+
+    Grade grade = Grade.getWithLevel(newGradeLevel);
+
+    if (grade == null) {
+      return "The grade does not exist.";
+    }
+
+    if (newName.isEmpty()) {
+      return "The name must not be empty.";
+    }
+
+    if (!student.setName(newName)) {
+      return "The name must be unique.";
+    }
+
+    if (!student.setGrade(grade)) {
+      return "The grade could not be updated.";
+    }
+
+    return "";
+
   }
 
   public static String deleteStudent(String name) {

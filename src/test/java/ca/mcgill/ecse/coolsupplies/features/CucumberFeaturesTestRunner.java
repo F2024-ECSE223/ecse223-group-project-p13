@@ -14,10 +14,10 @@ import io.cucumber.junit.CucumberOptions;
   // "src/test/resources/UpdatePasswordOfSchoolAdmin.feature",
 
   // Feature 2
-  // "src/test/resources/AddStudent.feature",
-  // "src/test/resources/UpdateStudent.feature",
-  // "src/test/resources/DeleteStudent.feature",
-  // "src/test/resources/GetStudent.feature"
+  "src/test/resources/AddStudent.feature",
+  "src/test/resources/UpdateStudent.feature",
+  "src/test/resources/DeleteStudent.feature",
+  "src/test/resources/GetStudent.feature",
   
   // Feature 3
   "src/test/resources/AddItem.feature",
