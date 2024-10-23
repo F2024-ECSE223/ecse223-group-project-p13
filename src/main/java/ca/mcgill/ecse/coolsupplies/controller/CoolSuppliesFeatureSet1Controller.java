@@ -32,9 +32,11 @@ public class CoolSuppliesFeatureSet1Controller {
       return "Password must be at least four characters long.";
     } else if (!password.contains("!") || !password.contains("#") || !password.contains("$") || !hasLower || !hasUpper){
       return "Password must contain a special character out of !#$, an upper case character, and a lower case character.";
+    } else if (!CoolSuppliesApplication.getCoolSupplies().hasAdmin()){
+      return "The admin does not exist.";
     }
     CoolSuppliesApplication.getCoolSupplies().getAdmin().setPassword(password);
-    return "Admin password updated!";
+    return "";
   }
 
   public static String addParent(String email, String password, String name, int phoneNumber) {
@@ -48,9 +50,6 @@ public class CoolSuppliesFeatureSet1Controller {
      * @return String: the exit status message correspondong to the right situation.
      **/
 
-    // need to check for the constraints
-    // DO I NEED TO CHECK IF THE PARENT ALREADY EXIST
-    // if two conditions are not valid whch one do i return
       if (User.hasWithEmail(email)){
        return "The email must be unique.";
       }
@@ -120,7 +119,7 @@ public class CoolSuppliesFeatureSet1Controller {
 
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
-        parent.delete(); // NOT SURE RIGHT METHOD
+        parent.delete();
         return "";
       }
     }
