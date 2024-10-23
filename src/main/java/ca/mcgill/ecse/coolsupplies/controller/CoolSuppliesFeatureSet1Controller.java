@@ -47,7 +47,7 @@ public class CoolSuppliesFeatureSet1Controller {
      * @param password: a string with the parent's password
      * @param name: a string with the parent's name
      * @param phoneNumber: a integer corresponding to the parent's phone number
-     * @return String: the exit status message correspondong to the right situation.
+     * @return String: the exit status message corresponding to the right situation.
      **/
 
     if (User.hasWithEmail(email)){
@@ -62,7 +62,7 @@ public class CoolSuppliesFeatureSet1Controller {
     else if (email.equals("admin@cool.ca")){
       return "The email must not be admin@cool.ca.";
     }
-    else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") > (email.length() -1)){
+    else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@") || email.indexOf("@") > (email.lastIndexOf(".") -1) || email.lastIndexOf(".") >= (email.length() -1) || email.indexOf("@") == (email.indexOf(".")-1)){
       return "The email must be well-formed.";
     }
     else if (name == null || name.equals("")){
