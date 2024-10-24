@@ -11,12 +11,18 @@ import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
 // Feature Set 3
 
-// TODO: JavaDoc
-
 public class CoolSuppliesFeatureSet3Controller {
 
   private static final CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
+  /**
+   * Add item to the system.
+   * 
+   * @param name name of item
+   * @param price price of item
+   * @return empty string if successful or an error message for unsuccessful submission
+   * @author Dimitri Christopoulos
+   */
   public static String addItem(String name, int price) {
 
     // Validate Price
@@ -43,8 +49,16 @@ public class CoolSuppliesFeatureSet3Controller {
     
   }
 
+  /**
+   * Updates an existing item with a new name and new price.
+   * 
+   * @param name old name of item
+   * @param newName new name of item
+   * @param newPrice new price of item
+   * @return empty string if successful or an error message for unsuccessful submission
+   * @author Dimitri Christopoulos
+   */
   public static String updateItem(String name, String newName, int newPrice) {
-    
 
     // Validate input - item must exist
     Item item = (Item) Item.getWithName(name);
@@ -75,6 +89,13 @@ public class CoolSuppliesFeatureSet3Controller {
     return "";
   }
 
+  /**
+   * Delete an existing item from the system
+   * 
+   * @param name name of item to be deleted
+   * @return empty string if successful or an error message for unsuccessful submission
+   * @author Dimitri Christopoulos
+   */
   public static String deleteItem(String name) {
 
     // Check if list of items is empty
@@ -95,6 +116,13 @@ public class CoolSuppliesFeatureSet3Controller {
     else return "";
   }
 
+  /**
+   * Get an item by name and return it as a transfer object
+   * @param name name of item
+   * @return tranfer item of item object
+   * @author empty string if successful or an error message for unsuccessful submission
+   * @author Dimitri Christopoulos
+   */
   public static TOItem getItem(String name) {
 
     Item item = (Item) Item.getWithName(name);
@@ -110,6 +138,13 @@ public class CoolSuppliesFeatureSet3Controller {
   }
 
   // returns all items
+  /**
+   * Get all the items in the system as a List of transfer objects.
+   * 
+   * @return list of Item transfer objects.
+   * @author empty string if successful or an error message for unsuccessful submission
+   * @author Dimitri Christopoulos
+   */
   public static List<TOItem> getItems() {
 
     List<TOItem> toitem_list = new ArrayList<>();  // Tranfer object item list
