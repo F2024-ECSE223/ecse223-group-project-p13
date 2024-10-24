@@ -88,7 +88,7 @@ public class CoolSuppliesFeatureSet1Controller {
   public static String updateParent(String email, String newPassword, String newName,
                                     int newPhoneNumber) {
 
-    // checking all constraints of the Parent's attributes
+    // checking all constraints of the parent's attributes
     if (newName == null || newName.equals("")){
       return "The name must not be empty.";
     } else if (newPassword == null || newPassword.equals("")){
