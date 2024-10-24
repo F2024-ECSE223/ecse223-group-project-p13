@@ -51,8 +51,6 @@ public class CoolSuppliesFeatureSet2Controller {
   public static String updateStudent(String name, String newName, String newGradeLevel) {
     Student student = Student.getWithName(name);
 
-    Student student = Student.getWithName(name);
-
     if (student == null) {
       return "The student does not exist.";
     }
