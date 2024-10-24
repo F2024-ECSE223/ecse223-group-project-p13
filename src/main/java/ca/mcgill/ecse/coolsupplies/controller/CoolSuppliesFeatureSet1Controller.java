@@ -82,7 +82,7 @@ public class CoolSuppliesFeatureSet1Controller {
    * @param email: a string with the parent's email
    * @param newPassword: a string with the parent's new password
    * @param newName: a string with the parent's new name
-   * @param newPhoneNumber: a integer corresponding to the parent's new phone number
+   * @param newPhoneNumber: an integer corresponding to the parent's new phone number
    * @return String: the exit status message corresponding to the right situation.
    **/
   public static String updateParent(String email, String newPassword, String newName,
