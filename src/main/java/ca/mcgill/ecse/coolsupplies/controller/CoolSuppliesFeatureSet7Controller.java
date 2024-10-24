@@ -7,7 +7,6 @@ import ca.mcgill.ecse.coolsupplies.model.Grade;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
 public class CoolSuppliesFeatureSet7Controller {
-
   /**
    * @author Kenny-Alexander Joseph
    * @param String level: the level that is going to be added in the system
@@ -36,7 +35,6 @@ public class CoolSuppliesFeatureSet7Controller {
   * Otherwise, error message is displayed accordingly. 
   */
   public static String updateGrade(String level, String newLevel) {
-
     if (!newLevel.equals("")){
       if (Grade.getWithLevel(level) != null) {
         if (!Grade.getWithLevel(level).setLevel(newLevel)) return "The level must be unique.";
@@ -70,10 +68,15 @@ public class CoolSuppliesFeatureSet7Controller {
   * This method creates the tranfer object from string level to be sent to UI
   */
   public static TOGrade getGrade(String level) {
-    return new TOGrade(Grade.getWithLevel(level).getLevel());
+    Grade grade = Grade.getWithLevel(level);
+
+    if (grade == null) {
+      return null;
+    }
+
+    return new TOGrade(grade.getLevel());
   }
 
-  // returns all grades
   /**
   * @author Kenny-Alexander Joseph
   * @param none
@@ -86,5 +89,4 @@ public class CoolSuppliesFeatureSet7Controller {
     for (Grade i : CoolSuppliesApplication.getCoolSupplies().getGrades()) grades.add(getGrade(i.getLevel()));
     return grades;
   }
-
 }
