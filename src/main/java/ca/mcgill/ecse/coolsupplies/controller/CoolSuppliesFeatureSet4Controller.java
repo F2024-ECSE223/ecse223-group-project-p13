@@ -1,7 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
-import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.*;
 
 import java.util.*;
@@ -15,9 +14,8 @@ public class CoolSuppliesFeatureSet4Controller {
    * @param name
    * @param discount
    * @param gradeLevel
-   * @return String
-   * @throws RuntimeException if name is null, already exists, if discount is smaller than 0 or larger than 100 or if gradeLevel
-   * does not exist in CoolSupplies or if it already has an associated GradeBundle
+   * @return String  returns the appropriate error message if there is any, returns an empty string if the action is
+   * successful.
    */
   public static String addBundle(String name, int discount, String gradeLevel) {
 
@@ -62,25 +60,25 @@ public class CoolSuppliesFeatureSet4Controller {
   }
 
   /**
-   * updates a GradeBundle object that is already existing in the system.
+   * updates a GradeBundle object if it already is in the system, the new name is unique and non-empty, if the new discount value is
+   * in the interval [0,100], if the new grade exists in the system and if the new grade does not already have a bundle.
    * @author Nil Akkurt
    * @param name
    * @param newName
    * @param newDiscount
    * @param newGradeLevel
-   * @return String
+   * @return String  returns the appropriate error message if there is any, returns an empty string if the action
+   * is successful.
    *
    */
   public static String updateBundle(String name, String newName, int newDiscount,
-      String newGradeLevel) {
+                                    String newGradeLevel) {
+    String finalMessage= "";
     GradeBundle bundleToUpdate = null;
     List<GradeBundle> bundles = CoolSuppliesApplication.getCoolSupplies().getBundles();
     for(GradeBundle bundle: bundles){
       if(bundle.getName().equals(name)){
         bundleToUpdate = bundle;
-      }
-      if(newName.equals(bundle.getName())){
-        return "The name must be unique.";
       }
     }
     if(bundleToUpdate == null){
@@ -88,11 +86,11 @@ public class CoolSuppliesFeatureSet4Controller {
     }
 
     if(newName==null || newName.trim().isEmpty()){
-      return "The name must not be empty";
+      return "The name must not be empty.";
     }
 
     if(newDiscount < 0 || newDiscount > 100){
-     return "The discount must be greater than or equal to 0 and less than or equal to 100.";
+      return "The discount must be greater than or equal to 0 and less than or equal to 100.";
     }
 
     List<Grade> gradesInSystem = CoolSuppliesApplication.getCoolSupplies().getGrades();
@@ -105,6 +103,13 @@ public class CoolSuppliesFeatureSet4Controller {
     if(gradeToUpdate == null){
       return "The grade does not exist.";
     }
+
+    for(GradeBundle bundle: bundles){
+      if(newName.equals(bundle.getName())){
+        return "The name must be unique.";
+      }
+    }
+
     if(gradeToUpdate.hasBundle()){
       return "A bundle already exists for the grade.";
     }
@@ -119,8 +124,7 @@ public class CoolSuppliesFeatureSet4Controller {
    * deletes a GradeBundle object if it exists in the system
    * @author Nil Akkurt
    * @param name
-   * @return String
-   * @throws RuntimeException if GradeBundle with name does not exist
+   * @return String returns an error message if the action is unsuccessful, returns an empty string otherwise.
    */
   public static String deleteBundle(String name) {
     List<GradeBundle> bundlesInSystem = CoolSuppliesApplication.getCoolSupplies().getBundles();
@@ -133,7 +137,7 @@ public class CoolSuppliesFeatureSet4Controller {
     if(bundleToDelete == null){
       return ("The grade bundle does not exist.");
     }
-    bundleToDelete.delete();   
+    bundleToDelete.delete();
     return "";
   }
 
@@ -151,8 +155,12 @@ public class CoolSuppliesFeatureSet4Controller {
         bundleToGet= bundle;
       }
     }
+    if(bundleToGet == null){
+      return null;
+    }
+
     return new TOGradeBundle(bundleToGet.getName(), bundleToGet.getDiscount(), bundleToGet.getGrade().getLevel());
-    //would this give an error if the bundle stays null?
+
   }
 
   // returns all bundles
@@ -170,6 +178,7 @@ public class CoolSuppliesFeatureSet4Controller {
       bundlesToGet.add(TObundle);
     }
     return bundlesToGet;
-    }
-
   }
+
+}
+
