@@ -26,9 +26,10 @@ public class CoolSuppliesFeatureSet3Controller {
    */
   public static String addItem(String name, int price) {
 
-    // Validate Price
-    if (price < 0) {
-      return "The price must be greater than or equal to 0.";
+    // Validate name - name cannot already be in system
+    Item item = (Item) Item.getWithName(name);
+    if (item != null) {
+      return "The name must be unique.";
     }
 
     // Validate name - Name must not be empty
@@ -36,10 +37,9 @@ public class CoolSuppliesFeatureSet3Controller {
       return "The name must not be empty.";
     }
 
-    // Validate name - name cannot already be in system
-    Item item = (Item) Item.getWithName(name);
-    if (item != null) {
-      return "The name must be unique.";
+    // Validate Price
+    if (price < 0) {
+      return "The price must be greater than or equal to 0.";
     }
 
     // Add new item - input is valid
@@ -157,5 +157,4 @@ public class CoolSuppliesFeatureSet3Controller {
     }
     return toitem_list;
   }
-
 }
