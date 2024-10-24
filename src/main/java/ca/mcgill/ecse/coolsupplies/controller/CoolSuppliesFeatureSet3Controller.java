@@ -86,7 +86,7 @@ public class CoolSuppliesFeatureSet3Controller {
     item.setName(newName);
     item.setPrice(newPrice);
     
-    return "";
+    return "";  // Success message
   }
 
   /**
@@ -113,7 +113,7 @@ public class CoolSuppliesFeatureSet3Controller {
 
       return "";
     }
-    else return "";
+    else return "";  // Success message
   }
 
   /**
