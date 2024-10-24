@@ -72,7 +72,7 @@ public class CoolSuppliesFeatureSet1Controller {
     } else if (phoneNumber <= 999999 || phoneNumber >= 10000000){
       return "The phone number must be seven digits.";
     }
-    Parent new_parent = new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
+    new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
     return "";
   }
 
@@ -80,9 +80,9 @@ public class CoolSuppliesFeatureSet1Controller {
    * This method updates a Parent entity with the given values for its attributes (password, name and phone number).
    * @author Lune Letailleur
    * @param email: a string with the parent's email
-   * @param password: a string with the parent's new password
-   * @param name: a string with the parent's new name
-   * @param phoneNumber: a integer corresponding to the parent's new phone number
+   * @param newPassword: a string with the parent's new password
+   * @param newName: a string with the parent's new name
+   * @param newPhoneNumber: a integer corresponding to the parent's new phone number
    * @return String: the exit status message corresponding to the right situation.
    **/
   public static String updateParent(String email, String newPassword, String newName,
@@ -145,8 +145,7 @@ public class CoolSuppliesFeatureSet1Controller {
   /**
    * This method iterates through the list of parent entities, adds them to a list of transfer objects and returns that list.
    * @author Lune Letailleur
-   * @param none
-   * @return List<TOParent>, the list of the parents's transfer objects
+   * @return List<TOParent>, the list of the parents' transfer objects
    **/
   public static List<TOParent> getParents() {
 
