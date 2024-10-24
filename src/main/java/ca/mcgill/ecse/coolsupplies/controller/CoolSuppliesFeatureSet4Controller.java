@@ -103,14 +103,15 @@ public class CoolSuppliesFeatureSet4Controller {
     if(gradeToUpdate == null){
       return "The grade does not exist.";
     }
-    if(gradeToUpdate.hasBundle()){
-      return "A bundle already exists for the grade.";
-    }
 
     for(GradeBundle bundle: bundles){
       if(newName.equals(bundle.getName())){
         return "The name must be unique.";
       }
+    }
+
+    if(gradeToUpdate.hasBundle()){
+      return "A bundle already exists for the grade.";
     }
 
     bundleToUpdate.setName(newName);
