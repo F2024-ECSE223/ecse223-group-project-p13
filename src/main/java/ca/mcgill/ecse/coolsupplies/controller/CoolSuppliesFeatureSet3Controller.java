@@ -1,18 +1,12 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-// Imports
 
 import ca.mcgill.ecse.coolsupplies.model.*;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
-// Feature Set 3
-
 public class CoolSuppliesFeatureSet3Controller {
-
   private static final CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
   /**
@@ -24,7 +18,6 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static String addItem(String name, int price) {
-
     // Validate name - name cannot already be in system
     Item item = (Item) Item.getWithName(name);
     if (item != null) {
@@ -45,8 +38,7 @@ public class CoolSuppliesFeatureSet3Controller {
     Item newItem = new Item(name, price, coolSupplies);
     coolSupplies.addItem(newItem);
 
-    return "";  // Success message
-    
+    return ""; // Success message
   }
 
   /**
@@ -59,7 +51,6 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static String updateItem(String name, String newName, int newPrice) {
-
     // Validate input - item must exist
     Item item = (Item) Item.getWithName(name);
     if (item == null) {
@@ -85,7 +76,7 @@ public class CoolSuppliesFeatureSet3Controller {
     // Set new name and new price
     item.setName(newName);
     item.setPrice(newPrice);
-    
+
     return "";
   }
 
@@ -97,7 +88,6 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static String deleteItem(String name) {
-
     // Check if list of items is empty
     if (coolSupplies.hasItems()) {
 
@@ -112,19 +102,20 @@ public class CoolSuppliesFeatureSet3Controller {
       item.delete();
 
       return "";
+    } else {
+      return "";
     }
-    else return "";
   }
 
   /**
    * Get an item by name and return it as a transfer object
+   * 
    * @param name name of item
    * @return tranfer item of item object
    * @author empty string if successful or an error message for unsuccessful submission
    * @author Dimitri Christopoulos
    */
   public static TOItem getItem(String name) {
-
     Item item = (Item) Item.getWithName(name);
 
     // If item not found, return null
@@ -137,7 +128,6 @@ public class CoolSuppliesFeatureSet3Controller {
 
   }
 
-  // returns all items
   /**
    * Get all the items in the system as a List of transfer objects.
    * 
@@ -146,14 +136,14 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static List<TOItem> getItems() {
-
-    List<TOItem> toitem_list = new ArrayList<>();  // Tranfer object item list
-    List<Item> item_list = coolSupplies.getItems();  // List of current objects
+    List<TOItem> toitem_list = new ArrayList<>(); // Tranfer object item list
+    List<Item> item_list = coolSupplies.getItems(); // List of current objects
 
     // Iterate over current objects and add them to the new list by creating TOItem objects
     for (Item item : item_list) {
       toitem_list.add(getItem(item.getName()));
     }
+
     return toitem_list;
   }
 }
