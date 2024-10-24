@@ -16,6 +16,8 @@ public class CoolSuppliesFeatureSet2Controller {
    *         the student was successfully added This method attempts to add a student
    */
   public static String addStudent(String name, String gradeLevel) {
+
+
     if (name.equals("")) {
       return "The name must not be empty.";
 
