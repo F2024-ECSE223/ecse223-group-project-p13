@@ -51,7 +51,6 @@ public class CoolSuppliesFeatureSet1Controller {
    * @return String: the exit status message corresponding to the right situation.
    **/
   public static String addParent(String email, String password, String name, int phoneNumber) {
-
     if (User.hasWithEmail(email)) {
       return "The email must be unique.";
     } else if (email.contains(" ")) {
@@ -86,9 +85,7 @@ public class CoolSuppliesFeatureSet1Controller {
    * @param newPhoneNumber: an integer corresponding to the parent's new phone number
    * @return String: the exit status message corresponding to the right situation.
    **/
-  public static String updateParent(String email, String newPassword, String newName,
-      int newPhoneNumber) {
-
+  public static String updateParent(String email, String newPassword, String newName, int newPhoneNumber) {
     // checking all constraints of the Parent's attributes
     if (newName == null || newName.equals("")) {
       return "The name must not be empty.";
@@ -108,6 +105,7 @@ public class CoolSuppliesFeatureSet1Controller {
         parent.setPhoneNumber(newPhoneNumber);
       }
     }
+
     return "";
   }
 
@@ -119,13 +117,13 @@ public class CoolSuppliesFeatureSet1Controller {
    * @return String: the exit status message corresponding to the right situation.
    **/
   public static String deleteParent(String email) {
-
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       if (parent.getEmail().equals(email)) {
         parent.delete();
         return "";
       }
     }
+
     return "The parent does not exist.";
   }
 
@@ -137,12 +135,12 @@ public class CoolSuppliesFeatureSet1Controller {
    * @return TOParent: trasnfer object for the parent entity
    **/
   public static TOParent getParent(String email) {
-
     if (User.hasWithEmail(email)) {
       Parent parent_to_return = (Parent) User.getWithEmail(email);
       return new TOParent(parent_to_return.getEmail(), parent_to_return.getPassword(),
           parent_to_return.getName(), parent_to_return.getPhoneNumber());
     }
+
     return null;
   }
 
@@ -154,12 +152,13 @@ public class CoolSuppliesFeatureSet1Controller {
    * @return List<TOParent>, the list of the parents' transfer objects
    **/
   public static List<TOParent> getParents() {
-
     // creating an array list of parents and adding the TOs to it
     List<TOParent> parents = new ArrayList<TOParent>();
+
     for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
       parents.add(getParent(parent.getEmail()));
     }
+
     return parents;
   }
 }
