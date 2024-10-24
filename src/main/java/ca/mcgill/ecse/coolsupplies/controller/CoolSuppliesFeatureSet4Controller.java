@@ -6,7 +6,6 @@ import ca.mcgill.ecse.coolsupplies.model.*;
 import java.util.*;
 
 public class CoolSuppliesFeatureSet4Controller {
-
   /**
    * Adds a GradeBundle to the application if the bundle's name is unique and not empty, the discount is an integer
    * between 0 and 100, and if the gradeLevel is an already existing Grade in the application without a bundle.
@@ -179,6 +178,5 @@ public class CoolSuppliesFeatureSet4Controller {
     }
     return bundlesToGet;
   }
-
 }
 
