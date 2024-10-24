@@ -90,7 +90,7 @@ public class CoolSuppliesFeatureSet4Controller {
     }
 
     if(newDiscount < 0 || newDiscount > 100){
-     return "The discount must be greater than or equal to 0 and less than or equal to 100.";
+      return "The discount must be greater than or equal to 0 and less than or equal to 100.";
     }
 
     List<Grade> gradesInSystem = CoolSuppliesApplication.getCoolSupplies().getGrades();
@@ -103,6 +103,13 @@ public class CoolSuppliesFeatureSet4Controller {
     if(gradeToUpdate == null){
       return "The grade does not exist.";
     }
+
+    for(GradeBundle bundle: bundles){
+      if(newName.equals(bundle.getName())){
+        return "The name must be unique.";
+      }
+    }
+
     if(gradeToUpdate.hasBundle()){
       return "A bundle already exists for the grade.";
     }
@@ -136,7 +143,7 @@ public class CoolSuppliesFeatureSet4Controller {
     if(bundleToDelete == null){
       return ("The grade bundle does not exist.");
     }
-    bundleToDelete.delete();   
+    bundleToDelete.delete();
     return "";
   }
 
@@ -177,6 +184,7 @@ public class CoolSuppliesFeatureSet4Controller {
       bundlesToGet.add(TObundle);
     }
     return bundlesToGet;
-    }
-
   }
+
+}
+
