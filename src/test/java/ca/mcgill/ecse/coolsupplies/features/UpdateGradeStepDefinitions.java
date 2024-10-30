@@ -1,3 +1,4 @@
+
 package ca.mcgill.ecse.coolsupplies.features;
 
 /* Project Imports */
@@ -8,7 +9,6 @@ import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
 /* Cucumber Imports */
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en.Given;
 
 /* JUnit Imports */
 import static org.junit.jupiter.api.Assertions.assertTrue;
