@@ -308,7 +308,7 @@ public class OrderStepDefinitions {
         break;
       }
     }
-    assertTrue("Expected orde to contain item " +string2, itemExists);
+    assertTrue("Expected order to contain item " +string2, itemExists);
 
   }
 
@@ -333,7 +333,7 @@ public class OrderStepDefinitions {
         break;
       }
     }
-    assertFalse("Expected orde to contain item " +string2, itemExists);
+    assertFalse("Expected order to contain item " +string2, itemExists);
 
   }
 
