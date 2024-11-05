@@ -393,8 +393,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string : string representing the number of the order
-   * @param string2 : authorization Code
    */
   @Then("the order {string} shall not contain authorization code {string}")
   public void the_order_shall_not_contain_authorization_code(String string, String string2) {
@@ -413,7 +411,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
    */
   @Then("the order {string} shall not exist in the system")
   public void the_order_shall_not_exist_in_the_system(String string) {
@@ -427,8 +424,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
-   * @param string2
    */
   @Then("the order {string} shall contain authorization code {string}")
   public void the_order_shall_contain_authorization_code(String string, String string2) {
@@ -446,8 +441,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
-   * @param string2
    */
   @Then("the order {string} shall contain {string} item")
   public void the_order_shall_contain_item(String string, String string2) {
@@ -472,8 +465,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
-   * @param string2
    */
   @Then("the order {string} shall not contain {string}")
   public void the_order_shall_not_contain(String string, String string2) {
