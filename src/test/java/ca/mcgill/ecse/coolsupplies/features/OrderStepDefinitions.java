@@ -12,6 +12,8 @@ import ca.mcgill.ecse.coolsupplies.model.OrderItem;
 
 /* Helper Imports */
 import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
 
 /* JUnit Imports */
@@ -23,6 +25,14 @@ import static org.junit.Assert.assertNotEquals;
 
 
 public class OrderStepDefinitions {
+  private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
+
+  /**
+   * This test attemps to verify that the given parent entities exist in the system.
+   * @author Lune Letailleur
+   * @param dataTable represents the parent entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -33,9 +43,24 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String, String, String, String >> entities = dataTable.asMaps();
+
+    for (var entity:entities){
+      String aEmail = entity.get("email");
+      String aPassword = entity.get("password");
+      String aName = entity.get("name");
+      int aPhoneNumber = (int) entity.get("phoneNumber");
+      coolSupplies.addParent(aEmail, aPassword, aName, aPhoneNumber);
+    }
   }
 
+  /**
+   * This test attemps to verify that the given grade entities exist in the system.
+   * @author Lune Letailleur
+   * @param dataTable represents the grade entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following grade entities exist in the system")
   public void the_following_grade_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -46,9 +71,20 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String level = entity.get("level");
+      coolSupplies.addGrade(level);
+    }
   }
 
+  /**
+   * This test attemps to verify that the given student entities exist in the system.
+   * @author Lune Letailleur
+   * @param dataTable represents the student entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following student entities exist in the system")
   public void the_following_student_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -59,7 +95,14 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      Grade gradeLevel = (Grade) entity.get("gradeLevel");
+      coolSupplies.addStudent(name, gradeLevel);
+    }
   }
 
   @Given("the following student entities exist for a parent in the system")
@@ -75,6 +118,12 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /**
+   * This test attemps to verify that the given item entities exist in the system.
+   * @author Lune Letailleur
+   * @param dataTable represents the item entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following item entities exist in the system")
   public void the_following_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -85,9 +134,21 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      int price = (int) entity.get("price");
+      coolSupplies.addItem(name, price);
+    }
   }
 
+  /**
+   * This test attemps to verify that the given grade bundle entities exist in the system.
+   * @author Lune Letailleur
+   * @param dataTable represents the grade bundle entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following grade bundle entities exist in the system")
   public void the_following_grade_bundle_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -98,7 +159,15 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      int discount = (int) entity.get("discount");
+      Grade gradeLevel = (Grade) entity.get("gradeLevel");
+      coolSupplies.addBundle(name, discount ,gradeLevel);
+    }
   }
 
   @Given("the following bundle item entities exist in the system")
