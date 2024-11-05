@@ -1,11 +1,9 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
-import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 
 import ca.mcgill.ecse.coolsupplies.model.*;
 
@@ -186,7 +184,12 @@ public class OrderStepDefinitions {
     }
   }
 
-  // MARK: Edouard
+  /**
+   * This test XXX
+   * @author Edouard Dupont
+   * @param dataTable represents the grade entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following bundle item entities exist in the system")
   public void the_following_bundle_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -197,9 +200,25 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String, String>> bundleItems = dataTable.asMaps(String.class, String.class);
+    for (Map<String, String> item : bundleItems) {
+        // Assume that `BundleItem` is a model entity and `addBundleItem` is a method in the model layer
+        String id = item.get("id");
+        String name = item.get("name");
+        int quantity = Integer.parseInt(item.get("quantity"));
+        // Call the method to create the bundle item entity
+        BundleItem bundleItem = new BundleItem(id, name, quantity);
+        addBundleItem(bundleItem); // Add item to model layer (is this in model?)
+    }
   }
 
+  /**
+   * This test XXX
+   * @author Edouard Dupont
+   * @param dataTable represents the grade entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following order entities exist in the system")
   public void the_following_order_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -210,9 +229,23 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    
+    List<Map<String, String>> orders = dataTable.asMaps(String.class, String.class);
+    for (Map<String, String> orderData : orders) {
+        String orderId = orderData.get("orderId");
+        String status = orderData.get("status");
+        // Create the order entity and set the required fields
+        Order order = new Order(orderId, status);
+        model.addOrder(order); // Add order to model layer
+    }
   }
 
+  /**
+   * This test XXX
+   * @author Edouard Dupont
+   * @param dataTable represents the grade entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following order item entities exist in the system")
   public void the_following_order_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -223,27 +256,67 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    
+    List<Map<String, String>> orderItems = dataTable.asMaps(String.class, String.class);
+    for (Map<String, String> itemData : orderItems) {
+        String itemId = itemData.get("itemId");
+        String orderId = itemData.get("orderId");
+        int quantity = Integer.parseInt(itemData.get("quantity"));
+        // Assuming an OrderItem model exists with respective fields
+        OrderItem orderItem = new OrderItem(itemId, orderId, quantity);
+        model.addOrderItem(orderItem); // Add item to model layer
+    }
   }
 
+  /**
+   * This test XXX
+   * @author Edouard Dupont
+   * @param string XXX
+   * @param string2 XXX
+   * @return void
+   */
   @Given("the order {string} is marked as {string}")
   public void the_order_is_marked_as(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
+    Order order = model.getOrderById(string); // Retrieve order from model layer
+    if (order != null) {
+        order.setStatus(string2); // Set the order's status (find it...)
+    } else {
+        throw new IllegalArgumentException("Order not found: " + string);
+    }
   }
 
+  /**
+   * This test XXX
+   * @author Edouard Dupont
+   * @param string XXX
+   * @param string2 XXX
+   * @param string3 XXX
+   * @return void
+   */
   @When("the parent attempts to update an order with number {string} to purchase level {string} and student with name {string}")
   public void the_parent_attempts_to_update_an_order_with_number_to_purchase_level_and_student_with_name(
       String string, String string2, String string3) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    OrderController.updateOrder(string, string2, string3);
   }
 
+  /**
+   * This test XXX
+   * @author Edouard Dupont
+   * @param string XXX
+   * @param string2 XXX
+   * @param string3 XXX
+   * @return void
+   */
   @When("the parent attempts to add an item {string} with quantity {string} to the order {string}")
   public void the_parent_attempts_to_add_an_item_with_quantity_to_the_order(String string,
       String string2, String string3) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
+    int quantity = Integer.parseInt(quantityStr);
+    OrderController.addItemToOrder(orderNumber, itemName, quantity); // Assumes `addItemToOrder` in the controller
   }
 
   // MARK: Trevor
@@ -393,8 +466,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string : string representing the number of the order
-   * @param string2 : authorization Code
    */
   @Then("the order {string} shall not contain authorization code {string}")
   public void the_order_shall_not_contain_authorization_code(String string, String string2) {
@@ -413,7 +484,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
    */
   @Then("the order {string} shall not exist in the system")
   public void the_order_shall_not_exist_in_the_system(String string) {
@@ -427,8 +497,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
-   * @param string2
    */
   @Then("the order {string} shall contain authorization code {string}")
   public void the_order_shall_contain_authorization_code(String string, String string2) {
@@ -446,8 +514,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
-   * @param string2
    */
   @Then("the order {string} shall contain {string} item")
   public void the_order_shall_contain_item(String string, String string2) {
@@ -472,8 +538,6 @@ public class OrderStepDefinitions {
 
   /**
    * @author Clara Dupuis
-   * @param string
-   * @param string2
    */
   @Then("the order {string} shall not contain {string}")
   public void the_order_shall_not_contain(String string, String string2) {
