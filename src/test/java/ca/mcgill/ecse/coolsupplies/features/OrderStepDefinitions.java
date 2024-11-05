@@ -105,6 +105,12 @@ public class OrderStepDefinitions {
     }
   }
 
+  /**
+   * This test attemps to verify that the given student entities exist for a parent in the system.
+   * @author Lune Letailleur
+   * @param dataTable represents the student entities we wish to exist in the system
+   * @return void
+   */
   @Given("the following student entities exist for a parent in the system")
   public void the_following_student_entities_exist_for_a_parent_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -115,7 +121,17 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      String email = entity.get("parentEmail");
+
+      Parent parentOfStudent = (Parent) User.getWithEmail(email);
+      Student student = Student.getWithName(name);
+
+      student.setParent(parentOfStudent);
+    }
   }
 
   /**
