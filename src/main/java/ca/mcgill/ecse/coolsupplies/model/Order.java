@@ -1,12 +1,13 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.34.0.7242.6b8819789 modeling language!*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 package ca.mcgill.ecse.coolsupplies.model;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import java.util.*;
 import java.sql.Date;
 
-// line 39 "../../../../../CoolSupplies.ump"
+// line 3 "../../../../../../CoolSuppliesStateMachine.ump"
+// line 41 "../../../../../../CoolSupplies.ump"
 public class Order
 {
 
@@ -26,6 +27,11 @@ public class Order
   private PurchaseLevel level;
   private String authorizationCode;
   private String penaltyAuthorizationCode;
+  private boolean isPickedUp;
+
+  //Order State Machines
+  public enum Status { Started, Penalized, Paid, Prepared, PickedUp }
+  private Status status;
 
   //Order Associations
   private Parent parent;
@@ -43,6 +49,7 @@ public class Order
     level = aLevel;
     authorizationCode = null;
     penaltyAuthorizationCode = null;
+    isPickedUp = false;
     if (!setNumber(aNumber))
     {
       throw new RuntimeException("Cannot create due to duplicate number. See https://manual.umple.org?RE003ViolationofUniqueness.html");
@@ -63,6 +70,7 @@ public class Order
       throw new RuntimeException("Unable to create order due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     orderItems = new ArrayList<OrderItem>();
+    setStatus(Status.Started);
   }
 
   //------------------------
@@ -120,6 +128,14 @@ public class Order
     return wasSet;
   }
 
+  public boolean setIsPickedUp(boolean aIsPickedUp)
+  {
+    boolean wasSet = false;
+    isPickedUp = aIsPickedUp;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getNumber()
   {
     return number;
@@ -153,6 +169,111 @@ public class Order
   public String getPenaltyAuthorizationCode()
   {
     return penaltyAuthorizationCode;
+  }
+
+  public boolean getIsPickedUp()
+  {
+    return isPickedUp;
+  }
+
+  public String getStatusFullName()
+  {
+    String answer = status.toString();
+    return answer;
+  }
+
+  public Status getStatus()
+  {
+    return status;
+  }
+
+  public boolean startSchoolYear()
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        setStatus(Status.Penalized);
+        wasEventProcessed = true;
+        break;
+      case Paid:
+        setStatus(Status.Prepared);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean pay()
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        if (orderHasItems())
+        {
+        // line 7 "../../../../../../CoolSuppliesStateMachine.ump"
+          payForOrder();
+          setStatus(Status.Paid);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean payForEverything()
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Penalized:
+        // line 10 "../../../../../../CoolSuppliesStateMachine.ump"
+        payForPenaltyAndOrder();
+        setStatus(Status.Prepared);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean receiveOrder()
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Prepared:
+        setStatus(Status.PickedUp);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setStatus(Status aStatus)
+  {
+    status = aStatus;
   }
   /* Code from template association_GetOne */
   public Parent getParent()
@@ -358,12 +479,32 @@ public class Order
   }
 
 
+  /**
+   * Implement actions within the model
+   */
+  // line 26 "../../../../../../CoolSuppliesStateMachine.ump"
+  public void payForPenaltyAndOrder(){
+    
+  }
+
+  // line 30 "../../../../../../CoolSuppliesStateMachine.ump"
+  public void payForOrder(){
+    
+  }
+
+  // line 33 "../../../../../../CoolSuppliesStateMachine.ump"
+  public boolean orderHasItems(){
+    return false;
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+
             "number" + ":" + getNumber()+ "," +
             "authorizationCode" + ":" + getAuthorizationCode()+ "," +
-            "penaltyAuthorizationCode" + ":" + getPenaltyAuthorizationCode()+ "]" + System.getProperties().getProperty("line.separator") +
+            "penaltyAuthorizationCode" + ":" + getPenaltyAuthorizationCode()+ "," +
+            "isPickedUp" + ":" + getIsPickedUp()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "level" + "=" + (getLevel() != null ? !getLevel().equals(this)  ? getLevel().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "parent = "+(getParent()!=null?Integer.toHexString(System.identityHashCode(getParent())):"null") + System.getProperties().getProperty("line.separator") +
