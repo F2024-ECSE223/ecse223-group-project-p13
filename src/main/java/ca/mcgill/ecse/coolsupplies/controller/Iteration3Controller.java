@@ -3,6 +3,7 @@ package ca.mcgill.ecse.coolsupplies.controller;
 /* Project Imports */
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
+import java.util.List;
 
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
@@ -24,21 +25,20 @@ public class Iteration3Controller {
   }
 
   public static String payForOrder(int orderId) { //is this right?
-    Order order = Order.getWithId(orderId); // Assuming a static method to get an order by ID
-        if (order == null) {
-            throw new Exception("Order not found with ID: " + orderId);
+    Order order = Order.getWithNumber(orderId);
+    if (order == null) {
+        throw new Exception("Order not found with ID: " + orderId); //check message
+    }
+
+    if (order.getStatusFullName().equals("Pending")) { //should this be in update order?
+        try {
+            order.pay(); // Trigger the state machine transition (how do I do that?)
+        } catch (Exception e) {
+            throw new Exception("Unable to process payment: " + e.getMessage());
         }
- 
- 
-        if (order.getStatusFullName().equals("Pending")) {
-            try {
-                order.pay(); // Trigger the state machine transition
-            } catch (Exception e) {
-                throw new Exception("Unable to process payment: " + e.getMessage());
-            }
-        } else {
-            throw new Exception("Order cannot be paid in its current state: " + order.getStatusFullName());
-        }
+    } else {
+        throw new Exception("Order cannot be paid in its current state: " + order.getStatusFullName()); //bruh...
+    }
   }
  
 
@@ -50,8 +50,8 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String viewAllOrders() {
-    return coolSupplies.getOrders(); // Find the Method to get all orders
+  public static List<Order> viewAllOrders() {
+    return coolSupplies.getOrders(); 
   }
 
   public static String viewOrder(String orderNumber) {
