@@ -7,7 +7,7 @@ import ca.mcgill.ecse.coolsupplies.model.*;
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
-  public static String updateOrder(String newLevel, String student) {
+  public static String updateOrder(String newLevel, String student, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
@@ -15,23 +15,23 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String updateOrderQuantity(String item, String quantity) {
+  public static String updateOrderQuantity(String item, String quantity, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String deleteItem(String item) {
+  public static String deleteItem(String item, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payForOrder(int orderId) { 
+  public static String payForOrder(String orderNumber) { 
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payPenaltyForOrder() {
+  public static String payPenaltyForOrder(String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String cancelOrder() {
+  public static String cancelOrder(String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
