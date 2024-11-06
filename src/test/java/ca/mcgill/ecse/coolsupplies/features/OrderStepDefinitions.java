@@ -13,6 +13,7 @@ import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.Grade;
+import ca.mcgill.ecse.coolsupplies.model.InventoryItem;
 import ca.mcgill.ecse.coolsupplies.model.Order;
 import ca.mcgill.ecse.coolsupplies.model.OrderItem;
 import ca.mcgill.ecse.coolsupplies.model.Parent;
@@ -594,22 +595,55 @@ public class OrderStepDefinitions {
     List<Map<String, String>> entities = dataTable.asMaps();
 
     for (Map<String, String> entity : entities) {
+      String parentEmail = entity.get("parentEmail");
       String orderNumber = entity.get("number");
+      String date = entity.get("date");
       String level = entity.get("level");
       String studentName = entity.get("studentName");
+      String status = entity.get("status");
+      String authorizationCode = entity.get("authorizationCode");
+      String penaltyAuthorizationCode = entity.get("penaltyAuthorizationCode");
+      String totalPrice = entity.get("totalPrice");
 
-      // Get order from system
+      // Get order from system, check if it exists and check order number
       Order order = Order.getWithNumber(Integer.parseInt(orderNumber));
       assertNotNull("Expected order with order number " + orderNumber + " to exist", order);  // Error if not found
+      assertEquals("Expected order number " + orderNumber, orderNumber, order.getNumber());
+
+      // Check date
+      assertEquals("Expected date: " + date, date, order.getDate());
+
+      // Check email
+      assertEquals("Expected the email " + parentEmail, parentEmail, order.getParent().getEmail());
 
       // Check if level is correct
       PurchaseLevel expectedLevel = PurchaseLevel.valueOf(level);
       assertEquals("Expected order to have level " + level, expectedLevel, order.getLevel());
 
-      //Parent parentEmail = order.getParent();
       // Check if student is correct
       Student student = Student.getWithName(studentName);
       assertEquals("Expected order to have student " + studentName, student, order.getStudent());
+
+      // Check status 
+      // TODO: need state machine
+      //assertEquals("", status, order.)
+      
+      // Check auhtorization code
+      assertEquals("Expected authorization code "+ authorizationCode, authorizationCode, order.getAuthorizationCode());
+
+      // Check late authorization code
+      assertEquals("Expected penalty authorization code "+ penaltyAuthorizationCode, penaltyAuthorizationCode, order.getPenaltyAuthorizationCode());
+
+      // Check price
+      int priceInSystem = 0;
+      for (OrderItem orderItem : order.getOrderItems()) {
+        InventoryItem inventoryItem = orderItem.getItem();
+        if (inventoryItem instanceof Item) {
+          Item item = (Item) inventoryItem;
+        }
+        
+      }
+      assertEquals("", totalPrice, )
     }
   }
 
