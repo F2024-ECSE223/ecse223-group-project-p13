@@ -8,7 +8,7 @@ import java.util.List;
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
-  public static String updateOrder(String newLevel, String student) {
+  public static String updateOrder(String newLevel, String student, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
@@ -16,37 +16,28 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String updateOrderQuantity(String item, String quantity) {
+  public static String updateOrderQuantity(String item, String quantity, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String deleteItem(String item) {
+  public static String deleteItem(String item, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payForOrder(int orderId) { //is this right?
-    Order order = Order.getWithNumber(orderId);
-    if (order == null) {
-        throw new Exception("Order not found with ID: " + orderId); //check message
-    }
-
-    if (order.getStatusFullName().equals("Pending")) { //should this be in update order?
-        try {
-            order.pay(); // Trigger the state machine transition (how do I do that?)
-        } catch (Exception e) {
-            throw new Exception("Unable to process payment: " + e.getMessage());
-        }
-    } else {
-        throw new Exception("Order cannot be paid in its current state: " + order.getStatusFullName()); //bruh...
-    }
+  public static String payForOrder(String orderNumber, String authCode) { 
+    throw new UnsupportedOperationException("Not Implemented yet.");
   }
  
 
-  public static String payPenaltyForOrder() {
+  public static String payPenaltyForOrder(String orderNumber, String authCode, String penaltyAuthCode) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String cancelOrder() {
+  public static String pickUpOrder(String orderNumber) {
+    throw new UnsupportedOperationException("Not Implemented yet.");
+  }
+
+  public static String cancelOrder(String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
