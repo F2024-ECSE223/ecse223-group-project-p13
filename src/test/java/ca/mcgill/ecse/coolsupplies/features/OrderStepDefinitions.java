@@ -2,11 +2,15 @@ package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class OrderStepDefinitions {
+  private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
+  private String error = "";
+
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -335,4 +339,10 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /* Helper Methods */
+  private void callController(String result) {
+    if (!result.isEmpty()) {
+      error += result;
+    }
+  }
 }
