@@ -4,6 +4,19 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.model.Order;
+import ca.mcgill.ecse.coolsupplies.model.OrderItem;
+
+
+import java.util.List;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
+
 public class OrderStepDefinitions {
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
@@ -215,38 +228,105 @@ public class OrderStepDefinitions {
   }
 
 
+  /**
+   * @author Clara Dupuis
+   */
   @Then("the order {string} shall not contain authorization code {string}")
   public void the_order_shall_not_contain_authorization_code(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
-    // throw new io.cucumbser.java.PendingException();
+    int orderId = Integer.parseInt(string);
+    Order particularOrder = Order.getWithNumber(orderId);
+
+    assertNotNull("Expected order with number "+ orderId+ " to exist", particularOrder);
+
+    String authorizationCode = particularOrder.getAuthorizationCode();
+
+    assertNotEquals("Expected authorization code to be " + string2, string2, authorizationCode);
+
   }
 
+  /**
+   * @author Clara Dupuis
+   */
   @Then("the order {string} shall not exist in the system")
   public void the_order_shall_not_exist_in_the_system(String string) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
-  }
 
+    int orderId= Integer.parseInt(string);
+    boolean orderExists = Order.hasWithNumber(orderId);
+
+    assertFalse("Expected order with number " + string +  "not to exist", orderExists);
+
+
+}
+  /**
+   * @author Clara Dupuis
+   */
   @Then("the order {string} shall contain authorization code {string}")
   public void the_order_shall_contain_authorization_code(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int orderId = Integer.parseInt(string);
+    Order particularOrder = Order.getWithNumber(orderId);
+
+    assertNotNull("Expected order with number "+ orderId+ " to exist", particularOrder);
+
+    String authorizationCode = particularOrder.getAuthorizationCode();
+
+    assertEquals("Expected authorization code to be " + string2, string2, authorizationCode);
+
   }
 
+  /**
+   * @author Clara Dupuis
+   */
   @Then("the order {string} shall contain {string} item")
   public void the_order_shall_contain_item(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int orderId = Integer.parseInt(string);
+    Order particularOrder = Order.getWithNumber(orderId);
+
+    assertNotNull("Expected order with number "+ orderId+ " to exist", particularOrder);
+
+    List<OrderItem> ListOfItems = particularOrder.getOrderItems();
+    boolean itemExists = false;
+
+    for (OrderItem item : ListOfItems){
+      if (string2.equals(item.getItem().getName())){
+        itemExists=true;
+        break;
+      }
+    }
+    assertTrue("Expected order to contain item " +string2, itemExists);
+
   }
 
+  /**
+   * @author Clara Dupuis
+   */
   @Then("the order {string} shall not contain {string}")
   public void the_order_shall_not_contain(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int orderId = Integer.parseInt(string);
+    Order particularOrder = Order.getWithNumber(orderId);
+
+    assertNotNull("Expected order with number "+ orderId+ " to exist", particularOrder);
+
+    List<OrderItem> ListOfItems = particularOrder.getOrderItems();
+    boolean itemExists = false;
+
+    for (OrderItem item : ListOfItems){
+      if (string2.equals(item.getItem().getName())){
+        itemExists=true;
+        break;
+      }
+    }
+    assertFalse("Expected order to contain item " +string2, itemExists);
+
   }
 
-
-
+  /**
+   * @author Clara Dupuis
+   */
   @Then("the number of order items in the system shall be {string}")
   public void the_number_of_order_items_in_the_system_shall_be(String string) {
     // Write code here that turns the phrase above into concrete actions
