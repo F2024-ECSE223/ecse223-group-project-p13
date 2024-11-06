@@ -167,10 +167,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test XXX
    * @author Edouard Dupont
-   * @param dataTable represents the grade entities we wish to exist in the system
-   * @return void
    */
   @Given("the following bundle item entities exist in the system")
   public void the_following_bundle_item_entities_exist_in_the_system(
@@ -191,15 +188,12 @@ public class OrderStepDefinitions {
         int quantity = Integer.parseInt(item.get("quantity"));
         // Call the method to create the bundle item entity
         BundleItem bundleItem = new BundleItem(id, name, quantity);
-        addBundleItem(bundleItem); // Add item to model layer (is this in model?)
+        model.addBundleItem(bundleItem); // Add item to model layer (is this in model?)
     }
   }
 
   /**
-   * This test XXX
    * @author Edouard Dupont
-   * @param dataTable represents the grade entities we wish to exist in the system
-   * @return void
    */
   @Given("the following order entities exist in the system")
   public void the_following_order_entities_exist_in_the_system(
@@ -223,10 +217,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test XXX
    * @author Edouard Dupont
-   * @param dataTable represents the grade entities we wish to exist in the system
-   * @return void
    */
   @Given("the following order item entities exist in the system")
   public void the_following_order_item_entities_exist_in_the_system(
@@ -251,11 +242,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test XXX
    * @author Edouard Dupont
-   * @param string XXX
-   * @param string2 XXX
-   * @return void
    */
   @Given("the order {string} is marked as {string}")
   public void the_order_is_marked_as(String string, String string2) {
@@ -270,12 +257,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test XXX
    * @author Edouard Dupont
-   * @param string XXX
-   * @param string2 XXX
-   * @param string3 XXX
-   * @return void
    */
   @When("the parent attempts to update an order with number {string} to purchase level {string} and student with name {string}")
   public void the_parent_attempts_to_update_an_order_with_number_to_purchase_level_and_student_with_name(
@@ -285,12 +267,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test XXX
    * @author Edouard Dupont
-   * @param string XXX
-   * @param string2 XXX
-   * @param string3 XXX
-   * @return void
    */
   @When("the parent attempts to add an item {string} with quantity {string} to the order {string}")
   public void the_parent_attempts_to_add_an_item_with_quantity_to_the_order(String string,
