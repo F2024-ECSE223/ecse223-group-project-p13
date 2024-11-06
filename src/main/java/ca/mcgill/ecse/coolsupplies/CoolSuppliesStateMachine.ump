@@ -1,0 +1,35 @@
+namespace ca.mcgill.ecse.coolsupplies.model;
+
+class Order {
+  status {
+    Started {
+      startSchoolYear -> Penalized;
+      pay [ orderHasItems() ] / { payForOrder(); } -> Paid;
+    }
+    Penalized {
+      payForEverything / { payForPenaltyAndOrder(); } -> Prepared;
+    }
+    Paid {
+      startSchoolYear -> Prepared;
+    }
+    Prepared {
+      receiveOrder -> PickedUp;
+    }
+    PickedUp {
+      // Final state
+    }
+  }
+
+  // Implement actions within the model
+  void payForPenaltyAndOrder() {
+
+  }
+
+  void payForOrder() {
+    
+  }
+  
+  boolean orderHasItems() {
+    return false;
+  }
+}
