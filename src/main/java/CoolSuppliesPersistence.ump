@@ -1,0 +1,22 @@
+// CoolSuppliesPersistence.ump
+namespace ca.mcgill.ecse.coolsupplies.persistence;
+
+class CoolSuppliesPersistence {
+  
+  // Singleton instance
+  static CoolSuppliesPersistence instance;
+
+  // Path to the data file
+  static String filename = "data.json";
+
+  // Load data from JSON file
+  static CoolSuppliesPersistence load() {
+    // Implementation will be provided in Java
+    return null;
+  }
+
+  // Save data to JSON file
+  void save() {
+    // Implementation will be provided in Java
+  }
+}
