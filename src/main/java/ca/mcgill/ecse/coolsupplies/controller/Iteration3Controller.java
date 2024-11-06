@@ -13,10 +13,10 @@ public class Iteration3Controller {
 
   /**
    * @author Clara Dupuis
-   * @param item
-   * @param quantity
-   * @param orderNumber
-   * @return
+   * @param item is a string representing the name of the item
+   * @param quantity is a string representing the quantity of the item we want to add to the order
+   * @param orderNumber is a string representing the number of the order
+   * @return en ampty string if the item was added successfully or an error message if not
    */
   public static String addItem(String item, String quantity, String orderNumber) {
    int itemQuantity;
@@ -88,8 +88,8 @@ public class Iteration3Controller {
 
   /**
    * @author Clara Dupuis
-   * @param orderNumber
-   * @return
+   * @param orderNumber is a string representing the number of the order that we want to view
+   * @return a string describing the order or an error message
    */
   public static String viewOrder(String orderNumber) {
     int orderNum;
@@ -103,9 +103,7 @@ public class Iteration3Controller {
     if (Order.getWithNumber(orderNum)== null) return "The Order could not be found in the system.";
 
     else return Order.getWithNumber(orderNum).toString();
-
   }
-
 
   public static String startSchoolYear() {
     throw new UnsupportedOperationException("Not Implemented yet.");
