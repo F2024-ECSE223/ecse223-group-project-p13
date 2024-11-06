@@ -26,10 +26,7 @@ public class OrderStepDefinitions {
   private String errString = "";
 
   /**
-   * This test attemps to verify that the given parent entities exist in the system.
    * @author Lune Letailleur
-   * @param dataTable represents the parent entities we wish to exist in the system
-   * @return void
    */
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
@@ -42,22 +39,19 @@ public class OrderStepDefinitions {
     //
     // For other transformations you can register a DataTableType.
 
-    List<Map<String, String, String, String >> entities = dataTable.asMaps();
+    List<Map<String,String >> entities = dataTable.asMaps();
 
     for (var entity:entities){
       String aEmail = entity.get("email");
       String aPassword = entity.get("password");
       String aName = entity.get("name");
-      int aPhoneNumber = (int) entity.get("phoneNumber");
+      int aPhoneNumber = Integer.parseInt(entity.get("phoneNumber"));
       coolSupplies.addParent(aEmail, aPassword, aName, aPhoneNumber);
     }
   }
 
   /**
-   * This test attemps to verify that the given grade entities exist in the system.
    * @author Lune Letailleur
-   * @param dataTable represents the grade entities we wish to exist in the system
-   * @return void
    */
   @Given("the following grade entities exist in the system")
   public void the_following_grade_entities_exist_in_the_system(
@@ -78,10 +72,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test attemps to verify that the given student entities exist in the system.
    * @author Lune Letailleur
-   * @param dataTable represents the student entities we wish to exist in the system
-   * @return void
    */
   @Given("the following student entities exist in the system")
   public void the_following_student_entities_exist_in_the_system(
@@ -98,16 +89,13 @@ public class OrderStepDefinitions {
 
     for (var entity : entities) {
       String name = entity.get("name");
-      Grade gradeLevel = (Grade) entity.get("gradeLevel");
+      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
       coolSupplies.addStudent(name, gradeLevel);
     }
   }
 
   /**
-   * This test attemps to verify that the given student entities exist for a parent in the system.
    * @author Lune Letailleur
-   * @param dataTable represents the student entities we wish to exist in the system
-   * @return void
    */
   @Given("the following student entities exist for a parent in the system")
   public void the_following_student_entities_exist_for_a_parent_in_the_system(
@@ -133,10 +121,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test attemps to verify that the given item entities exist in the system.
    * @author Lune Letailleur
-   * @param dataTable represents the item entities we wish to exist in the system
-   * @return void
    */
   @Given("the following item entities exist in the system")
   public void the_following_item_entities_exist_in_the_system(
@@ -152,16 +137,13 @@ public class OrderStepDefinitions {
 
     for (var entity : entities) {
       String name = entity.get("name");
-      int price = (int) entity.get("price");
+      int price = Integer.parseInt(entity.get("price"));
       coolSupplies.addItem(name, price);
     }
   }
 
   /**
-   * This test attemps to verify that the given grade bundle entities exist in the system.
    * @author Lune Letailleur
-   * @param dataTable represents the grade bundle entities we wish to exist in the system
-   * @return void
    */
   @Given("the following grade bundle entities exist in the system")
   public void the_following_grade_bundle_entities_exist_in_the_system(
@@ -178,8 +160,8 @@ public class OrderStepDefinitions {
 
     for (var entity : entities) {
       String name = entity.get("name");
-      int discount = (int) entity.get("discount");
-      Grade gradeLevel = (Grade) entity.get("gradeLevel");
+      int discount = Integer.parseInt(entity.get("discount"));
+      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
       coolSupplies.addBundle(name, discount ,gradeLevel);
     }
   }
