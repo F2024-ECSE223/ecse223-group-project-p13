@@ -86,9 +86,26 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
+  /**
+   * @author Clara Dupuis
+   * @param orderNumber
+   * @return
+   */
   public static String viewOrder(String orderNumber) {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+    int orderNum;
+
+    try {
+      orderNum = Integer.parseInt(orderNumber);
+    } catch (NumberFormatException e){
+      return "The order number must be a valid integer.";
+    }
+
+    if (Order.getWithNumber(orderNum)== null) return "The Order could not be found in the system.";
+
+    else return Order.getWithNumber(orderNum).toString();
+
   }
+
 
   public static String startSchoolYear() {
     throw new UnsupportedOperationException("Not Implemented yet.");
