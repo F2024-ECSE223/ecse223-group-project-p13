@@ -1,26 +1,26 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.Grade;
+import ca.mcgill.ecse.coolsupplies.model.Order;
+import ca.mcgill.ecse.coolsupplies.model.OrderItem;
+import ca.mcgill.ecse.coolsupplies.model.Parent;
+import ca.mcgill.ecse.coolsupplies.model.Student;
+import ca.mcgill.ecse.coolsupplies.model.User;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-
-import ca.mcgill.ecse.coolsupplies.model.*;
-
-/* Helper Imports */
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-
-
-/* JUnit Imports */
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 
 public class OrderStepDefinitions {
@@ -528,25 +528,58 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the order {string} shall contain level {string} and student {string}")
   public void the_order_shall_contain_level_and_student(String string, String string2,
       String string3) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+   
+    // Obtain the order object
+    int orderNumber = Integer.parseInt(string);
+    Order specificOrder = Order.getWithNumber(orderNumber);
+    assertNotNull("Expected order with number " + orderNumber + " to exist", specificOrder);
+  
+    // Update the level
+    PurchaseLevel level = PurchaseLevel.valueOf(string2);
+    specificOrder.setLevel(level);
+    assertEquals("Expected order to have level " + level, level, specificOrder.getLevel());
+
+    // Set the student name to the order
+    Student student = Student.getWithName(string3);
+    assertNotNull("Expected student with name " + string3 + " is not found", student);
+
+    specificOrder.setStudent(student);
+    assertEquals("Expected order to be assigned to student " + string3, student, specificOrder.getStudent());
+      
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Given("order {string} is marked as {string}")
   public void order_is_marked_as(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
+    // Parse string into integer, then create new Order object
+    int orderNumber = Integer.parseInt(string);
+    Order new_order = new Order(orderNumber, null, null, null, null, coolSupplies);
+
+    // Add order to system
+    coolSupplies.addOrder(new_order);
+ 
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the error {string} shall be raised")
   public void the_error_shall_be_raised(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    throw new IllegalArgumentException(string);
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the following order entities shall be presented")
   public void the_following_order_entities_shall_be_presented(
       io.cucumber.datatable.DataTable dataTable) {
@@ -557,9 +590,32 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+  
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (Map<String, String> entity : entities) {
+      String orderNumber = entity.get("number");
+      String level = entity.get("level");
+      String studentName = entity.get("studentName");
+
+      // Get order from system
+      Order order = Order.getWithNumber(Integer.parseInt(orderNumber));
+      assertNotNull("Expected order with order number " + orderNumber + " to exist", order);  // Error if not found
+
+      // Check if level is correct
+      PurchaseLevel expectedLevel = PurchaseLevel.valueOf(level);
+      assertEquals("Expected order to have level " + level, expectedLevel, order.getLevel());
+
+      //Parent parentEmail = order.getParent();
+      // Check if student is correct
+      Student student = Student.getWithName(studentName);
+      assertEquals("Expected order to have student " + studentName, student, order.getStudent());
+    }
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the following order items shall be presented for the order with number {string}")
   public void the_following_order_items_shall_be_presented_for_the_order_with_number(String string,
       io.cucumber.datatable.DataTable dataTable) {
@@ -570,13 +626,31 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    int orderNumberInSystem = Integer.parseInt(string);
+    Order orderInSystem = Order.getWithNumber(orderNumberInSystem);
+    List<OrderItem> orderItemsInSystem = orderInSystem.getOrderItems();
+    assertNotNull("Expected orderr to be in system", orderInSystem);
+
+    List<Map<String, String>> orderItems = dataTable.asMaps();
+
+    for (Map<String, String> orderItem : orderItems) {
+      String quantity = orderItem.get("quantity");
+      assertEquals("Expected quantity of order to be " + quantity, quantity, orderInSystem.getQuantity());
+      String itemName = orderItem.get("itemName");
+      String gradeBundleName = orderItem.get("gradeBundleName");
+      String price = orderItem.get("price");
+      String discount = orderItem.get("discount");
+    
+    }
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("no order entities shall be presented")
   public void no_order_entities_shall_be_presented() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
+    assertTrue("Expected no order entities", coolSupplies.getOrders().isEmpty());
   }
 
   /* Helper methods */
