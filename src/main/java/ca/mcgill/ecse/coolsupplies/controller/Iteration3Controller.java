@@ -30,6 +30,14 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
+  /**
+   * @auther Trevor Piltch
+   * @param orderNumber - The number of the order to pay for in the system
+   * @param authCode - The authorization code of the payment
+   * @param panaltyAuthCode - The autorization code of the penalty
+   * 
+   * Pays for the penalty for the order.
+   */
   public static String payPenaltyForOrder(String orderNumber, String authCode, String penaltyAuthCode) {
     Integer num = Integer.parseInt(orderNumber);
     Order order = Order.getWithNumber(num);
@@ -38,11 +46,9 @@ public class Iteration3Controller {
       return "Order " + orderNumber + " does not exist";
     }
 
-    /* 
-    if (order.getStatus() != Prepared) {
-      return "Cannot pay penalty for a " + order.getStatus() + " order"
+    if (order.getStatus() != Order.Status.Penalized) {
+      return "Cannot pay penalty for a " + order.getStatus() + " order";
     }
-    */
 
     if (authCode.isEmpty()) {
       return "Authorization code is invalid.";
@@ -52,9 +58,7 @@ public class Iteration3Controller {
       return "Penalty authorization code is invalid";
     }
 
-    /*
-     * order.payPenalty(authCode, panaltyCode)
-     */
+    order.setPenaltyAuthorizationCode(penaltyAuthCode);
 
     return "";
   }
@@ -67,8 +71,16 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String viewAllOrders() {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+  /**
+   * @author Trevor Piltch
+   *  
+   * Returns a list of orders. 
+   * **NOTE** I opted not to use a transfer object here for multiple reasons:
+   * 1. In the definition of viewAllOrders, it specifies basically all the fields of the object 
+   * 2. Creating a new transfer object for the order with the same fields is duplicating code and further increasing the complexity of the system
+  */
+  public static List<Order> viewAllOrders() {
+    return coolSupplies.getOrders();
   }
 
   public static String viewOrder(String orderNumber) {
