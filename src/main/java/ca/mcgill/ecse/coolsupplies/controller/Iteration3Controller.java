@@ -31,6 +31,10 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
+  public static String pickUpOrder(){
+    throw new UnsupportedOperationException("Not Implemented yet.");
+  }
+
   public static String cancelOrder() {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
