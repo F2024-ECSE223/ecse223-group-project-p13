@@ -23,7 +23,7 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payForOrder(String orderNumber) { 
+  public static String payForOrder(String orderNumber, String authCode) { 
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 

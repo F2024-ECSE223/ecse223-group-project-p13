@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -303,16 +304,14 @@ public class OrderStepDefinitions {
   @When("the parent attempts to update an item {string} with quantity {string} in the order {string}")
   public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String item,
       String quantity, String order) {
-    // TODO: add controller call
-    // callController(<CONTROLLER>.updateItem(item, quentity, order));
+    callController(Iteration3Controller.updateOrderQuantity(item, quantity, order));
   }
   /**
    * @author Trevor Piltch 
    */
   @When("the parent attempts to delete an item {string} from the order {string}")
   public void the_parent_attempts_to_delete_an_item_from_the_order(String item, String order) {
-    // TODO: add controller call
-    // callController(<CONTROLLER>.deleteItem(item, order));
+    callController(Iteration3Controller.deleteItem(item, order));
   }
 
   /**
@@ -320,8 +319,7 @@ public class OrderStepDefinitions {
    */
   @When("the parent attempts to get from the system the order with number {string}")
   public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String order) {
-    // TODO: add controller call
-    // callController(<CONTROLLER>.getOrder(order));
+    callController(Iteration3Controller.viewOrder(order));
   }
 
 
@@ -330,8 +328,7 @@ public class OrderStepDefinitions {
    */
   @When("the parent attempts to cancel the order {string}")
   public void the_parent_attempts_to_cancel_the_order(String order) {
-    // TODO: add controller call
-    // callController(<CONTROLLER>.cancelOrder(order));
+    callController(Iteration3Controller.cancelOrder(order));
   }
 
   /**
@@ -339,9 +336,8 @@ public class OrderStepDefinitions {
    */
   @When("the parent attempts to pay for the order {string} with authorization code {string}")
   public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String order,
-      String authoCode) {
-    // TODO: add controller call
-    // callController(<CONTROLLER>.payForOrder(order, authCode));
+      String authCode) {
+    callController(Iteration3Controller.payForOrder(order, authCode));
   }
 
   /**
