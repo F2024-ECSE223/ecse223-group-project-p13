@@ -16,26 +16,30 @@ public class Iteration3Controller {
    * @param item is a string representing the name of the item
    * @param quantity is a string representing the quantity of the item we want to add to the order
    * @param orderNumber is a string representing the number of the order
-   * @return en ampty string if the item was added successfully or an error message if not
+   * @return en empty string if the item was added successfully or an error message if not
    */
   public static String addItem(String item, String quantity, String orderNumber) {
-   int itemQuantity;
-   int orderNum;
-    try {
-       itemQuantity = Integer.parseInt(quantity);
-       orderNum = Integer.parseInt(orderNumber);
-    }catch (NumberFormatException e) {
-      return "The quantity number and the order number must be valid integers.";
+
+   int itemQuantity = Integer.parseInt(quantity);
+   int orderNum = Integer.parseInt(orderNumber);
+
+   if (itemQuantity <= 0) return "Quantity must be greater than 0.";
+
+
+   if (Order.getWithNumber(orderNum) == null){
+     return "Order "+ orderNumber+ "does not exist.";
     }
 
-    if (Order.getWithNumber(orderNum) == null){
-      return "Order not found in the system";
-    }
 
-
-    if (InventoryItem.hasWithName(item)){
-      try {
+   if (InventoryItem.hasWithName(item)){
+     try {
         OrderItem itemOrdered = new OrderItem(itemQuantity, coolSupplies, Order.getWithNumber(orderNum), InventoryItem.getWithName(item));
+
+        for (OrderItem itemAlreadyInOrder: Order.getWithNumber(orderNum).getOrderItems()){
+          if (itemOrdered.equals(itemAlreadyInOrder)) {
+            return "Item " + item + "already exists in the order " + orderNumber;
+          }
+        }
 
         if (Order.getWithNumber(orderNum).addOrderItem(itemOrdered)){
           return "";
@@ -58,7 +62,7 @@ public class Iteration3Controller {
       }
 
 
-    } else return "The Item was not found in the system";
+    } else return "Item " + item + "does not exist.";
 
   }
 
