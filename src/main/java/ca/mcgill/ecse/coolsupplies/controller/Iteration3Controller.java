@@ -11,8 +11,55 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
+  /**
+   * @author Clara Dupuis
+   * @param item
+   * @param quantity
+   * @param orderNumber
+   * @return
+   */
   public static String addItem(String item, String quantity, String orderNumber) {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+   int itemQuantity;
+   int orderNum;
+    try {
+       itemQuantity = Integer.parseInt(quantity);
+       orderNum = Integer.parseInt(orderNumber);
+    }catch (NumberFormatException e) {
+      return "The quantity number and the order number must be valid integers.";
+    }
+
+    if (Order.getWithNumber(orderNum) == null){
+      return "Order not found in the system";
+    }
+
+
+    if (InventoryItem.hasWithName(item)){
+      try {
+        OrderItem itemOrdered = new OrderItem(itemQuantity, coolSupplies, Order.getWithNumber(orderNum), InventoryItem.getWithName(item));
+
+        if (Order.getWithNumber(orderNum).addOrderItem(itemOrdered)){
+          return "";
+        } else {
+          return "Item was not added to the order.";
+        }
+
+      } catch (RuntimeException e) {
+
+        switch (e.getMessage()) {
+          case "Unable to create orderItem due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html":
+            return "The orderItem was nor created due to coolSupplies.";
+          case "Unable to create orderItem due to order. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html":
+            return "The orderItem was not created due to the order.";
+          case "Unable to create orderItem due to item. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html":
+            return "The orderItem was not created due to the item.";
+          default :
+            return "The orderItem was not created due to an unexpected error: "+ e.getMessage();
+        }
+      }
+
+
+    } else return "The Item was not found in the system";
+
   }
 
   public static String updateOrderQuantity(String item, String quantity) {
