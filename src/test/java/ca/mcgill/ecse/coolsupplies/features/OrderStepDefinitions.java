@@ -160,8 +160,8 @@ public class OrderStepDefinitions {
 
     for (var entity : entities) {
       String name = entity.get("name");
-      int discount = (int) entity.get("discount");
-      Grade gradeLevel = (Grade) entity.get("gradeLevel");
+      int discount = Integer.parseInt(entity.get("discount"));
+      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
       coolSupplies.addBundle(name, discount ,gradeLevel);
     }
   }
