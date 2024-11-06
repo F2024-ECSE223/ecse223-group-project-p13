@@ -19,6 +19,7 @@ import ca.mcgill.ecse.coolsupplies.model.OrderItem;
 import ca.mcgill.ecse.coolsupplies.model.Parent;
 import ca.mcgill.ecse.coolsupplies.model.Student;
 import ca.mcgill.ecse.coolsupplies.model.User;
+import ca.mcgill.ecse.coolsupplies.model.Item;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -640,10 +641,11 @@ public class OrderStepDefinitions {
         InventoryItem inventoryItem = orderItem.getItem();
         if (inventoryItem instanceof Item) {
           Item item = (Item) inventoryItem;
+          priceInSystem += item.getPrice();
         }
         
       }
-      assertEquals("", totalPrice, )
+      assertEquals("Expected price " + totalPrice, totalPrice, priceInSystem);
     }
   }
 
