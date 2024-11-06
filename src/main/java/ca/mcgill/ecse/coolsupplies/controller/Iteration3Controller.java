@@ -23,9 +23,24 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payForOrder(int orderId) { 
-    throw new UnsupportedOperationException("Not Implemented yet.");
+  public static String payForOrder(int orderId) { //is this right?
+    Order order = Order.getWithId(orderId); // Assuming a static method to get an order by ID
+        if (order == null) {
+            throw new Exception("Order not found with ID: " + orderId);
+        }
+ 
+ 
+        if (order.getStatusFullName().equals("Pending")) {
+            try {
+                order.pay(); // Trigger the state machine transition
+            } catch (Exception e) {
+                throw new Exception("Unable to process payment: " + e.getMessage());
+            }
+        } else {
+            throw new Exception("Order cannot be paid in its current state: " + order.getStatusFullName());
+        }
   }
+ 
 
   public static String payPenaltyForOrder() {
     throw new UnsupportedOperationException("Not Implemented yet.");
@@ -36,7 +51,7 @@ public class Iteration3Controller {
   }
 
   public static String viewAllOrders() {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+    return coolSupplies.getOrders(); // Find the Method to get all orders
   }
 
   public static String viewOrder(String orderNumber) {
