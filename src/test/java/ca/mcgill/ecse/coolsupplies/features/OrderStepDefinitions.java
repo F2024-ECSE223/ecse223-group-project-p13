@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
+import ca.mcgill.ecse.coolsupplies.controller.TOOrderItem;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
@@ -33,7 +34,8 @@ import io.cucumber.java.en.When;
 public class OrderStepDefinitions {
   private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
   private String errString = "";
-  List<TOOrder> = new ArrayList<>;
+  private List<TOOrder> transferOrders = new ArrayList<>();
+  private List<TOOrderItem> transferOrderItems = new ArrayList<>();
 
 
   @Given("the following parent entities exist in the system")
@@ -413,111 +415,19 @@ public class OrderStepDefinitions {
       String penaltyAuthorizationCode = entity.get("penaltyAuthorizationCode");
       String totalPrice = entity.get("totalPrice");
 
-      // Get order from system, check if it exists and check order number
-      List<Order> orderList = coolSupplies.getOrders();
-      Order order = null;
-      for (Order orderFromList : orderList) {
-        if (orderFromList.getNumber() == Integer.parseInt(orderNumber)) {
-          order = orderFromList;
+      for (TOOrder transferOrder : transferOrders) {
+        if (!(parentEmail.equals(transferOrder.getParentEmail()) && 
+        orderNumber.equals(transferOrder.getNumber()) && 
+        date.equals(transferOrder.getDate()) && 
+        level.equals(transferOrder.getLevel()) && 
+        studentName.equals(transferOrder.getStudentName()) && 
+        status.equals(transferOrder.getStatus()) && 
+        authorizationCode.equals(transferOrder.getAuthCode()) && 
+        penaltyAuthorizationCode.equals(transferOrder.getPenaltyAuthCode()) && totalPrice.equals(String.valueOf(transferOrder.getPrice())))) {
+          throw new AssertionError("Order entity not found.");
         }
       }
 
-      assertNotNull("Order with order number " + orderNumber + " not found", order);  // Error if not found
-      assertEquals("Expected order number " + orderNumber, orderNumber, order.getNumber());
-
-      // Check date
-      assertEquals("Expected date: " + date, date, order.getDate());
-
-      // Check email
-      assertEquals("Expected the email " + parentEmail, parentEmail, order.getParent().getEmail());
-
-      // Check if level is correct
-      PurchaseLevel expectedLevel = PurchaseLevel.valueOf(level);
-      assertEquals("Expected order to have level " + level, expectedLevel, order.getLevel());
-
-      // Check if student is correct
-      Student student = Student.getWithName(studentName);
-      assertEquals("Expected order to have student " + studentName, student, order.getStudent());
-
-      // Check status
-      assertEquals("Expected the order to have status: " + status, status, order.getStatusFullName());
-      
-      // Check auhtorization code
-      assertEquals("Expected authorization code "+ authorizationCode, authorizationCode, order.getAuthorizationCode());
-
-      // Check late authorization code
-      assertEquals("Expected penalty authorization code "+ penaltyAuthorizationCode, penaltyAuthorizationCode, order.getPenaltyAuthorizationCode());
-
-      // Check price
-      int priceInSystem = 0;
-
-      // Look over all order items
-      for (OrderItem orderItem : order.getOrderItems()) {
-
-        int quantityOfOrderItem = orderItem.getQuantity();  // Number of orderItem
-
-        // Turn order item into invenotry item 
-        InventoryItem inventoryItem = orderItem.getItem();
-
-        // Inventory item is either an (Individual) Item or a GradeBundle
-
-        // inventoryItem is an Item
-        if (inventoryItem instanceof Item) {
-
-          Item item = (Item) inventoryItem;
-          int priceOfItems = item.getPrice() * quantityOfOrderItem;
-          priceInSystem += priceOfItems;
-
-        }
-
-        // inventoryItem is a GradeBundle
-        else if (inventoryItem instanceof GradeBundle) {
-
-          int priceOfBundle = 0;
-          PurchaseLevel purchaseLevel = order.getLevel();  // Purchase level selected in Order
-          
-
-          GradeBundle gradeBundle = (GradeBundle) inventoryItem;
-          int discount = gradeBundle.getDiscount();
-
-          // Items contained in the bundle, includes items of all levels
-          List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
-
-
-          int numOfIterations = 0; // Used to count if discount should be applied (discount only if 2 or more distinct items)
-
-          // Loop over all bundle items, only want the ones that are equal to or higher in priority to the selected level
-          for (BundleItem bundleItem : itemsInBundle) {
-
-            int quantity = bundleItem.getQuantity();
-            int priceOfBundleItem = 0;
-
-            // Only include the bundle items with the appropriate level
-            if (purchaseLevel.compareTo(bundleItem.getLevel()) >= 0) {  // enum PurchaseLevel {Mandatory, Recommended, Optional}, Optional has the highest value
-              Item itemInBundle = bundleItem.getItem();
-              priceOfBundleItem = itemInBundle.getPrice();
-            }
-            
-            priceOfBundle += (quantity * priceOfBundleItem);
-
-            numOfIterations++;
-          }
-
-          // Apply discount if 2 or more distinct items are bought from the bundle
-          if (numOfIterations > 1) {
-            priceOfBundle = priceOfBundle * ((1-discount)/100);
-          }
-          
-          // Multiply by the quantity of Bundles ordered
-          priceOfBundle *= quantityOfOrderItem;
-
-          // Update total price
-          priceInSystem += priceOfBundle;
-
-        }
-        
-      }
-      assertEquals("Expected price " + totalPrice, totalPrice, priceInSystem);
     }
   }
 
@@ -547,8 +457,6 @@ public class OrderStepDefinitions {
     }
     assertNotNull("Order with order number " + orderNumber + " not found", order);  // Error if not found
 
-    List<OrderItem> orderItemsInSystem = order.getOrderItems();
-
     // Get map of order items to be validated
     List<Map<String, String>> orderItemsInDatatable = dataTable.asMaps();
 
@@ -559,54 +467,13 @@ public class OrderStepDefinitions {
       String price = orderItem.get("price");
       String discount = orderItem.get("discount");
 
-      int actualQuantity = 0;
-      String actualInventoryName = "";
-      for (OrderItem orderItemInList : orderItemsInSystem) {
-        if (orderItemInList.getOrder().getNumber() == orderNumber) {
-          actualQuantity = orderItemInList.getQuantity();
-          actualInventoryName = orderItemInList.getItem().getName();
-        }
-
-
-      }
-
-      String actualGradeBundleName = "";
-      if (actualInventoryName.contains("Bundle")) {
-        actualGradeBundleName = actualInventoryName;
-        List<GradeBundle> actualGradeBundleList = coolSupplies.getBundles();
-        for (GradeBundle actualGradeBundle : actualGradeBundleList) {
-          if (actualInventoryName.contains(actualGradeBundle.getGrade().getLevel())) {
-
+      for (TOOrderItem transferOrderItem : transferOrderItems) {
+        if (!(quantity.equals(transferOrderItem.getQuantity()) &&
+         itemName.equals(transferOrderItem.getName()) && gradeBundleName.equals(transferOrderItem.getGradeBundle()) &&
+          price.equals(transferOrderItem.getPrice()) && discount.equals(transferOrderItem.getPrice()))) {
+            throw new AssertionError("Order item not found");
           }
-        }
       }
-
-      InventoryItem correspondingItemInSystem = null;
-      OrderItem orderItemInSystem = null;
-      for (OrderItem orderItemInList : orderItemsInSystem) {
-        if (itemName.equals(orderItemInList.getItem().getName())) {
-          correspondingItemInSystem = orderItemInList.getItem();
-          orderItemInSystem = orderItemInList;
-        }
-      }
-
-      // Check if order item object is found
-      assertNotNull("Order item not found: " + orderItem, orderItemInSystem);
-      
-      // Validate quantity
-      assertEquals("Expected quantity of order to be " + quantity, quantity, orderItemInSystem.getQuantity());
-
-      // Check if item in system is GradeBundle or Item
-
-      if (correspondingItemInSystem instanceof GradeBundle) {
-        GradeBundle correspoondingGradeBundle = (GradeBundle) correspondingItemInSystem;
-        assertEquals("Expected grade bundle name: " + gradeBundleName, gradeBundleName, correspoondingGradeBundle.getName());
-      }
-      // Check if item is in system
-      assertNotNull("Item not found: " + itemName, correspondingItemInSystem);
-
-      // Validate 
-    
     }
   }
 
