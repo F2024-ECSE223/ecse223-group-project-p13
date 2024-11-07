@@ -9,31 +9,50 @@ class CoolSupplies{
 }
 
 class User {
-  public static void reinitializeUniqueEmail(Admin admin,List<Parent> parents){
-    int x;
+  public static void reinitializeUniqueEmail(SchoolAdmin admin,List<Parent> parents){
+    usersByEmail.clear();
+    usersByEmail.put(admin.getEmail(), admin);
+    for (var parent : parents){
+      usersByEmail.put(parent.getEmail(),parent);
+    }
   }
 }
 
 class Student {
   public static void reinitializeUniqueName(List<Student> students){
-    int x;
+    studentsByName.clear();
+    for (var student : students){
+      studentsByName.put(student.getName(),student);
+    }
   }
 }
 
 class Order {
   public static void reinitializeUniqueNumber(List<Order> orders){
-    int x;
+    ordersByNumber.clear();
+    for (var order : orders){
+      ordersByNumber.put(order.getNumber(),order);
+    }
   }
 }
 
 class InventoryItem {
   public static void reinitializeUniqueItemName(List<Item> items,List<GradeBundle> bundles){
-    int x;
+    inventoryitemsByName.clear();
+    for (var item : items){
+      inventoryitemsByName.put(item.getName(),item);
+    }
+    for (var bundle : bundles){
+      inventoryitemsByName.put(bundle.getName(),bundle);
+    }
   }
 }
 
 class Grade {
   public static void reinitializeUniqueLevel(List<Grade> grades){
-    int x;
+    gradesByLevel.clear();
+    for (var grade : grades){
+      gradesByLevel.put(grade.getLevel(),grade);
+    }
   }
 }
