@@ -4,6 +4,8 @@ package ca.mcgill.ecse.coolsupplies.controller;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
 
+import java.util.List;
+
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
@@ -126,13 +128,62 @@ public class Iteration3Controller {
 
       
 
+    double totalPrice = 0;
+    List <TOItem> = ;
+
+    for (OrderItem orderItem: particularOrder.getOrderItems()) {
+        int quantityOrdered = orderItem.getQuantity();
+        InventoryItem inventoryItem = orderItem.getItem();
+
+        if (inventoryItem instanceof Item) {
+            Item item = (Item) inventoryItem;
+
+            int priceOfItem = item.getPrice() * quantityOrdered;
+            totalPrice += priceOfItem;
+        }
+
+        else if (inventoryItem instanceof GradeBundle) {
+            double priceOfBundle = 0;
+
+            BundleItem.PurchaseLevel purchaseLevel = particularOrder.getLevel();
+
+            GradeBundle gradeBundle = (GradeBundle) inventoryItem;
+
+            int discount = gradeBundle.getDiscount();
+
+            List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
+
+            int numberOfIterations = 0; //used to count if discount should be applied
+
+            for (BundleItem bundleItem : itemsInBundle){
+
+                int quantityInBundle = bundleItem.getQuantity();;
+                int priceOfBundleItem = 0;
+
+                if (purchaseLevel.compareTo(bundleItem.getLevel())>=0){
+                    Item itemInBundle = bundleItem.getItem();
+                    priceOfBundleItem = itemInBundle.getPrice();
+                }
+
+                priceOfBundle += (quantityInBundle * priceOfBundleItem);
+
+                numberOfIterations+=1;
+            }
+
+            if (numberOfIterations>1){
+                priceOfBundle=priceOfBundle*((double) (1-discount)/100);
+            }
+
+            priceOfBundle *=quantityOrdered;
+
+            totalPrice += priceOfBundle;
+        }
+
+    }
 
 
 
-
-
-
-
+      return TOOrder(parentName, studentName, statusString, orderNumber, date, levelString, authorizationCode, penaltyAuthorizationCode, totalPrice,  );
 
   }
 
