@@ -42,7 +42,7 @@ public class Iteration3Controller {
       }
     }
     if(inItem == null) {
-      return "Item" + item + "does not exist.";
+      return "Item " + item + " does not exist.";
     }
 
     for(OrderItem myItem: items){
@@ -53,7 +53,7 @@ public class Iteration3Controller {
       }
     }
     if(itemToDel == null){
-      return "Item" + item +"does not exist in order" + orderNumber + ".";
+      return "Item " + item +" does not exist in order" + orderNumber + ".";
     }
 
     for
