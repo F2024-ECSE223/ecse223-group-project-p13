@@ -12,6 +12,7 @@ public class Iteration3Controller {
   }
 
   /**
+   * This method allows the user to add an item to a started order
    * @author Clara Dupuis
    * @param item is a string representing the name of the item
    * @param quantity is a string representing the quantity of the item we want to add to the order
@@ -20,10 +21,11 @@ public class Iteration3Controller {
    */
   public static String addItem(String item, String quantity, String orderNumber) {
 
-
       int itemQuantity = Integer.parseInt(quantity);
       int orderNum = Integer.parseInt(orderNumber);
 
+
+      //cannot add an item to a paid, penalized, prepared or picked up order
       if (Order.getWithNumber(orderNum).getStatusFullName().equals("Paid")) {
           return "Cannot add items to a paid order.";
       } else if (Order.getWithNumber(orderNum).getStatusFullName().equals("Penalized")) {
@@ -33,27 +35,31 @@ public class Iteration3Controller {
       } else if (Order.getWithNumber(orderNum).getStatusFullName().equals("Prepared")) {
           return "Cannot add items to a prepared order.";
 
-          //} else if (Order.getWithNumber(orderNum).getStatusFullName().equals("Started")) {
+          //can only add an item to an order with status "Started"
       }else{
 
+          //Check that the quantity is bigger than 0
           if (itemQuantity <= 0) return "Quantity must be greater than 0.";
 
-
+          //Verify that the order exists in the system
           if (Order.getWithNumber(orderNum) == null) {
               return "Order " + orderNumber + "does not exist.";
           }
 
-
+          //Verify that the item exists
           if (InventoryItem.hasWithName(item)) {
               try {
+                  //create a new ItemOrdered for the item we want to add
                   OrderItem itemOrdered = new OrderItem(itemQuantity, coolSupplies, Order.getWithNumber(orderNum), InventoryItem.getWithName(item));
 
+                  //Check that the item is not already present in the order
                   for (OrderItem itemAlreadyInOrder : Order.getWithNumber(orderNum).getOrderItems()) {
                       if (itemOrdered.equals(itemAlreadyInOrder)) {
                           return "Item " + item + "already exists in the order " + orderNumber;
                       }
                   }
 
+                  //Add the item to the order
                   if (Order.getWithNumber(orderNum).addOrderItem(itemOrdered)) {
                       return "";
                   } else {
@@ -73,7 +79,6 @@ public class Iteration3Controller {
                           return "The orderItem was not created due to an unexpected error: " + e.getMessage();
                   }
               }
-
 
           } else return "Item " + item + "does not exist.";
 
@@ -109,25 +114,24 @@ public class Iteration3Controller {
   }
 
   /**
+   * This method allows the user to view all the details of an order.
    * @author Clara Dupuis
    * @param orderNumber is a string representing the number of the order that we want to view
-   * @return a string describing the order or an error message
+   * @return a string describing the order or an empty string if the order could not be viewed
    */
   public static String viewOrder(String orderNumber) {
-    int orderNum;
 
-    try {
-      orderNum = Integer.parseInt(orderNumber);
-    } catch (NumberFormatException e){
-      return "";
-    }
+      int orderNum = Integer.parseInt(orderNumber);
 
-    if (Order.getWithNumber(orderNum)== null) return "";
-
-    else return Order.getWithNumber(orderNum).toString();
+      //Verify that an order with the orderNum exists
+      if (!Order.hasWithNumber(orderNum)){
+          return "";
+      }
+      else return Order.getWithNumber(orderNum).toString();
   }
 
     /**
+     * This method starts a school year by changing the status of an order
      * @author Clara Dupuis
      * @param orderNumber is a string representing the number of the order
      * @return an empty string if the school year was started successfully or an error message
@@ -137,16 +141,25 @@ public class Iteration3Controller {
       int orderNum = Integer.parseInt(orderNumber);
       Order particularOrder = Order.getWithNumber(orderNum);
 
+      //verify that the order exists in the system
       if (particularOrder == null) {
           return "Order " + orderNumber + "does not exist.";
       }
 
+      //Start a school year if the order is started or if it is paid
       if (particularOrder.getStatusFullName().equals("Started") || particularOrder.getStatusFullName().equals("Paid")) {
-          particularOrder.startSchoolYear();
-          return "";
+          if (particularOrder.startSchoolYear()) {
+              //if the order is started it becomes penalized
+              //if the order is paid it becomes prepared
+              return "";
+          }
+          else return "The School year could not be started.";
+
+          //The school year cannot be started if order is penalized, pickedUp or prepared --> school year has already started
       } else if (particularOrder.getStatusFullName().equals("Penalized") || particularOrder.getStatusFullName().equals("PickedUp") || particularOrder.getStatusFullName().equals("Prepared")) {
           return "The school year has already been started.";
 
+        // this case should never happen
       } else {
           return "The order status is neither Started, Penalized, Prepared, Paid or PickedUp.";
       }
