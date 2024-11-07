@@ -387,56 +387,96 @@ public class OrderStepDefinitions {
     List<OrderItem> ListOfItems = particularOrder.getOrderItems();
     boolean itemExists = false;
 
-    for (OrderItem item : ListOfItems){
-      if (string2.equals(item.getItem().getName())){
-        itemExists=true;
-        break;
-      }
-    }
-    assertFalse("Expected order to contain item " +string2, itemExists);
-
-  }
-
-  
+  /**
+   * @author Nil Akkurt
+   */
   @Then("the number of order items in the system shall be {string}")
   public void the_number_of_order_items_in_the_system_shall_be(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int itemsInSystem = CoolSuppliesApplication.getCoolSupplies().numberOfOrderItems();
+    int numOfItems= Integer.parseInt(string);
+    assertEquals("Expected"+ numOfItems + "order items, found" + itemsInSystem, numOfItems, itemsInSystem);
   }
 
+  /**
+   * @author Nil Akkurt
+   */
   @Then("the order {string} shall contain {string} items")
   public void the_order_shall_contain_items(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int orderNum = Integer.parseInt(string);
+    int numOfItems = Integer.parseInt(string2);
+    Order myOrder = Order.getWithNumber(orderNum);
+    assertNotNull("Expected order"+ orderNum + "to exist.", myOrder);
+    int actNumOfItems = myOrder.numberOfOrderItems();
+    assertEquals("Expected"+ numOfItems + "order items in order" + orderNum + ", found" + actNumOfItems,
+            numOfItems, actNumOfItems);
   }
 
+  /**
+   * @author Nil Akkurt
+   */
   @Then("the order {string} shall not contain {string} with quantity {string}")
   public void the_order_shall_not_contain_with_quantity(String string, String string2,
-      String string3) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+                                                        String string3) {
+    int wrongQuantity = Integer.parseInt(string3);
+    int orderNum = Integer.parseInt(string);
+    Order myOrder = Order.getWithNumber(orderNum);
+    assertNotNull("Expected order"+ orderNum + "to exist.", myOrder);
+    int itemQuantity = 0;
+    List<OrderItem> itemsInOrder = myOrder.getOrderItems();
+    for(OrderItem item: itemsInOrder){
+      if(string2.equals(item.getItem().getName())){   //expected item to exist?
+        itemQuantity = item.getQuantity();
+      }
+    }
+    assertNotEquals("The quantity of item" + string2 + "should not be"+ wrongQuantity, itemQuantity, wrongQuantity);
+
   }
 
-
+  /**
+   * @author Nil Akkurt
+   */
   @Then("the order {string} shall contain {string} with quantity {string}")
   public void the_order_shall_contain_with_quantity(String string, String string2, String string3) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int expQuantity = Integer.parseInt(string3);
+    int orderNum = Integer.parseInt(string);
+    int itemQuantity = 0;
+    Order myOrder = Order.getWithNumber(orderNum);
+    assertNotNull("Expected order"+ orderNum + "to exist.", myOrder);
+    List<OrderItem> itemsInOrder = myOrder.getOrderItems();
+    for(OrderItem item: itemsInOrder){
+      if(string2.equals(item.getItem().getName())){
+        itemQuantity = item.getQuantity();
+      }
+    }
+    assertEquals("Expected" + expQuantity + "amount of" + string2 + "in order" + orderNum + ", found" +
+            itemQuantity, expQuantity, itemQuantity);
   }
 
 
+  /**
+   * @author Nil Akkurt
+   */
   @Then("the order {string} shall be marked as {string}")
   public void the_order_shall_be_marked_as(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int orderNum = Integer.parseInt(string);
+    Order myOrder = Order.getWithNumber(orderNum);
+    assertNotNull("Expected order"+ orderNum + "to exist.", myOrder);
+    String orderStatus = myOrder.getStatusFullName();
+    assertEquals("Expected order" + orderNum + "to be marked as" + string2 + "found" + orderStatus, string2, orderStatus);
+
   }
 
 
+  /**
+   * @author Nil Akkurt
+   */
   @Then("the number of orders in the system shall be {string}")
   public void the_number_of_orders_in_the_system_shall_be(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    int numOfOrders = Integer.parseInt(string);
+    int ordersInSystem = CoolSuppliesApplication.getCoolSupplies().numberOfOrders();
+    assertEquals("Expected"+ numOfOrders + "orders, but found" + ordersInSystem, numOfOrders, ordersInSystem);
   }
+
 
   @Then("the order {string} shall contain level {string} and student {string}")
   public void the_order_shall_contain_level_and_student(String string, String string2,
