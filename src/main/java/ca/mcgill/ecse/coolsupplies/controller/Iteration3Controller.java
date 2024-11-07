@@ -5,6 +5,9 @@ import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
 import java.util.*;
 
+/* Util Imports */
+import java.util.List;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -215,56 +218,37 @@ public class Iteration3Controller {
       return "Authorization code is invalid";
   }
 
-    // Parse the order number
-    int orderNum;
-    try {
-        orderNum = Integer.parseInt(orderNumber);
-    } catch (NumberFormatException e) {
-        return "Order number is invalid";
-    }
+  /**
+   * @auther Trevor Piltch
+   * @param orderNumber - The number of the order to pay for in the system
+   * @param authCode - The authorization code of the payment
+   * @param penaltyAuthCode - The autorization code of the penalty
+   * 
+   * Pays for the penalty for the order.
+   */
+  public static String payPenaltyForOrder(String orderNumber, String authCode, String penaltyAuthCode) {
+    Integer num = Integer.parseInt(orderNumber);
+    Order order = Order.getWithNumber(num);
 
-    // Retrieve the order
-    Order order = Order.getWithNumber(orderNum);
     if (order == null) {
-        return "Order " + orderNumber + " does not exist";
+      return "Order " + orderNumber + " does not exist";
     }
 
-    // Check the order's state
-    String state = order.getStatusFullName(); 
-    if (!state.equals("Started")) {
-        switch (state) {
-            case "Paid":
-                return "The order is already paid";
-            case "Penalized":
-                return "Cannot pay for a penalized order";
-            case "Prepared":
-                return "Cannot pay for a prepared order";
-            case "PickedUp":
-                return "Cannot pay for a picked up order";
-            default:
-                return "Cannot pay for the order in its current state";
-        }
+    if (order.getStatus() != Order.Status.Penalized) {
+      return "Cannot pay penalty for a " + order.getStatus() + " order";
     }
 
-    // Check if the order has items
-    if (order.numberOfOrderItems() == 0) {
-        return "Order " + orderNumber + " has no items";
+    if (authCode.isEmpty()) {
+      return "Authorization code is invalid.";
     }
 
-    // Perform the payment
-    try {
-        order.setAuthorizationCode(authCode);
-        order.payForOrder(); // Assuming this triggers the state transition to "Paid"
-    } catch (Exception e) {
-        // Handle exceptions from the state machine
-        return "Unable to process payment: " + e.getMessage();
+    if (penaltyAuthCode.isEmpty()) {
+      return "Penalty authorization code is invalid";
     }
+
+    order.setPenaltyAuthorizationCode(penaltyAuthCode);
 
     return "";
-  }
- 
-  public static String payPenaltyForOrder(String orderNumber, String authCode, String penaltyAuthCode) {
-    throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
   public static String pickUpOrder(String orderNumber) {
@@ -290,112 +274,15 @@ public class Iteration3Controller {
   }
 
   /**
-   * This method allows the user to view all the details of an order.
-   * @author Clara Dupuis
-   * @param orderNumber is a string representing the number of the order that we want to view
-   * @return a TOOrder object
-   */
-  public static TOOrder viewOrder(String orderNumber) {
-
-      int orderNum = Integer.parseInt(orderNumber);
-
-      Order particularOrder = Order.getWithNumber(orderNum);
-
-      if (particularOrder == null){
-          return null;
-      }
-
-      String studentName = particularOrder.getStudent().getName();
-      String parentName = particularOrder.getParent().getName();
-      String date = particularOrder.getDate().toString();
-      String OrderNumber = Integer.toString(particularOrder.getNumber());
-      String authorizationCode = particularOrder.getAuthorizationCode();
-      String penaltyAuthorizationCode = particularOrder.getPenaltyAuthorizationCode();
-      String statusString = particularOrder.getStatusFullName();
-      String levelString = particularOrder.getLevel().toString();
-
-      
-
-    double totalPrice = 0;
-    List<TOOrderItem> orderItemList = new ArrayList<>();
-
-    for (OrderItem orderItem: particularOrder.getOrderItems()) {
-        int quantityOrdered = orderItem.getQuantity();
-        InventoryItem inventoryItem = orderItem.getItem();
-
-        String itemQuantityStr = String.valueOf(quantityOrdered);
-
-        String itemName = "";
-        String gradeBundleStr = "";
-        String itemPriceStr = "";
-        String discountStr = "0";
-
-        double itemTotalPrice = 0;
-
-        if (inventoryItem instanceof Item) {
-            Item item = (Item) inventoryItem;
-
-            itemName = item.getName();
-            int itemPrice = item.getPrice();
-            int priceOfItem = item.getPrice() * quantityOrdered;
-            totalPrice += priceOfItem;
-            itemTotalPrice = priceOfItem;
-            itemPriceStr = String.valueOf(priceOfItem);
-        }
-
-        else if (inventoryItem instanceof GradeBundle) {
-
-            GradeBundle gradeBundle = (GradeBundle) inventoryItem;
-
-            itemName = gradeBundle.getName();
-            gradeBundleStr = gradeBundle.getName();
-            int discount = gradeBundle.getDiscount();
-            discountStr = String.valueOf(discount);
-
-            double priceOfBundle = 0;
-
-            BundleItem.PurchaseLevel purchaseLevel = particularOrder.getLevel();
-
-            List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
-
-
-            int numberOfIterations = 0; //used to count if discount should be applied
-
-            for (BundleItem bundleItem : itemsInBundle){
-
-                int quantityInBundle = bundleItem.getQuantity();;
-                int priceOfBundleItem = 0;
-
-                if (purchaseLevel.compareTo(bundleItem.getLevel()) >= 0){
-                    Item itemInBundle = bundleItem.getItem();
-                    priceOfBundleItem = itemInBundle.getPrice();
-                }
-
-                priceOfBundle += (quantityInBundle * priceOfBundleItem);
-
-                numberOfIterations+=1;
-            }
-
-            if (numberOfIterations>1){
-                priceOfBundle = priceOfBundle*((double) (1-discount)/100);
-            }
-
-            priceOfBundle *=quantityOrdered;
-            itemTotalPrice = priceOfBundle;
-            itemPriceStr = String.valueOf(priceOfBundle);
-
-            totalPrice += priceOfBundle;
-        }
-
-        TOOrderItem toOrderItem = new TOOrderItem(itemQuantityStr, itemName, gradeBundleStr, itemPriceStr, discountStr);
-
-        orderItemList.add(toOrderItem);
-
-    }
-
-     return new TOOrder(parentName, studentName, statusString, orderNumber, date, levelString, authorizationCode, penaltyAuthorizationCode, totalPrice, orderItemList.toArray(new TOOrderItem[0]));
-
-
+   * @author Trevor Piltch
+   *  
+   * Returns a list of orders. 
+   * NOTE I opted not to use a transfer object here for multiple reasons:
+   * - In the definition of viewAllOrders, it specifies basically all the fields of the object 
+   * - Creating a new transfer object for the order with the same fields is duplicating code and further increasing the complexity of the system
+  */
+  public static List<Order> viewAllOrders() {
+    return coolSupplies.getOrders();
   }
 
     /**
