@@ -42,7 +42,6 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
@@ -56,7 +55,6 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
@@ -70,7 +68,6 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
@@ -84,7 +81,6 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
@@ -98,16 +94,9 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
-  /**
-   * This test attemps to verify that the given grade bundle entities exist in the system.
-   * @author Lune Letailleur
-   * @param dataTable represents the grade bundle entities we wish to exist in the system
-   * @return void
-   */
   @Given("the following grade bundle entities exist in the system")
   public void the_following_grade_bundle_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -118,15 +107,7 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-
-    List<Map<String, String>> entities = dataTable.asMaps();
-
-    for (var entity : entities) {
-      String name = entity.get("name");
-      int discount = (int) entity.get("discount");
-      Grade gradeLevel = (Grade) entity.get("gradeLevel");
-      coolSupplies.addBundle(name, discount ,gradeLevel);
-    }
+    throw new io.cucumber.java.PendingException();
   }
 
   @Given("the following bundle item entities exist in the system")
@@ -188,22 +169,21 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
-
   @When("the parent attempts to update an item {string} with quantity {string} in the order {string}")
-  public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String item,
-      String quantity, String order) {
+  public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String string,
+      String string2, String string3) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
   @When("the parent attempts to delete an item {string} from the order {string}")
-  public void the_parent_attempts_to_delete_an_item_from_the_order(String item, String order) {
+  public void the_parent_attempts_to_delete_an_item_from_the_order(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
   @When("the parent attempts to get from the system the order with number {string}")
-  public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String order) {
+  public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String string) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
@@ -211,14 +191,14 @@ public class OrderStepDefinitions {
 
 
   @When("the parent attempts to cancel the order {string}")
-  public void the_parent_attempts_to_cancel_the_order(String order) {
+  public void the_parent_attempts_to_cancel_the_order(String string) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
   @When("the parent attempts to pay for the order {string} with authorization code {string}")
-  public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String order,
-      String authoCode) {
+  public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String string,
+      String string2) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
@@ -228,7 +208,7 @@ public class OrderStepDefinitions {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
- 
+
   @When("the parent attempts to pay penalty for the order {string} with penalty authorization code {string} and authorization code {string}")
   public void the_parent_attempts_to_pay_penalty_for_the_order_with_penalty_authorization_code_and_authorization_code(
       String string, String string2, String string3) {
@@ -261,6 +241,7 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+
   @Then("the order {string} shall not contain authorization code {string}")
   public void the_order_shall_not_contain_authorization_code(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
@@ -291,6 +272,8 @@ public class OrderStepDefinitions {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
+
+
 
   @Then("the number of order items in the system shall be {string}")
   public void the_number_of_order_items_in_the_system_shall_be(String string) {
@@ -626,7 +609,6 @@ public class OrderStepDefinitions {
    */
   @Then("no order entities shall be presented")
   public void no_order_entities_shall_be_presented() {
-    
     assertTrue("Expected no order entities", coolSupplies.getOrders().isEmpty());
   }
 
