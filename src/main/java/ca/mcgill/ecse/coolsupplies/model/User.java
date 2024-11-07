@@ -101,7 +101,7 @@ public abstract class User
   // line 13 "../../../../../CoolSuppliesPersistence.ump"
    public static  void reinitializeUniqueEmail(SchoolAdmin admin, List<Parent> parents){
     usersByEmail.clear();
-    usersByEmail.put(admin.getEmail(), admin);
+    if (admin.getEmail() != null) usersByEmail.put(admin.getEmail(), admin);
     for (var parent : parents){
       usersByEmail.put(parent.getEmail(),parent);
     }
