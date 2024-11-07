@@ -5,7 +5,7 @@ import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
 public class CoolSuppliesPersistence {
 
-  private static String filename = "app.json";
+  private static String filename = "app.data";
   private static JsonSerializer serializer = new JsonSerializer("ca.mcgill.ecse.coolsupplies");
 
   public static void setFilename(String filename) {
