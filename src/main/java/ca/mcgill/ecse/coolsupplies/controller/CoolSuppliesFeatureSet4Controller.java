@@ -2,6 +2,7 @@ package ca.mcgill.ecse.coolsupplies.controller;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class CoolSuppliesFeatureSet4Controller {
    *         if the action is successful.
    */
   public static String addBundle(String name, int discount, String gradeLevel) {
+    try {
     List<GradeBundle> bundlesInSystem = CoolSuppliesApplication.getCoolSupplies().getBundles();
     for (GradeBundle bundle : bundlesInSystem) {
       if (bundle.getName().equals(name)) {
@@ -57,6 +59,11 @@ public class CoolSuppliesFeatureSet4Controller {
     GradeBundle myBundle = new GradeBundle(name, discount, CoolSuppliesApplication.getCoolSupplies(), myGrade);
     myGrade.setBundle(myBundle);
 
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
+    }
     return "";
 
   }
@@ -76,6 +83,7 @@ public class CoolSuppliesFeatureSet4Controller {
    *
    */
   public static String updateBundle(String name, String newName, int newDiscount, String newGradeLevel) {
+    try {
     GradeBundle bundleToUpdate = null;
     List<GradeBundle> bundles = CoolSuppliesApplication.getCoolSupplies().getBundles();
 
@@ -124,6 +132,11 @@ public class CoolSuppliesFeatureSet4Controller {
     bundleToUpdate.setDiscount(newDiscount);
     bundleToUpdate.setGrade(gradeToUpdate);
 
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
+    }    
     return "";
   }
 
@@ -136,6 +149,7 @@ public class CoolSuppliesFeatureSet4Controller {
    *         otherwise.
    */
   public static String deleteBundle(String name) {
+    try {
     List<GradeBundle> bundlesInSystem = CoolSuppliesApplication.getCoolSupplies().getBundles();
     GradeBundle bundleToDelete = null;
 
@@ -150,7 +164,11 @@ public class CoolSuppliesFeatureSet4Controller {
     }
 
     bundleToDelete.delete();
-
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
+    }
     return "";
   }
 

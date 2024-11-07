@@ -2,6 +2,8 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 package ca.mcgill.ecse.coolsupplies.persistence;
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
 // line 4 "../../../../../CoolSuppliesPersistence.ump"
 public class CoolSuppliesPersistence
@@ -12,17 +14,9 @@ public class CoolSuppliesPersistence
   //------------------------
 
   //CoolSuppliesPersistence Attributes
-  private static String filename;
+  private static String filename = "app.json";
   private static JsonSerializer serializer = new JsonSerializer("ca.mcgill.ecse.coolsupplies");
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public CoolSuppliesPersistence()
-  {
-    filename = "data.json";
-  }
 
   //------------------------
   // INTERFACE
@@ -36,9 +30,6 @@ public class CoolSuppliesPersistence
     return wasSet;
   }
 
-  /**
-   * Path to the data file
-   */
   public String getFilename()
   {
     return filename;
@@ -47,37 +38,29 @@ public class CoolSuppliesPersistence
   public void delete()
   {}
 
+  //Load data from JSON file
+  static CoolSupplies load() {
+    var coolsupplies = (CoolSupplies) serializer.deserialize(filename);
 
-  /**
-   * Load data from JSON file
-   */
-  // line 14 "../../../../../CoolSuppliesPersistence.ump"
-   static  CoolSuppliesPersistence load(){
-    // Implementation will be provided in Java
-    return null;
+    //if model cannot be loaded create new empty cool supplies
+    if(coolsupplies == null) coolsupplies = new CoolSupplies();
+    else coolsupplies.reinitialize();
+    return coolsupplies;
   }
 
-
-  /**
-   * Save data to JSON file
-   */
-  // line 20 "../../../../../CoolSuppliesPersistence.ump"
-  public void save(){
-    // Implementation will be provided in Java
+  //Save helper function
+  static void save() {
+    save(CoolSuppliesApplication.getCoolSupplies();)
   }
 
+  // Save data to JSON file
+  static void save(CoolSupplies coolsupplies) {
+    serializer.serialize(coolsupplies, filename);
+  }
 
   public String toString()
   {
     return super.toString() + "["+
             "filename" + ":" + getFilename()+ "]";
-  }  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 7 "../../../../../CoolSuppliesPersistence.ump"
-  static CoolSuppliesPersistence instance ;
-
-  
+  }
 }

@@ -3,6 +3,7 @@ package ca.mcgill.ecse.coolsupplies.controller;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.Grade;
 import ca.mcgill.ecse.coolsupplies.model.Student;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,27 +17,30 @@ public class CoolSuppliesFeatureSet2Controller {
    *         the student was successfully added This method attempts to add a student
    */
   public static String addStudent(String name, String gradeLevel) {
+    try {
+      if (name.equals("")) {
+        return "The name must not be empty.";
 
-
-    if (name.equals("")) {
-      return "The name must not be empty.";
-
-    } else {
-      try {
+      } else {
+       try {
         if (Grade.getWithLevel(gradeLevel) != null) {
-          new Student(name, CoolSuppliesApplication.getCoolSupplies(),
-              Grade.getWithLevel(gradeLevel));
+           new Student(name, CoolSuppliesApplication.getCoolSupplies(), Grade.getWithLevel(gradeLevel));
         } else {
           return "The grade does not exist.";
         }
-      } catch (RuntimeException e) {
-        if (e.getMessage().equals(
-            "Cannot create due to duplicate name. See https://manual.umple.org?RE003ViolationofUniqueness.html")) {
+        } catch (RuntimeException e) {
+          if (e.getMessage().equals(
+              "Cannot create due to duplicate name. See https://manual.umple.org?RE003ViolationofUniqueness.html")) {
           return "The name must be unique.";
+          }
         }
       }
-      return "";
+      //autosave
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
     }
+    return "";        
   }
 
   /**
@@ -49,6 +53,7 @@ public class CoolSuppliesFeatureSet2Controller {
    *         and the grade level of a current student
    */
   public static String updateStudent(String name, String newName, String newGradeLevel) {
+    try {
     Student student = Student.getWithName(name);
 
     if (student == null) {
@@ -72,7 +77,11 @@ public class CoolSuppliesFeatureSet2Controller {
     if (!student.setGrade(grade)) {
       return "The grade could not be updated.";
     }
-
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+      }
     return "";
   }
 
@@ -83,15 +92,21 @@ public class CoolSuppliesFeatureSet2Controller {
    *         the student was successfully deleted This method attempts tto delete a student
    */
   public static String deleteStudent(String name) {
+    try {
     if (!name.equals("") && !(name == null)) {
       if (Student.getWithName(name) != null) {
         Student.getWithName(name).delete();
+        //autosave
+        CoolSuppliesPersistence.save();
         return "";
       } else {
         return "The student does not exist.";
       }
     } else {
       return "The name must not be empty.";
+    }
+    } catch (RuntimeException e) {
+      return e.getMessage();
     }
   }
 

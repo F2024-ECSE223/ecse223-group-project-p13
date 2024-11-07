@@ -2,21 +2,47 @@
 namespace ca.mcgill.ecse.coolsupplies.persistence;
 
 class CoolSuppliesPersistence {
-  
-  // Singleton instance
-  static CoolSuppliesPersistence instance;
+  String filename = "app.json";
+  depend ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+  depend ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+}
 
-  // Path to the data file
-  static String filename = "data.json";
-
-  // Load data from JSON file
-  static CoolSuppliesPersistence load() {
-    // Implementation will be provided in Java
-    return null;
+class CoolSupplies{
+  public void reinitialize() {
+    User.reinitializeUniqueEmail();
+    Student.reinitializeUniqueName();
+    Order.reinitializeUniqueNumber();
+    InventoryItem.reinitializeUniqueItemName();
+    Grade.reinitializeUniqueLevel();
   }
+}
 
-  // Save data to JSON file
-  void save() {
-    // Implementation will be provided in Java
+class User {
+  public static void reinitializeUniqueEmail(){
+
+  }
+}
+
+class Student {
+  public static void reinitializeUniqueName(){
+
+  }
+}
+
+class Order {
+  public static void reinitializeUniqueNumber(){
+
+  }
+}
+
+class InventoryItem {
+  public static void reinitializeUniqueItemName(){
+
+  }
+}
+
+class Grade {
+  public static void reinitializeUniqueLevel(){
+
   }
 }

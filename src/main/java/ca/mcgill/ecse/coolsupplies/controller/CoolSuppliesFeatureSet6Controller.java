@@ -3,6 +3,7 @@ package ca.mcgill.ecse.coolsupplies.controller;
 /* Project Imports */
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 /* Utility Imports */
 import java.sql.Date;
@@ -22,6 +23,7 @@ public class CoolSuppliesFeatureSet6Controller {
    * @return A string containing an error message, or an empty string on success
    */
   public static String addStudentToParent(String studentName, String parentEmail) {
+    try {
     Student studentToAdd = Student.getWithName(studentName);    
 
     if (studentToAdd == null) {
@@ -35,7 +37,11 @@ public class CoolSuppliesFeatureSet6Controller {
     }
 
     parent.addStudent(studentToAdd);
-
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
+    }
     return "";
   }
 
@@ -46,6 +52,7 @@ public class CoolSuppliesFeatureSet6Controller {
    * @return A string containing an error message, or an empty string on success
    */
   public static String deleteStudentFromParent(String studentName, String parentEmail) {
+    try {
     Student studentToDelete = Student.getWithName(studentName);
 
     if (studentToDelete == null) {
@@ -59,7 +66,11 @@ public class CoolSuppliesFeatureSet6Controller {
     }
 
     parent.removeStudent(studentToDelete);
-
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
+    }  
     return "";
   }
 
@@ -159,6 +170,8 @@ public class CoolSuppliesFeatureSet6Controller {
 
     try {
       new Order(number, date, purchaseLevel, parent, student, coolSupplies);
+      //autosave
+      CoolSuppliesPersistence.save();
     } catch (RuntimeException e) {
       return e.getMessage(); // If we get here, then some other error occurred.
     }
