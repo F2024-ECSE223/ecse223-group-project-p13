@@ -216,6 +216,9 @@ public class Iteration3Controller {
     // Validate the authorization code
     if (authCode == null || authCode.trim().isEmpty()) {
       return "Authorization code is invalid";
+    }
+
+    return "";
   }
 
   /**
@@ -272,19 +275,7 @@ public class Iteration3Controller {
 
     return toOrders;
   }
-
-  /**
-   * @author Trevor Piltch
-   *  
-   * Returns a list of orders. 
-   * NOTE I opted not to use a transfer object here for multiple reasons:
-   * - In the definition of viewAllOrders, it specifies basically all the fields of the object 
-   * - Creating a new transfer object for the order with the same fields is duplicating code and further increasing the complexity of the system
-  */
-  public static List<Order> viewAllOrders() {
-    return coolSupplies.getOrders();
-  }
-
+   
     /**
      * This method starts a school year by changing the status of an order
      * @author Clara Dupuis

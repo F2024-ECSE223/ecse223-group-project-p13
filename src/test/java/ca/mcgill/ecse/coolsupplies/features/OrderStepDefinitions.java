@@ -92,8 +92,12 @@ public class OrderStepDefinitions {
 
     for (var entity : entities) {
       String name = entity.get("name");
-      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
-      coolSupplies.addStudent(name, gradeLevel);
+      
+      for (Grade grade : coolSupplies.getGrades()) {
+        if (grade.getLevel() == entity.get("gradeLevel")) {
+          coolSupplies.addStudent(name, grade);
+        }
+      }
     }
   }
 
@@ -534,6 +538,7 @@ public class OrderStepDefinitions {
 
     List<OrderItem> ListOfItems = particularOrder.getOrderItems();
     boolean itemExists = false;
+  }
 
   /**
    * @author Nil Akkurt
