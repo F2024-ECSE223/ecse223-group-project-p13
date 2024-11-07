@@ -1,10 +1,34 @@
+
 package ca.mcgill.ecse.coolsupplies.features;
 
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import ca.mcgill.ecse.coolsupplies.model.*;
+
+/* Helper Imports */
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+
+
+/* JUnit Imports */
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+
 public class OrderStepDefinitions {
+  private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
+  private String errString = "";
+
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -15,9 +39,21 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String,String >> entities = dataTable.asMaps();
+
+    for (var entity:entities){
+      String aEmail = entity.get("email");
+      String aPassword = entity.get("password");
+      String aName = entity.get("name");
+      int aPhoneNumber = Integer.parseInt(entity.get("phoneNumber"));
+      coolSupplies.addParent(aEmail, aPassword, aName, aPhoneNumber);
+    }
   }
 
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following grade entities exist in the system")
   public void the_following_grade_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -28,9 +64,17 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String level = entity.get("level");
+      coolSupplies.addGrade(level);
+    }
   }
 
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following student entities exist in the system")
   public void the_following_student_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -41,9 +85,19 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
+      coolSupplies.addStudent(name, gradeLevel);
+    }
   }
 
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following student entities exist for a parent in the system")
   public void the_following_student_entities_exist_for_a_parent_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -54,9 +108,22 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      String email = entity.get("parentEmail");
+
+      Parent parentOfStudent = (Parent) User.getWithEmail(email);
+      Student student = Student.getWithName(name);
+
+      student.setParent(parentOfStudent);
+    }
   }
 
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following item entities exist in the system")
   public void the_following_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -67,9 +134,18 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      int price = Integer.parseInt(entity.get("price"));
+      coolSupplies.addItem(name, price);
+    }
   }
 
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following grade bundle entities exist in the system")
   public void the_following_grade_bundle_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -80,7 +156,15 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (var entity : entities) {
+      String name = entity.get("name");
+      int discount = Integer.parseInt(entity.get("discount"));
+      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
+      coolSupplies.addBundle(name, discount ,gradeLevel);
+    }
   }
 
 
@@ -336,4 +420,4 @@ public class OrderStepDefinitions {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
-
+}
