@@ -28,7 +28,10 @@ import static org.junit.Assert.assertNotEquals;
 
 public class OrderStepDefinitions {
   private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
-  private String error = "";
+  private String errString = "";
+  private List<TOOrder> transferOrders = new ArrayList<>();
+  private List<TOOrderItem> transferOrderItems = new ArrayList<>();
+
 
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
@@ -590,26 +593,76 @@ public class OrderStepDefinitions {
     assertEquals("Expected"+ numOfOrders + "orders, but found" + ordersInSystem, numOfOrders, ordersInSystem);
   }
 
-
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the order {string} shall contain level {string} and student {string}")
   public void the_order_shall_contain_level_and_student(String string, String string2,
       String string3) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+   
+    // Obtain the order object
+    int orderNumber = Integer.parseInt(string);
+
+
+    List<Order> orderList = coolSupplies.getOrders();
+    Order orderInSystem = null;
+
+    // Find order from the order in the system
+    for (Order orderFromList : orderList) {
+      if (orderFromList.getNumber() == orderNumber) {
+        orderInSystem = orderFromList;
+      }
+    }
+
+    // Check if the order was found
+    assertNotNull("Order with number " + orderNumber + " does not exist", orderInSystem);
+  
+    // Update the level
+    PurchaseLevel level = PurchaseLevel.valueOf(string2);
+    orderInSystem.setLevel(level);
+    assertEquals("Expected order to have level " + level, level, orderInSystem.getLevel());
+
+    // Set the student name to the order
+    Student student = Student.getWithName(string3);
+    assertNotNull("Expected student with name " + string3, student);
+
+    specificOrder.setStudent(student);
+    assertEquals("Expected order to be assigned to student " + string3, student, orderInSystem.getStudent());
+      
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Given("order {string} is marked as {string}")
   public void order_is_marked_as(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
+    // Parse string into integer, then create new Order object
+
+    Order orderInSystem = null;
+
+    List<Order> orders = coolSupplies.getOrders();
+    for (Order order : orders) {
+      if (order.getNumber() == Integer.parseInt(string)) {
+        orderInSystem = order;
+      }
+    }
+    assertNotNull("Order not found: " + string, orderInSystem);
+
+    orderInSystem.setStatus(Status.Started);
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the error {string} shall be raised")
   public void the_error_shall_be_raised(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    assertTrue("The expected error ** " + string + " ** was not raised. Found: " + errString, errString.contains(string));
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the following order entities shall be presented")
   public void the_following_order_entities_shall_be_presented(
       io.cucumber.datatable.DataTable dataTable) {
@@ -620,9 +673,39 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+  
+    List<Map<String, String>> entities = dataTable.asMaps();
+
+    for (Map<String, String> entity : entities) {
+      String parentEmail = entity.get("parentEmail");
+      String orderNumber = entity.get("number");
+      String date = entity.get("date");
+      String level = entity.get("level");
+      String studentName = entity.get("studentName");
+      String status = entity.get("status");
+      String authorizationCode = entity.get("authorizationCode");
+      String penaltyAuthorizationCode = entity.get("penaltyAuthorizationCode");
+      String totalPrice = entity.get("totalPrice");
+
+      for (TOOrder transferOrder : transferOrders) {
+        if (!(parentEmail.equals(transferOrder.getParentEmail()) && 
+        orderNumber.equals(transferOrder.getNumber()) && 
+        date.equals(transferOrder.getDate()) && 
+        level.equals(transferOrder.getLevel()) && 
+        studentName.equals(transferOrder.getStudentName()) && 
+        status.equals(transferOrder.getStatus()) && 
+        authorizationCode.equals(transferOrder.getAuthCode()) && 
+        penaltyAuthorizationCode.equals(transferOrder.getPenaltyAuthCode()) && totalPrice.equals(String.valueOf(transferOrder.getPrice())))) {
+          throw new AssertionError("Order entity not found.");
+        }
+      }
+
+    }
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("the following order items shall be presented for the order with number {string}")
   public void the_following_order_items_shall_be_presented_for_the_order_with_number(String string,
       io.cucumber.datatable.DataTable dataTable) {
@@ -633,19 +716,51 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    
+    int orderNumber = Integer.parseInt(string);
+
+    // Find order in system
+    List<Order> orderList = coolSupplies.getOrders();
+    Order order = null;
+    for (Order orderFromList : orderList) {
+      if (orderFromList.getNumber() == orderNumber) {
+        order = orderFromList;
+      }
+    }
+    assertNotNull("Order with order number " + orderNumber + " not found", order);  // Error if not found
+
+    // Get map of order items to be validated
+    List<Map<String, String>> orderItemsInDatatable = dataTable.asMaps();
+
+    for (Map<String, String> orderItem : orderItemsInDatatable) {
+      String quantity = orderItem.get("quantity");
+      String itemName = orderItem.get("itemName");
+      String gradeBundleName = orderItem.get("gradeBundleName");
+      String price = orderItem.get("price");
+      String discount = orderItem.get("discount");
+
+      for (TOOrderItem transferOrderItem : transferOrderItems) {
+        if (!(quantity.equals(transferOrderItem.getQuantity()) &&
+         itemName.equals(transferOrderItem.getName()) && gradeBundleName.equals(transferOrderItem.getGradeBundle()) &&
+          price.equals(transferOrderItem.getPrice()) && discount.equals(transferOrderItem.getPrice()))) {
+            throw new AssertionError("Order item not found");
+          }
+      }
+    }
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   @Then("no order entities shall be presented")
   public void no_order_entities_shall_be_presented() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    assertTrue("Expected no order entities", coolSupplies.getOrders().isEmpty());
   }
 
-  /* Helper Methods */
+  /* Helper methods */
   private void callController(String result) {
     if (!result.isEmpty()) {
-      error += result;
+      errString += result;
     }
   }
 }
