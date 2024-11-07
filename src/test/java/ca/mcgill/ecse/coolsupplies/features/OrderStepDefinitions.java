@@ -324,9 +324,7 @@ public class OrderStepDefinitions {
 
   }
 
-  /**
-   * @author Clara Dupuis
-   */
+  
   @Then("the number of order items in the system shall be {string}")
   public void the_number_of_order_items_in_the_system_shall_be(String string) {
     // Write code here that turns the phrase above into concrete actions
