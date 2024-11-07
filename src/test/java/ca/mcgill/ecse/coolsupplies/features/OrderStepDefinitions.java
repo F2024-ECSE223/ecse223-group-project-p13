@@ -253,10 +253,7 @@ public class OrderStepDefinitions {
 
 
   /**
-   * This test verifies the number of order items in the system.
    * @author Nil Akkurt
-   * @param string
-   * @returns void
    */
   @Then("the number of order items in the system shall be {string}")
   public void the_number_of_order_items_in_the_system_shall_be(String string) {
@@ -266,11 +263,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test verifies the number of items in an order.
    * @author Nil Akkurt
-   * @param string
-   * @param string2
-   * @returns void
    */
   @Then("the order {string} shall contain {string} items")
   public void the_order_shall_contain_items(String string, String string2) {
@@ -284,12 +277,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test verifies the number of a specific OrderItem is not in an order.
    * @author Nil Akkurt
-   * @param string
-   * @param string2
-   * @param string3
-   * @returns void
    */
   @Then("the order {string} shall not contain {string} with quantity {string}")
   public void the_order_shall_not_contain_with_quantity(String string, String string2,
@@ -310,12 +298,7 @@ public class OrderStepDefinitions {
   }
 
   /**
-   * This test verifies a certain OrderItem has a specific quantity in a specific order.
    * @author Nil Akkurt
-   * @param string
-   * @param string2
-   * @param string3
-   * @returns void
    */
   @Then("the order {string} shall contain {string} with quantity {string}")
   public void the_order_shall_contain_with_quantity(String string, String string2, String string3) {
@@ -336,11 +319,7 @@ public class OrderStepDefinitions {
 
 
   /**
-   * This test checks if the order is in the expected status.
    * @author Nil Akkurt
-   * @param string
-   * @param string2
-   * @returns void
    */
   @Then("the order {string} shall be marked as {string}")
   public void the_order_shall_be_marked_as(String string, String string2) {
@@ -354,10 +333,7 @@ public class OrderStepDefinitions {
 
 
   /**
-   * This test verifies the number of orders in the system.
    * @author Nil Akkurt
-   * @param string
-   * @returns void
    */
   @Then("the number of orders in the system shall be {string}")
   public void the_number_of_orders_in_the_system_shall_be(String string) {

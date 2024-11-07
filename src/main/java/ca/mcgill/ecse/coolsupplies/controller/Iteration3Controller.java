@@ -60,7 +60,7 @@ public class Iteration3Controller {
         orItemToDel = myItem;
       }
     }
-    if(itemToDel == null){  
+    if(itemToDel == null){
       return "Item " + item +" does not exist in order" + orderNumber + ".";
     }
 
