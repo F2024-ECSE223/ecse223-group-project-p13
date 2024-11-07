@@ -5,6 +5,7 @@ import java.util.List;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.Item;
 import ca.mcgill.ecse.coolsupplies.model.Order;
 import ca.mcgill.ecse.coolsupplies.model.OrderItem;
 
@@ -19,15 +20,17 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
+  /*
+   * @author Dimitri Christopoulos
+   */
   public static String updateOrderQuantity(String item, String quantity, String orderNumber) {
 
     // Obtain the order object
     int orderNumberInt = Integer.parseInt(orderNumber);
-
     List<Order> orderList = coolSupplies.getOrders();
     Order order = null;
 
-    // Find order from the order in the system
+    // Find order from the orders in the system
     for (Order orderFromList : orderList) {
       if (orderFromList.getNumber() == orderNumberInt) {
         order = orderFromList;
@@ -36,11 +39,23 @@ public class Iteration3Controller {
 
     // Error if orderNumber is not in system
     if (order == null) {
-	    return "Order " + orderNumberInt + " does not exist";
+	    return "Item " + item + " does not exist in the order " + orderNumber + ".";
     }
 
-    for (OrderItem orderItem : order.getOrderItems()) {}
-    
+    // Check if item is in the system
+    Item itemObject = null;
+    List<Item> itemList = coolSupplies.getItems();
+    for (Item itemFromList : itemList) {
+      if (itemFromList.getName().equals(item)) {
+        itemObject = itemFromList;
+      }
+    }
+
+    // Error if item is not in system
+    if (itemObject == null) {
+      return "Item" + item + " does not exist.";
+    }
+
     for (OrderItem orderItem : order.getOrderItems()) {
 
       // Successfully update item
@@ -59,6 +74,17 @@ public class Iteration3Controller {
       return "Quantity must be greater than 0.";
     }
 
+    // Test if order exists, by checking if orderNumber is in the system
+    Order orderExists = null;
+    for (Order orderFromList : orderList) {
+      if (orderFromList.getNumber() == orderNumberInt) {
+        orderExists = orderFromList;
+      }
+    }
+    if (orderExists == null) {
+      return "Order " + orderNumber + " does not exist";
+    }
+
     // Error if status is not started
     switch (order.getStatus()) {
         case Paid:
@@ -71,6 +97,14 @@ public class Iteration3Controller {
             return "Cannot update items in a picked up order";
         default:
             break;
+    }
+    
+    for (OrderItem orderItem : order.getOrderItems()) {
+      // Successfully update item
+      if ((orderItem.getItem().getName()).equals(item)) {
+        orderItem.setQuantity(Integer.parseInt(quantity));
+        return "";
+      }
     }
     return "Item " + item + " does not exist.";
   }

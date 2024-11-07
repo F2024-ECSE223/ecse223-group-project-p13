@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
@@ -31,6 +33,8 @@ import io.cucumber.java.en.When;
 public class OrderStepDefinitions {
   private CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
   private String errString = "";
+  List<TOOrder> = new ArrayList<>;
+
 
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
@@ -562,6 +566,8 @@ public class OrderStepDefinitions {
           actualQuantity = orderItemInList.getQuantity();
           actualInventoryName = orderItemInList.getItem().getName();
         }
+
+
       }
 
       String actualGradeBundleName = "";
