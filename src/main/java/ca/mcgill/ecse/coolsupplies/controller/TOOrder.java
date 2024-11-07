@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 import java.util.*;
 
-// line 46 "../../../../../CoolSuppliesTransferObjects.ump"
+// line 43 "../../../../../CoolSuppliesTransferObjects.ump"
 public class TOOrder
 {
 
@@ -24,7 +24,7 @@ public class TOOrder
   private double price;
 
   //TOOrder Associations
-  private List<TOItem> items;
+  private List<TOOrderItem> items;
 
   //Helper Variables
   private boolean canSetItems;
@@ -33,7 +33,7 @@ public class TOOrder
   // CONSTRUCTOR
   //------------------------
 
-  public TOOrder(String aParentEmail, String aStudentName, String aStatus, String aNumber, String aDate, String aLevel, String aAuthCode, String aPenaltyAuthCode, double aPrice, TOItem... allItems)
+  public TOOrder(String aParentEmail, String aStudentName, String aStatus, String aNumber, String aDate, String aLevel, String aAuthCode, String aPenaltyAuthCode, double aPrice, TOOrderItem... allItems)
   {
     parentEmail = aParentEmail;
     studentName = aStudentName;
@@ -45,7 +45,7 @@ public class TOOrder
     penaltyAuthCode = aPenaltyAuthCode;
     price = aPrice;
     canSetItems = true;
-    items = new ArrayList<TOItem>();
+    items = new ArrayList<TOOrderItem>();
     boolean didAddItems = setItems(allItems);
     if (!didAddItems)
     {
@@ -102,15 +102,15 @@ public class TOOrder
     return price;
   }
   /* Code from template association_GetMany */
-  public TOItem getItem(int index)
+  public TOOrderItem getItem(int index)
   {
-    TOItem aItem = items.get(index);
+    TOOrderItem aItem = items.get(index);
     return aItem;
   }
 
-  public List<TOItem> getItems()
+  public List<TOOrderItem> getItems()
   {
-    List<TOItem> newItems = Collections.unmodifiableList(items);
+    List<TOOrderItem> newItems = Collections.unmodifiableList(items);
     return newItems;
   }
 
@@ -126,7 +126,7 @@ public class TOOrder
     return has;
   }
 
-  public int indexOfItem(TOItem aItem)
+  public int indexOfItem(TOOrderItem aItem)
   {
     int index = items.indexOf(aItem);
     return index;
@@ -137,13 +137,13 @@ public class TOOrder
     return 0;
   }
   /* Code from template association_SetUnidirectionalMany */
-  private boolean setItems(TOItem... newItems)
+  private boolean setItems(TOOrderItem... newItems)
   {
     boolean wasSet = false;
     if (!canSetItems) { return false; }
     canSetItems = false;
-    ArrayList<TOItem> verifiedItems = new ArrayList<TOItem>();
-    for (TOItem aItem : newItems)
+    ArrayList<TOOrderItem> verifiedItems = new ArrayList<TOOrderItem>();
+    for (TOOrderItem aItem : newItems)
     {
       if (verifiedItems.contains(aItem))
       {
