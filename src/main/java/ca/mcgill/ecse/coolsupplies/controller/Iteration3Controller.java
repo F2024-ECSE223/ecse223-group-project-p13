@@ -56,9 +56,8 @@ public class Iteration3Controller {
       return "Item " + item +" does not exist in order" + orderNumber + ".";
     }
 
-    for
     if(myOrder == null){
-      return "Order" + orderNumber + "does not exist";
+      return "Order " + orderNumber + " does not exist";
     }
     if(myOrder.getStatusFullName().equals("Paid")){
       return "Cannot delete items from a paid order";
