@@ -83,6 +83,7 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+
   @Given("the following bundle item entities exist in the system")
   public void the_following_bundle_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -95,6 +96,7 @@ public class OrderStepDefinitions {
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
+
 
   @Given("the following order entities exist in the system")
   public void the_following_order_entities_exist_in_the_system(
@@ -142,36 +144,35 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+
   @When("the parent attempts to update an item {string} with quantity {string} in the order {string}")
-  public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String string,
-      String string2, String string3) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String item,
+      String quantity, String order) {
+      // Write code here that turns the phrase above into concrete actions
+      throw new io.cucumber.java.PendingException();
   }
 
   @When("the parent attempts to delete an item {string} from the order {string}")
-  public void the_parent_attempts_to_delete_an_item_from_the_order(String string, String string2) {
+  public void the_parent_attempts_to_delete_an_item_from_the_order(String item, String order) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
   @When("the parent attempts to get from the system the order with number {string}")
-  public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String string) {
+  public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String order) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
-
-
   @When("the parent attempts to cancel the order {string}")
-  public void the_parent_attempts_to_cancel_the_order(String string) {
+  public void the_parent_attempts_to_cancel_the_order(String order) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
   @When("the parent attempts to pay for the order {string} with authorization code {string}")
-  public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String string,
-      String string2) {
+  public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String order,
+      String authoCode) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
@@ -212,13 +213,13 @@ public class OrderStepDefinitions {
       String string2) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
-  }
 
+  }
 
   @Then("the order {string} shall not contain authorization code {string}")
   public void the_order_shall_not_contain_authorization_code(String string, String string2) {
     // Write code here that turns the phrase above into concrete actions
-    // throw new io.cucumbser.java.PendingException();
+    throw new io.cucumber.java.PendingException();
   }
 
   @Then("the order {string} shall not exist in the system")
@@ -244,8 +245,6 @@ public class OrderStepDefinitions {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
-
-
 
   @Then("the number of order items in the system shall be {string}")
   public void the_number_of_order_items_in_the_system_shall_be(String string) {
@@ -338,4 +337,3 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
-}
