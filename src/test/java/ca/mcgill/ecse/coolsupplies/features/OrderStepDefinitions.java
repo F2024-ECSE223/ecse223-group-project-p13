@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -636,7 +637,7 @@ public class OrderStepDefinitions {
         }
       }
 
-      assertNotNull("Expected order with order number " + orderNumber + " to exist", order);  // Error if not found
+      assertNotNull("Order with order number " + orderNumber + " not found", order);  // Error if not found
       assertEquals("Expected order number " + orderNumber, orderNumber, order.getNumber());
 
       // Check date
@@ -748,20 +749,43 @@ public class OrderStepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    int orderNumberInSystem = Integer.parseInt(string);
-    Order orderInSystem = Order.getWithNumber(orderNumberInSystem);
-    List<OrderItem> orderItemsInSystem = orderInSystem.getOrderItems();
-    assertNotNull("Expected orderr to be in system", orderInSystem);
+    
+    int orderNumber = Integer.parseInt(string);
 
+    // Find order in system
+    List<Order> orderList = coolSupplies.getOrders();
+    Order order = null;
+    for (Order orderFromList : orderList) {
+      if (orderFromList.getNumber() == orderNumber) {
+        order = orderFromList;
+      }
+    }
+    assertNotNull("Order with order number " + orderNumber + " not found", order);  // Error if not found
+
+    List<OrderItem> orderItemsInSystem = order.getOrderItems();
+
+    
+
+
+    // Get map of order items to be validated
     List<Map<String, String>> orderItems = dataTable.asMaps();
 
     for (Map<String, String> orderItem : orderItems) {
       String quantity = orderItem.get("quantity");
-      assertEquals("Expected quantity of order to be " + quantity, quantity, orderInSystem.getQuantity());
       String itemName = orderItem.get("itemName");
       String gradeBundleName = orderItem.get("gradeBundleName");
       String price = orderItem.get("price");
       String discount = orderItem.get("discount");
+
+      for (OrderItem orderItemInSystem : orderItemsInSystem) {
+        if (Integer.parseInt(quantity) == orderItemInSystem.getQuantity()) {
+          if (itemName.equals(orderItemInSystem.getItem().getName())) {
+            
+          }
+        }
+      }
+      // Validate quantity
+      assertEquals("Expected quantity of order to be " + quantity, quantity, order.getOrderItems());
     
     }
   }
