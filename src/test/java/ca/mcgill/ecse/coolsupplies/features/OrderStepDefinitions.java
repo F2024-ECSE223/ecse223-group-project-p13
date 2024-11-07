@@ -318,9 +318,9 @@ public class OrderStepDefinitions {
    * @author Edouard Dupont
    */
   @Given("the order {string} is marked as {string}")
-  public void the_order_is_marked_as(String string, String string2) {
+  public void the_order_is_marked_as(String orderID, String status) {
     // Write code here that turns the phrase above into concrete actions
-    int orderNumber = Integer.parseInt(string);
+    int orderNumber = Integer.parseInt(orderID);
 
     // Retrieve the order
     Order order = Order.getWithNumber(orderNumber);
@@ -329,7 +329,7 @@ public class OrderStepDefinitions {
     }
 
     // Set the Order status
-    switch (string2) {
+    switch (status) {
         case "Started":
             // Default status; do nothing
             break;
@@ -357,7 +357,7 @@ public class OrderStepDefinitions {
             }
             break;
         default:
-            throw new Exception("Invalid order status: " + string2);
+            throw new Exception("Invalid order status: " + status);
     }
   }
 
@@ -366,10 +366,10 @@ public class OrderStepDefinitions {
    */
   @When("the parent attempts to update an order with number {string} to purchase level {string} and student with name {string}")
   public void the_parent_attempts_to_update_an_order_with_number_to_purchase_level_and_student_with_name(
-      String string, String string2, String string3) {
+      String orderID, String purLevel, String stuName) {
     // Write code here that turns the phrase above into concrete actions
 
-      int orderNumber = Integer.parseInt(string);
+      int orderNumber = Integer.parseInt(orderID);
   
       // Retrieve the order
       Order order = Order.getWithNumber(orderNumber);
@@ -380,21 +380,21 @@ public class OrderStepDefinitions {
       // Convert level string to PurchaseLevel enum
       BundleItem.PurchaseLevel level;
       try {
-          level = BundleItem.PurchaseLevel.valueOf(string2);
+          level = BundleItem.PurchaseLevel.valueOf(purLevel);
       } catch (IllegalArgumentException e) {
-          throw new Exception("Invalid purchase level: " + string2);
+          throw new Exception("Invalid purchase level: " + purLevel);
       }
   
       // Find the Student by name
       Student student = null;
       for (Student s : order.getParent().getStudents()) {
-          if (s.getName().equals(string3)) {
+          if (s.getName().equals(stuName)) {
               student = s;
               break;
           }
       }
       if (student == null) {
-          throw new Exception("Student not found: " + string3);
+          throw new Exception("Student not found: " + stuName);
       }
   
       // Update the order
@@ -406,11 +406,11 @@ public class OrderStepDefinitions {
    * @author Edouard Dupont
    */
   @When("the parent attempts to add an item {string} with quantity {string} to the order {string}")
-  public void the_parent_attempts_to_add_an_item_with_quantity_to_the_order(String string,
-      String string2, String string3) {
+  public void the_parent_attempts_to_add_an_item_with_quantity_to_the_order(String itemName,
+      String itemQty, String OrderNum) {
     // Write code here that turns the phrase above into concrete actions
-    int quantity = Integer.parseInt(string2);
-    int orderNumber = Integer.parseInt(string3);
+    int quantity = Integer.parseInt(itemQty);
+    int orderNumber = Integer.parseInt(OrderNum);
 
     CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
@@ -425,7 +425,7 @@ public class OrderStepDefinitions {
 
     // Check if itemName corresponds to an Item
     for (Item item : coolSupplies.getItems()) {
-        if (item.getName().equals(string)) {
+        if (item.getName().equals(itemName)) {
             inventoryItem = item;
             break;
         }
@@ -434,7 +434,7 @@ public class OrderStepDefinitions {
     // If not found, check if itemName corresponds to a GradeBundle
     if (inventoryItem == null) {
         for (GradeBundle bundle : coolSupplies.getBundles()) {
-            if (bundle.getName().equals(string)) {
+            if (bundle.getName().equals(itemName)) {
                 inventoryItem = bundle;
                 break;
             }
@@ -442,7 +442,7 @@ public class OrderStepDefinitions {
     }
 
     if (inventoryItem == null) {
-        throw new Exception("Item or Bundle not found: " + string);
+        throw new Exception("Item or Bundle not found: " + itemName);
     }
 
     // Create and add the OrderItem
