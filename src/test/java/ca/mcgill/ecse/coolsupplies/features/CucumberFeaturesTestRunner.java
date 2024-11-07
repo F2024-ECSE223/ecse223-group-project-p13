@@ -7,11 +7,11 @@ import io.cucumber.junit.CucumberOptions;
 @RunWith(Cucumber.class)
 @CucumberOptions(plugin = "pretty", features = {
   // Feature 1
-  // "src/test/resources/AddParent.feature",
-  // "src/test/resources/UpdateParent.feature",
-  // "src/test/resources/DeleteParent.feature",
-  // "src/test/resources/GetParent.feature",
-  // "src/test/resources/UpdatePasswordOfSchoolAdmin.feature",
+  "src/test/resources/AddParent.feature",
+  "src/test/resources/UpdateParent.feature",
+  "src/test/resources/DeleteParent.feature",
+  "src/test/resources/GetParent.feature",
+  "src/test/resources/UpdatePasswordOfSchoolAdmin.feature",
 
   // Feature 2
   "src/test/resources/AddStudent.feature",
@@ -26,10 +26,10 @@ import io.cucumber.junit.CucumberOptions;
   "src/test/resources/GetItem.feature",
 
   // Feature 4
-  // "src/test/resources/AddGradeBundle.feature",
-  // "src/test/resources/UpdateGradeBundle.feature",
-  // "src/test/resources/DeleteGradeBundle.feature",
-  // "src/test/resources/GetGradeBundle.feature",
+  "src/test/resources/AddGradeBundle.feature",
+  "src/test/resources/UpdateGradeBundle.feature",
+  "src/test/resources/DeleteGradeBundle.feature",
+  "src/test/resources/GetGradeBundle.feature",
 
   // Feature 5
   "src/test/resources/AddBundleItemToBundleItemsOfGradeBundle.feature",
@@ -47,7 +47,12 @@ import io.cucumber.junit.CucumberOptions;
   "src/test/resources/AddGrade.feature",
   "src/test/resources/DeleteGrade.feature",
   "src/test/resources/GetGrade.feature",
-  "src/test/resources/UpdateGrade.feature"
+  "src/test/resources/UpdateGrade.feature",
+
+  // Iteration3
+  // "src/test/resources/GetOrder.feature",
+  // "src/test/resources/ProcessOrder.feature"
+  
 },
     glue = "ca.mcgill.ecse.coolsupplies.features")
 public class CucumberFeaturesTestRunner {
