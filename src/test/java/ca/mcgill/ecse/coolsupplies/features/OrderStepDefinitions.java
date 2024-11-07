@@ -541,20 +541,29 @@ public class OrderStepDefinitions {
    
     // Obtain the order object
     int orderNumber = Integer.parseInt(string);
-    Order specificOrder = Order.getWithNumber(orderNumber);
-    assertNotNull("Expected order with number " + orderNumber + " to exist", specificOrder);
+    //Order orderInSystem = Order.getWithNumber(orderNumber);
+
+    List<Order> orderList = coolSupplies.getOrders();
+    Order orderInSystem = null;
+    for (Order orderFromList : orderList) {
+      if (orderFromList.getNumber() == orderNumber) {
+        orderInSystem = orderFromList;
+      }
+    }
+
+    assertNotNull("Expected order with number " + orderNumber + " to exist", orderInSystem);
   
     // Update the level
     PurchaseLevel level = PurchaseLevel.valueOf(string2);
-    specificOrder.setLevel(level);
-    assertEquals("Expected order to have level " + level, level, specificOrder.getLevel());
+    orderInSystem.setLevel(level);
+    assertEquals("Expected order to have level " + level, level, orderInSystem.getLevel());
 
     // Set the student name to the order
     Student student = Student.getWithName(string3);
     assertNotNull("Expected student with name " + string3 + " is not found", student);
 
     specificOrder.setStudent(student);
-    assertEquals("Expected order to be assigned to student " + string3, student, specificOrder.getStudent());
+    assertEquals("Expected order to be assigned to student " + string3, student, orderInSystem.getStudent());
       
   }
 
@@ -609,7 +618,14 @@ public class OrderStepDefinitions {
       String totalPrice = entity.get("totalPrice");
 
       // Get order from system, check if it exists and check order number
-      Order order = Order.getWithNumber(Integer.parseInt(orderNumber));
+      List<Order> orderList = coolSupplies.getOrders();
+      Order order = null;
+      for (Order orderFromList : orderList) {
+        if (orderFromList.getNumber() == Integer.parseInt(orderNumber)) {
+          order = orderFromList;
+        }
+      }
+
       assertNotNull("Expected order with order number " + orderNumber + " to exist", order);  // Error if not found
       assertEquals("Expected order number " + orderNumber, orderNumber, order.getNumber());
 
@@ -643,30 +659,64 @@ public class OrderStepDefinitions {
       // Look over all order items
       for (OrderItem orderItem : order.getOrderItems()) {
 
-        int quantityOfOrderItem = orderItem.getQuantity();
-        // Turn all each order item into invenotry item 
+        int quantityOfOrderItem = orderItem.getQuantity();  // Number of orderItem
+
+        // Turn order item into invenotry item 
         InventoryItem inventoryItem = orderItem.getItem();
+
+        // Inventory item is either an (Individual) Item or a GradeBundle
+
+        // inventoryItem is an Item
         if (inventoryItem instanceof Item) {
+
           Item item = (Item) inventoryItem;
           int priceOfItems = item.getPrice() * quantityOfOrderItem;
           priceInSystem += priceOfItems;
+
         }
+
+        // inventoryItem is a GradeBundle
         else if (inventoryItem instanceof GradeBundle) {
+
+          int priceOfBundle = 0;
+          PurchaseLevel purchaseLevel = order.getLevel();  // Purchase level selected in Order
+          
+
           GradeBundle gradeBundle = (GradeBundle) inventoryItem;
           int discount = gradeBundle.getDiscount();
 
+          // Items contained in the bundle, includes items of all levels
           List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
-          int priceOfBundle = 0;
-          for (BundleItem bundleItem : itemsInBundle) {
-            int quantity = bundleItem.getQuantity();
 
-            Item itemInBundle = bundleItem.getItem();
-            int price = itemInBundle.getPrice();
+
+          int numOfIterations = 0; // Used to count if discount should be applied (discount only if 2 or more distinct items)
+
+          // Loop over all bundle items, only want the ones that are equal to or higher in priority to the selected level
+          for (BundleItem bundleItem : itemsInBundle) {
+
+            int quantity = bundleItem.getQuantity();
+            int priceOfBundleItem = 0;
+
+            // Only include the bundle items with the appropriate level
+            if (purchaseLevel.compareTo(bundleItem.getLevel()) >= 0) {  // enum PurchaseLevel {Mandatory, Recommended, Optional}, Optional has the highest value
+              Item itemInBundle = bundleItem.getItem();
+              priceOfBundleItem = itemInBundle.getPrice();
+            }
             
-            priceOfBundle += (quantity * price);
+            priceOfBundle += (quantity * priceOfBundleItem);
+
+            numOfIterations++;
           }
-          priceOfBundle = priceOfBundle * ((1-discount)/100);
+
+          // Apply discount if 2 or more distinct items are bought from the bundle
+          if (numOfIterations > 1) {
+            priceOfBundle = priceOfBundle * ((1-discount)/100);
+          }
+          
+          // Multiply by the quantity of Bundles ordered
           priceOfBundle *= quantityOfOrderItem;
+
+          // Update total price
           priceInSystem += priceOfBundle;
 
         }
