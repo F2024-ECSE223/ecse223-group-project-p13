@@ -9,8 +9,58 @@ public class Iteration3Controller {
 
   public static String updateOrder(String newLevel, String student, String orderNumber) {
 
+    int orderNumberInt = Integer.parseInt(orderNumber);
+    BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(newLevel); //NOT SURE
 
-    throw new UnsupportedOperationException("Not Implemented yet.");
+    // checking for the status
+    if(Order.getWithNumber(orderNumberInt).getStatusFullName().equals("Paid")){
+      return "Cannot update a paid order";
+    } else if (Order.getWithNumber(orderNumberInt).getStatusFullName().equals("Penalized")){
+      return "Cannot update a penalized order";
+    } else if (Order.getWithNumber(orderNumberInt).getStatusFullName().equals("Prepared")) {
+      return "Cannot update a prepared order";
+    } else if (Order.getWithNumber(orderNumberInt).getStatusFullName().equals("PickedUp")) {
+      return "Cannot update a picked up order";
+    }
+
+    // checking that the student exists
+    Boolean doesStudentExists = false;
+    for (Student studentEntity : coolSupplies.getStudents()){
+      if (studentEntity.toString().equals(student)){
+        doesStudentExists = true;
+      }
+    }
+
+    if (!doesStudentExists){
+      return "Student" + student + "does not exist.";
+    }
+
+
+    // checking if the order exists
+    if (Order.getWithNumber(orderNumberInt) == null){
+      return "Order" + orderNumberInt + "does not exist";
+    }
+
+    // checking that the level exist
+    if(!(newLevel.equals("Mandatory") || newLevel.equals("Recommended") || newLevel.equals("Optional"))){
+      return "Purchase level" + newLevel + "does not exist.";
+    }
+
+    //checking if student of parent
+    Boolean isStudentOfParent = false;
+    for (Student studentOfParent : Order.getWithNumber(orderNumberInt).getParent().getStudents()){
+      if (studentOfParent.toString().equals(student)){
+        isStudentOfParent = true;
+        Order.getWithNumber(orderNumberInt).setStudent(studentOfParent);
+      }
+    }
+    if (!isStudentOfParent){
+      return "Student" + student + "is not a child of the parent" + Order.getWithNumber(orderNumberInt).getParent().getEmail() + ".";
+    }
+
+    Order.getWithNumber(orderNumberInt).setLevel(level);
+    return ""; // empty ????
+
   }
 
   public static String addItem(String item, String quantity, String orderNumber) {
