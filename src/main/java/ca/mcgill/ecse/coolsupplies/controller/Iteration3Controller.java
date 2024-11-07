@@ -79,7 +79,7 @@ public class Iteration3Controller {
     if(myOrder.getStatusFullName().equals("PickedUp")){
       return "Cannot delete items from a picked up order";
     }
-    myOrder.removeOrderItem(orItemToDel);
+    orItemToDel.delete();
     return "";
   }
 
