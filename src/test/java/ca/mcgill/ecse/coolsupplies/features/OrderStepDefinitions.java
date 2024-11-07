@@ -1,24 +1,20 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
-import ca.mcgill.ecse.coolsupplies.model.BundleItem;
-import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
-import ca.mcgill.ecse.coolsupplies.model.GradeBundle;
-import ca.mcgill.ecse.coolsupplies.model.InventoryItem;
-import ca.mcgill.ecse.coolsupplies.model.Item;
-import ca.mcgill.ecse.coolsupplies.model.Order;
-import ca.mcgill.ecse.coolsupplies.model.OrderItem;
-import ca.mcgill.ecse.coolsupplies.model.Parent;
-import ca.mcgill.ecse.coolsupplies.model.Student;
+import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
-import java.sql.SQLException;
 import java.sql.Date;
 
 public class OrderStepDefinitions {
+  private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
+  private String error = "";
+
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
@@ -103,14 +99,6 @@ public class OrderStepDefinitions {
   @Given("the following bundle item entities exist in the system")
   public void the_following_bundle_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
     List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
     for (Map<String, String> row : rows) {
@@ -119,13 +107,7 @@ public class OrderStepDefinitions {
         String gradeBundleName = row.get("gradeBundleName");
         String itemName = row.get("itemName");
 
-        // Convert level string to PurchaseLevel enum
-        BundleItem.PurchaseLevel level;
-        try {
-            level = BundleItem.PurchaseLevel.valueOf(levelStr);
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Invalid purchase level: " + levelStr);
-        }
+        BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(levelStr);
 
         // Find the GradeBundle by name
         GradeBundle gradeBundle = null;
@@ -134,9 +116,6 @@ public class OrderStepDefinitions {
                 gradeBundle = gb;
                 break;
             }
-        }
-        if (gradeBundle == null) {
-            throw new Exception("GradeBundle not found: " + gradeBundleName);
         }
 
         // Find the Item by name
@@ -147,13 +126,9 @@ public class OrderStepDefinitions {
                 break;
             }
         }
-        if (item == null) {
-            throw new Exception("Item not found: " + itemName);
-        }
 
         // Add the BundleItem to the system
-        BundleItem bundleItem = new BundleItem(quantity, level, coolSupplies, gradeBundle, item);
-        coolSupplies.addBundleItem(bundleItem);
+        new BundleItem(quantity, level, coolSupplies, gradeBundle, item);
       }
   }
 
@@ -163,16 +138,8 @@ public class OrderStepDefinitions {
   @Given("the following order entities exist in the system")
   public void the_following_order_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
-
     List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
     for (Map<String, String> row : rows) {
         int number = Integer.parseInt(row.get("number"));
         Date date = Date.valueOf(row.get("date"));
@@ -184,12 +151,7 @@ public class OrderStepDefinitions {
         String penaltyAuthorizationCode = row.get("penaltyAuthorizationCode");
 
         // Convert level string to PurchaseLevel enum
-        BundleItem.PurchaseLevel level;
-        try {
-            level = BundleItem.PurchaseLevel.valueOf(levelStr);
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Invalid purchase level: " + levelStr);
-        }
+        BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(levelStr);
 
         // Find the Parent by email
         Parent parent = null;
@@ -199,9 +161,6 @@ public class OrderStepDefinitions {
                 break;
             }
         }
-        if (parent == null) {
-            throw new Exception("Parent not found: " + parentEmail);
-        }
 
         // Find the Student by name
         Student student = null;
@@ -210,9 +169,6 @@ public class OrderStepDefinitions {
                 student = s;
                 break;
             }
-        }
-        if (student == null) {
-            throw new Exception("Student not found: " + studentName);
         }
 
         // Create the Order
@@ -240,12 +196,7 @@ public class OrderStepDefinitions {
                 order.startSchoolYear();
                 order.receiveOrder();
                 break;
-            default:
-                throw new Exception("Invalid order status: " + status);
         }
-
-        // Add the Order to CoolSupplies
-        coolSupplies.addOrder(order);
     }
   }
 
@@ -255,15 +206,6 @@ public class OrderStepDefinitions {
   @Given("the following order item entities exist in the system")
   public void the_following_order_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
-
     List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
     for (Map<String, String> row : rows) {
         int quantity = Integer.parseInt(row.get("quantity"));
@@ -273,9 +215,6 @@ public class OrderStepDefinitions {
 
         // Find the Order by number
         Order order = Order.getWithNumber(orderNumber);
-        if (order == null) {
-            throw new Exception("Order not found: " + orderNumber);
-        }
 
         // Determine if the item is a GradeBundle or an Item
         InventoryItem inventoryItem = null;
@@ -288,9 +227,6 @@ public class OrderStepDefinitions {
                     break;
                 }
             }
-            if (inventoryItem == null) {
-                throw new Exception("Item not found: " + itemName);
-            }
         } else if (gradeBundleName != null && !gradeBundleName.isEmpty()) {
             // Find the GradeBundle by name
             for (GradeBundle bundle : coolSupplies.getBundles()) {
@@ -299,18 +235,10 @@ public class OrderStepDefinitions {
                     break;
                 }
             }
-            if (inventoryItem == null) {
-                throw new Exception("GradeBundle not found: " + gradeBundleName);
-            }
-        } else {
-            throw new Exception("Either itemName or gradeBundleName must be provided");
         }
 
         // Create the OrderItem
-        OrderItem orderItem = new OrderItem(quantity, coolSupplies, order, inventoryItem);
-
-        // Add the OrderItem to CoolSupplies
-        coolSupplies.addOrderItem(orderItem);
+        new OrderItem(quantity, coolSupplies, order, inventoryItem);
     }
   }
 
@@ -319,14 +247,10 @@ public class OrderStepDefinitions {
    */
   @Given("the order {string} is marked as {string}")
   public void the_order_is_marked_as(String orderID, String status) {
-    // Write code here that turns the phrase above into concrete actions
     int orderNumber = Integer.parseInt(orderID);
 
     // Retrieve the order
     Order order = Order.getWithNumber(orderNumber);
-    if (order == null) {
-        throw new Exception("Order not found: " + orderNumber);
-    }
 
     // Set the Order status
     switch (status) {
@@ -356,8 +280,6 @@ public class OrderStepDefinitions {
                 order.receiveOrder();
             }
             break;
-        default:
-            throw new Exception("Invalid order status: " + status);
     }
   }
 
@@ -367,39 +289,7 @@ public class OrderStepDefinitions {
   @When("the parent attempts to update an order with number {string} to purchase level {string} and student with name {string}")
   public void the_parent_attempts_to_update_an_order_with_number_to_purchase_level_and_student_with_name(
       String orderID, String purLevel, String stuName) {
-    // Write code here that turns the phrase above into concrete actions
-
-      int orderNumber = Integer.parseInt(orderID);
-  
-      // Retrieve the order
-      Order order = Order.getWithNumber(orderNumber);
-      if (order == null) {
-          throw new Exception("Order not found: " + orderNumber);
-      }
-  
-      // Convert level string to PurchaseLevel enum
-      BundleItem.PurchaseLevel level;
-      try {
-          level = BundleItem.PurchaseLevel.valueOf(purLevel);
-      } catch (IllegalArgumentException e) {
-          throw new Exception("Invalid purchase level: " + purLevel);
-      }
-  
-      // Find the Student by name
-      Student student = null;
-      for (Student s : order.getParent().getStudents()) {
-          if (s.getName().equals(stuName)) {
-              student = s;
-              break;
-          }
-      }
-      if (student == null) {
-          throw new Exception("Student not found: " + stuName);
-      }
-  
-      // Update the order
-      order.setLevel(level);
-      order.setStudent(student);
+    callController(Iteration3Controller.updateOrder(purLevel, stuName, orderID));
   }
 
   /**
@@ -407,47 +297,8 @@ public class OrderStepDefinitions {
    */
   @When("the parent attempts to add an item {string} with quantity {string} to the order {string}")
   public void the_parent_attempts_to_add_an_item_with_quantity_to_the_order(String itemName,
-      String itemQty, String OrderNum) {
-    // Write code here that turns the phrase above into concrete actions
-    int quantity = Integer.parseInt(itemQty);
-    int orderNumber = Integer.parseInt(OrderNum);
-
-    CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
-
-    // Retrieve the order
-    Order order = Order.getWithNumber(orderNumber);
-    if (order == null) {
-        throw new Exception("Order not found: " + orderNumber);
-    }
-
-    // Find the Item by name
-    InventoryItem inventoryItem = null;
-
-    // Check if itemName corresponds to an Item
-    for (Item item : coolSupplies.getItems()) {
-        if (item.getName().equals(itemName)) {
-            inventoryItem = item;
-            break;
-        }
-    }
-
-    // If not found, check if itemName corresponds to a GradeBundle
-    if (inventoryItem == null) {
-        for (GradeBundle bundle : coolSupplies.getBundles()) {
-            if (bundle.getName().equals(itemName)) {
-                inventoryItem = bundle;
-                break;
-            }
-        }
-    }
-
-    if (inventoryItem == null) {
-        throw new Exception("Item or Bundle not found: " + itemName);
-    }
-
-    // Create and add the OrderItem
-    OrderItem orderItem = new OrderItem(quantity, coolSupplies, order, inventoryItem);
-    coolSupplies.addOrderItem(orderItem);
+      String itemQty, String orderNum) {
+    callController(Iteration3Controller.addItem(itemName, itemQty, orderNum));
   }
 
   @When("the parent attempts to update an item {string} with quantity {string} in the order {string}")
@@ -646,4 +497,10 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /* Helper Methods */
+  private void callController(String result) {
+    if (!result.isEmpty()) {
+      error += result;
+    }
+  }
 }
