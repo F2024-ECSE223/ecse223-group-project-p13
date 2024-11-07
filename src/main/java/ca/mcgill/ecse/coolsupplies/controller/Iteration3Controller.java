@@ -48,7 +48,7 @@ public class Iteration3Controller {
 
           //Verify that the item exists
           if (InventoryItem.hasWithName(item)) {
-              try {
+
                   //create a new ItemOrdered for the item we want to add
                   OrderItem itemOrdered = new OrderItem(itemQuantity, coolSupplies, Order.getWithNumber(orderNum), InventoryItem.getWithName(item));
 
@@ -63,22 +63,8 @@ public class Iteration3Controller {
                   if (Order.getWithNumber(orderNum).addOrderItem(itemOrdered)) {
                       return "";
                   } else {
-                      return "Item was not added to the order.";
+                      return "Item could not be added to the order.";
                   }
-
-              } catch (RuntimeException e) {
-                    //idk if I need to catch these exceptions
-                  switch (e.getMessage()) {
-                      case "Unable to create orderItem due to coolSupplies. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html":
-                          return "The orderItem was nor created due to coolSupplies.";
-                      case "Unable to create orderItem due to order. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html":
-                          return "The orderItem was not created due to the order.";
-                      case "Unable to create orderItem due to item. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html":
-                          return "The orderItem was not created due to the item.";
-                      default:
-                          return "The orderItem was not created due to an unexpected error: " + e.getMessage();
-                  }
-              }
 
           } else return "Item " + item + "does not exist.";
 
@@ -119,15 +105,35 @@ public class Iteration3Controller {
    * @param orderNumber is a string representing the number of the order that we want to view
    * @return a string describing the order or an empty string if the order could not be viewed
    */
-  public static String viewOrder(String orderNumber) {
+  public static TOOrder viewOrder(String orderNumber) {
 
       int orderNum = Integer.parseInt(orderNumber);
 
-      //Verify that an order with the orderNum exists
-      if (!Order.hasWithNumber(orderNum)){
-          return "";
+      Order particularOrder = Order.getWithNumber(orderNum);
+
+      if (particularOrder == null){
+          return null;
       }
-      else return Order.getWithNumber(orderNum).toString();
+
+      String studentName = particularOrder.getStudent().getName();
+      String parentName = particularOrder.getParent().getName();
+      String date = particularOrder.getDate().toString();
+      String OrderNumber = Integer.toString(particularOrder.getNumber());
+      String authorizationCode = particularOrder.getAuthorizationCode();
+      String penaltyAuthorizationCode = particularOrder.getPenaltyAuthorizationCode();
+      String statusString = particularOrder.getStatusFullName();
+      String levelString = particularOrder.getLevel().toString();
+
+      
+
+
+
+
+
+
+
+
+
   }
 
     /**
