@@ -106,7 +106,7 @@ public class Iteration3Controller {
    * This method allows the user to view all the details of an order.
    * @author Clara Dupuis
    * @param orderNumber is a string representing the number of the order that we want to view
-   * @return a string describing the order or an empty string if the order could not be viewed
+   * @return a TOOrder object
    */
   public static TOOrder viewOrder(String orderNumber) {
 
@@ -205,8 +205,6 @@ public class Iteration3Controller {
         orderItemList.add(toOrderItem);
 
     }
-
-
 
      return new TOOrder(parentName, studentName, statusString, orderNumber, date, levelString, authorizationCode, penaltyAuthorizationCode, totalPrice, orderItemList.toArray(new TOOrderItem[0]));
 
