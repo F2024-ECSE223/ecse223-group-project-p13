@@ -3,7 +3,6 @@ package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
-import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -70,7 +69,7 @@ public class OrderStepDefinitions {
 
     for (var entity : entities) {
       String level = entity.get("level");
-      coolSupplies.addGrade(level);
+      new Grade(level, coolSupplies);
     }
   }
 
@@ -80,24 +79,21 @@ public class OrderStepDefinitions {
   @Given("the following student entities exist in the system")
   public void the_following_student_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
+       List<Map<String, String>> rows = dataTable.asMaps();
 
-    List<Map<String, String>> entities = dataTable.asMaps();
+    for (var row : rows) {
+      String name = row.get("name");
+      String gradeLevel = row.get("gradeLevel");
+      Grade studentGrade;
 
-    for (var entity : entities) {
-      String name = entity.get("name");
-      
-      for (Grade grade : coolSupplies.getGrades()) {
-        if (grade.getLevel() == entity.get("gradeLevel")) {
-          coolSupplies.addStudent(name, grade);
-        }
+      if (Grade.hasWithLevel(gradeLevel)) { // Checking if grade exists
+        studentGrade = Grade.getWithLevel(gradeLevel);
+      } else {
+        studentGrade = new Grade(gradeLevel, coolSupplies);
+        coolSupplies.addGrade(studentGrade);
       }
+
+      coolSupplies.addStudent(name, studentGrade);
     }
   }
 
@@ -155,21 +151,15 @@ public class OrderStepDefinitions {
   @Given("the following grade bundle entities exist in the system")
   public void the_following_grade_bundle_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
+    List<List<String>> gradeBundles = dataTable.asLists(String.class);
 
-    List<Map<String, String>> entities = dataTable.asMaps();
-
-    for (var entity : entities) {
-      String name = entity.get("name");
-      int discount = Integer.parseInt(entity.get("discount"));
-      Grade gradeLevel = new Grade(entity.get("gradeLevel"), coolSupplies);
-      coolSupplies.addBundle(name, discount ,gradeLevel);
+    // Skip index zero since it contains column headers
+    for (int i = 1; i < gradeBundles.size(); i++) {
+      List<String> curData = gradeBundles.get(i);
+      String name = curData.get(0);
+      int discount = Integer.parseInt(curData.get(1));
+      Grade grade = Grade.getWithLevel(curData.get(2));
+      new GradeBundle(name, discount, coolSupplies, grade);
     }
   }
 
@@ -226,9 +216,6 @@ public class OrderStepDefinitions {
         String levelStr = row.get("level");
         String parentEmail = row.get("parentEmail");
         String studentName = row.get("studentName");
-        String status = row.get("status");
-        String authorizationCode = row.get("authorizationCode");
-        String penaltyAuthorizationCode = row.get("penaltyAuthorizationCode");
 
         // Convert level string to PurchaseLevel enum
         BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(levelStr);
@@ -252,31 +239,7 @@ public class OrderStepDefinitions {
         }
 
         // Create the Order
-        Order order = new Order(number, date, level, parent, student, coolSupplies);
-        order.setAuthorizationCode(authorizationCode);
-        order.setPenaltyAuthorizationCode(penaltyAuthorizationCode);
-
-        // Set the Order status
-        switch (status) {
-            case "Started":
-                // Default status; do nothing
-                break;
-            case "Paid":
-                order.pay(); // Assuming this method exists
-                break;
-            case "Penalized":
-                order.startSchoolYear(); // Transition to Penalized
-                break;
-            case "Prepared":
-                order.pay();
-                order.startSchoolYear();
-                break;
-            case "PickedUp":
-                order.pay();
-                order.startSchoolYear();
-                order.receiveOrder();
-                break;
-        }
+        new Order(number, date, level, parent, student, coolSupplies);
     }
   }
 
@@ -291,7 +254,6 @@ public class OrderStepDefinitions {
         int quantity = Integer.parseInt(row.get("quantity"));
         int orderNumber = Integer.parseInt(row.get("orderNumber"));
         String itemName = row.get("itemName");
-        String gradeBundleName = row.get("gradeBundleName");
 
         // Find the Order by number
         Order order = Order.getWithNumber(orderNumber);
@@ -299,24 +261,22 @@ public class OrderStepDefinitions {
         // Determine if the item is a GradeBundle or an Item
         InventoryItem inventoryItem = null;
 
-        if (itemName != null && !itemName.isEmpty()) {
-            // Find the Item by name
-            for (Item item : coolSupplies.getItems()) {
-                if (item.getName().equals(itemName)) {
-                    inventoryItem = item;
-                    break;
-                }
-            }
-        } else if (gradeBundleName != null && !gradeBundleName.isEmpty()) {
-            // Find the GradeBundle by name
-            for (GradeBundle bundle : coolSupplies.getBundles()) {
-                if (bundle.getName().equals(gradeBundleName)) {
-                    inventoryItem = bundle;
-                    break;
-                }
+        // Find the Item by name
+        for (Item item : coolSupplies.getItems()) {
+            if (item.getName().equals(itemName)) {
+                inventoryItem = item;
+                break;
             }
         }
 
+        if (inventoryItem == null) {
+          for (GradeBundle bundle : coolSupplies.getBundles()) {
+            if (bundle.getName().equals(itemName)) {
+              inventoryItem = bundle;
+              break;
+            }
+          }
+        }
         // Create the OrderItem
         new OrderItem(quantity, coolSupplies, order, inventoryItem);
     }
