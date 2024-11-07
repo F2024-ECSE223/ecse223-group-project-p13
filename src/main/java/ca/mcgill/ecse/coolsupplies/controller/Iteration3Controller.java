@@ -35,10 +35,18 @@ public class Iteration3Controller {
     InventoryItem itemToDel = null;
     OrderItem orItemToDel = null;
     List<OrderItem> itemsInSystem = CoolSuppliesApplication.getCoolSupplies().getOrderItems();
-    InventoryItem inItem = null;
+    List<GradeBundle> bundlesInSystem = CoolSuppliesApplication.getCoolSupplies().getBundles();
+
+    InventoryItem inItem = null;     //checking if the inputted item is an item in the system
     for(OrderItem orItem: itemsInSystem) {
       if(orItem.getItem().getName().equals(item)){
         inItem = orItem.getItem();
+      }
+    }
+
+    for(GradeBundle bundle: bundlesInSystem){
+      if(bundle.getName().equals(item)){
+        inItem = bundle;
       }
     }
     if(inItem == null) {
@@ -52,7 +60,7 @@ public class Iteration3Controller {
         orItemToDel = myItem;
       }
     }
-    if(itemToDel == null){
+    if(itemToDel == null){  
       return "Item " + item +" does not exist in order" + orderNumber + ".";
     }
 
