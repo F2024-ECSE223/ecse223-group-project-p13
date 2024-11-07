@@ -7,10 +7,18 @@ import ca.mcgill.ecse.coolsupplies.model.*;
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
+  /**
+   * This method allows the user to update an order by assigning a new level and student.
+   * @author Lune Letailleur
+   * @param newLevel is a string representing the new level of the order
+   * @param student is a string representing the student for the order
+   * @param orderNumber is a string representing the number of the order
+   * @return an empty string if the update was successful or an error message
+   */
   public static String updateOrder(String newLevel, String student, String orderNumber) {
 
     int orderNumberInt = Integer.parseInt(orderNumber);
-    BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(newLevel); //NOT SURE
+    BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(newLevel);
 
     // checking for the status
     if(Order.getWithNumber(orderNumberInt).getStatusFullName().equals("Paid")){
@@ -59,7 +67,7 @@ public class Iteration3Controller {
     }
 
     Order.getWithNumber(orderNumberInt).setLevel(level);
-    return ""; // empty ????
+    return "";
 
   }
 
