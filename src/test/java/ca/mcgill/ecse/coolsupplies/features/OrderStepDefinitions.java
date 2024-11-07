@@ -1,6 +1,5 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -764,28 +763,65 @@ public class OrderStepDefinitions {
 
     List<OrderItem> orderItemsInSystem = order.getOrderItems();
 
-    
-
-
     // Get map of order items to be validated
-    List<Map<String, String>> orderItems = dataTable.asMaps();
+    List<Map<String, String>> orderItemsInDatatable = dataTable.asMaps();
 
-    for (Map<String, String> orderItem : orderItems) {
+    for (Map<String, String> orderItem : orderItemsInDatatable) {
       String quantity = orderItem.get("quantity");
       String itemName = orderItem.get("itemName");
       String gradeBundleName = orderItem.get("gradeBundleName");
       String price = orderItem.get("price");
       String discount = orderItem.get("discount");
+      
+      for (OrderItem actualOrderItem : orderItemsInSystem) {
+        if (quantity.equals(actualOrderItem.getQuantity() + "") && itemName.equals(actualOrderItem.getItem().getName()) && )
+      }
 
-      for (OrderItem orderItemInSystem : orderItemsInSystem) {
-        if (Integer.parseInt(quantity) == orderItemInSystem.getQuantity()) {
-          if (itemName.equals(orderItemInSystem.getItem().getName())) {
-            
+      int actualQuantity = 0;
+      String actualInventoryName = "";
+      for (OrderItem orderItemInList : orderItemsInSystem) {
+        if (orderItemInList.getOrder().getNumber() == orderNumber) {
+          actualQuantity = orderItemInList.getQuantity();
+          actualInventoryName = orderItemInList.getItem().getName();
+        }
+      }
+
+      String actualGradeBundleName = "";
+      if (actualInventoryName.contains("Bundle")) {
+        actualGradeBundleName = actualInventoryName;
+        List<GradeBundle> actualGradeBundleList = coolSupplies.getBundles();
+        for (GradeBundle actualGradeBundle : actualGradeBundleList) {
+          if (actualInventoryName.contains(actualGradeBundle.getGrade().getLevel())) {
+
           }
         }
       }
+
+      InventoryItem correspondingItemInSystem = null;
+      OrderItem orderItemInSystem = null;
+      for (OrderItem orderItemInList : orderItemsInSystem) {
+        if (itemName.equals(orderItemInList.getItem().getName())) {
+          correspondingItemInSystem = orderItemInList.getItem();
+          orderItemInSystem = orderItemInList;
+        }
+      }
+
+      // Check if order item object is found
+      assertNotNull("Order item not found: " + orderItem, orderItemInSystem);
+      
       // Validate quantity
-      assertEquals("Expected quantity of order to be " + quantity, quantity, order.getOrderItems());
+      assertEquals("Expected quantity of order to be " + quantity, quantity, orderItemInSystem.getQuantity());
+
+      // Check if item in system is GradeBundle or Item
+
+      if (correspondingItemInSystem instanceof GradeBundle) {
+        GradeBundle correspoondingGradeBundle = (GradeBundle) correspondingItemInSystem;
+        assertEquals("Expected grade bundle name: " + gradeBundleName, gradeBundleName, correspoondingGradeBundle.getName());
+      }
+      // Check if item is in system
+      assertNotNull("Item not found: " + itemName, correspondingItemInSystem);
+
+      // Validate 
     
     }
   }
