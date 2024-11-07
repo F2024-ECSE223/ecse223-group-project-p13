@@ -34,7 +34,7 @@ public class Iteration3Controller {
    * @auther Trevor Piltch
    * @param orderNumber - The number of the order to pay for in the system
    * @param authCode - The authorization code of the payment
-   * @param panaltyAuthCode - The autorization code of the penalty
+   * @param penaltyAuthCode - The autorization code of the penalty
    * 
    * Pays for the penalty for the order.
    */
@@ -75,9 +75,9 @@ public class Iteration3Controller {
    * @author Trevor Piltch
    *  
    * Returns a list of orders. 
-   * **NOTE** I opted not to use a transfer object here for multiple reasons:
-   * 1. In the definition of viewAllOrders, it specifies basically all the fields of the object 
-   * 2. Creating a new transfer object for the order with the same fields is duplicating code and further increasing the complexity of the system
+   * NOTE I opted not to use a transfer object here for multiple reasons:
+   * - In the definition of viewAllOrders, it specifies basically all the fields of the object 
+   * - Creating a new transfer object for the order with the same fields is duplicating code and further increasing the complexity of the system
   */
   public static List<Order> viewAllOrders() {
     return coolSupplies.getOrders();
