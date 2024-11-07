@@ -3,16 +3,23 @@ package ca.mcgill.ecse.coolsupplies.persistence;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 
-class CoolSuppliesPersistence {
-  static String filename = "app.json";
-  static JsonSerializer serializer = new JsonSerializer("ca.mcgill.ecse.coolsupplies");
+public class CoolSuppliesPersistence {
 
+  private static String filename = "app.json";
+  private static JsonSerializer serializer = new JsonSerializer("ca.mcgill.ecse.coolsupplies");
+
+  public static void setFilename(String filename) {
+    CoolSuppliesPersistence.filename = filename;
+  }
 
   public static CoolSupplies load() {
     var coolsupplies = (CoolSupplies) serializer.deserialize(filename);
 
-    if(coolsupplies == null) coolsupplies = new CoolSupplies();
-    else coolsupplies.reinitialize();
+    if(coolsupplies == null) {
+      coolsupplies = new CoolSupplies();
+    } else {
+      coolsupplies.reinitialize();
+    }
     return coolsupplies;
   }
 
