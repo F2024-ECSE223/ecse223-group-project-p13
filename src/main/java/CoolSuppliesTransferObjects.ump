@@ -40,3 +40,25 @@ class TOGrade {
    String level;
 }
 
+class TOOrder {
+  immutable;
+  String parentEmail;
+  String studentName;
+  String status;
+  String number;
+  String date;
+  String level;
+  String authCode;
+  String penaltyAuthCode;
+  Double price;
+  0..1 -> * TOOrderItem items;
+}
+
+class TOOrderItem {
+  immutable;
+  String quantity;
+  String name;
+  String gradeBundle;
+  String price;
+  String discount;
+}
