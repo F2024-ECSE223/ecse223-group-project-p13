@@ -10,16 +10,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.model.BundleItem;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.Grade;
+import ca.mcgill.ecse.coolsupplies.model.GradeBundle;
 import ca.mcgill.ecse.coolsupplies.model.InventoryItem;
+import ca.mcgill.ecse.coolsupplies.model.Item;
 import ca.mcgill.ecse.coolsupplies.model.Order;
 import ca.mcgill.ecse.coolsupplies.model.OrderItem;
 import ca.mcgill.ecse.coolsupplies.model.Parent;
 import ca.mcgill.ecse.coolsupplies.model.Student;
 import ca.mcgill.ecse.coolsupplies.model.User;
-import ca.mcgill.ecse.coolsupplies.model.Item;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -637,11 +639,36 @@ public class OrderStepDefinitions {
 
       // Check price
       int priceInSystem = 0;
+
+      // Look over all order items
       for (OrderItem orderItem : order.getOrderItems()) {
+
+        int quantityOfOrderItem = orderItem.getQuantity();
+        // Turn all each order item into invenotry item 
         InventoryItem inventoryItem = orderItem.getItem();
         if (inventoryItem instanceof Item) {
           Item item = (Item) inventoryItem;
-          priceInSystem += item.getPrice();
+          int priceOfItems = item.getPrice() * quantityOfOrderItem;
+          priceInSystem += priceOfItems;
+        }
+        else if (inventoryItem instanceof GradeBundle) {
+          GradeBundle gradeBundle = (GradeBundle) inventoryItem;
+          int discount = gradeBundle.getDiscount();
+
+          List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
+          int priceOfBundle = 0;
+          for (BundleItem bundleItem : itemsInBundle) {
+            int quantity = bundleItem.getQuantity();
+
+            Item itemInBundle = bundleItem.getItem();
+            int price = itemInBundle.getPrice();
+            
+            priceOfBundle += (quantity * price);
+          }
+          priceOfBundle = priceOfBundle * ((1-discount)/100);
+          priceOfBundle *= quantityOfOrderItem;
+          priceInSystem += priceOfBundle;
+
         }
         
       }
