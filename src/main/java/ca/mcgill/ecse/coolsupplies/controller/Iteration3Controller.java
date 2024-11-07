@@ -4,6 +4,7 @@ package ca.mcgill.ecse.coolsupplies.controller;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Iteration3Controller {
@@ -129,29 +130,47 @@ public class Iteration3Controller {
       
 
     double totalPrice = 0;
-    List <TOItem> = ;
+    List<TOOrderItem> orderItemList = new ArrayList<>();
 
     for (OrderItem orderItem: particularOrder.getOrderItems()) {
         int quantityOrdered = orderItem.getQuantity();
         InventoryItem inventoryItem = orderItem.getItem();
 
+        String itemQuantityStr = String.valueOf(quantityOrdered);
+
+        String itemName = "";
+        String gradeBundleStr = "";
+        String itemPriceStr = "";
+        String discountStr = "0";
+
+        double itemTotalPrice = 0;
+
         if (inventoryItem instanceof Item) {
             Item item = (Item) inventoryItem;
 
+            itemName = item.getName();
+            int itemPrice = item.getPrice();
             int priceOfItem = item.getPrice() * quantityOrdered;
             totalPrice += priceOfItem;
+            itemTotalPrice = priceOfItem;
+            itemPriceStr = String.valueOf(priceOfItem);
         }
 
         else if (inventoryItem instanceof GradeBundle) {
+
+            GradeBundle gradeBundle = (GradeBundle) inventoryItem;
+
+            itemName = gradeBundle.getName();
+            gradeBundleStr = gradeBundle.getName();
+            int discount = gradeBundle.getDiscount();
+            discountStr = String.valueOf(discount);
+
             double priceOfBundle = 0;
 
             BundleItem.PurchaseLevel purchaseLevel = particularOrder.getLevel();
 
-            GradeBundle gradeBundle = (GradeBundle) inventoryItem;
-
-            int discount = gradeBundle.getDiscount();
-
             List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
+
 
             int numberOfIterations = 0; //used to count if discount should be applied
 
@@ -160,7 +179,7 @@ public class Iteration3Controller {
                 int quantityInBundle = bundleItem.getQuantity();;
                 int priceOfBundleItem = 0;
 
-                if (purchaseLevel.compareTo(bundleItem.getLevel())>=0){
+                if (purchaseLevel.compareTo(bundleItem.getLevel()) >= 0){
                     Item itemInBundle = bundleItem.getItem();
                     priceOfBundleItem = itemInBundle.getPrice();
                 }
@@ -171,19 +190,26 @@ public class Iteration3Controller {
             }
 
             if (numberOfIterations>1){
-                priceOfBundle=priceOfBundle*((double) (1-discount)/100);
+                priceOfBundle = priceOfBundle*((double) (1-discount)/100);
             }
 
             priceOfBundle *=quantityOrdered;
+            itemTotalPrice = priceOfBundle;
+            itemPriceStr = String.valueOf(priceOfBundle);
 
             totalPrice += priceOfBundle;
         }
+
+        TOOrderItem toOrderItem = new TOOrderItem(itemQuantityStr, itemName, gradeBundleStr, itemPriceStr, discountStr);
+
+        orderItemList.add(toOrderItem);
 
     }
 
 
 
-      return TOOrder(parentName, studentName, statusString, orderNumber, date, levelString, authorizationCode, penaltyAuthorizationCode, totalPrice,  );
+     return new TOOrder(parentName, studentName, statusString, orderNumber, date, levelString, authorizationCode, penaltyAuthorizationCode, totalPrice, orderItemList.toArray(new TOOrderItem[0]));
+
 
   }
 
