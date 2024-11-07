@@ -22,6 +22,7 @@ import ca.mcgill.ecse.coolsupplies.model.OrderItem;
 import ca.mcgill.ecse.coolsupplies.model.Parent;
 import ca.mcgill.ecse.coolsupplies.model.Student;
 import ca.mcgill.ecse.coolsupplies.model.User;
+import io.cucumber.core.backend.Status;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -541,17 +542,20 @@ public class OrderStepDefinitions {
    
     // Obtain the order object
     int orderNumber = Integer.parseInt(string);
-    //Order orderInSystem = Order.getWithNumber(orderNumber);
+
 
     List<Order> orderList = coolSupplies.getOrders();
     Order orderInSystem = null;
+
+    // Find order from the order in the system
     for (Order orderFromList : orderList) {
       if (orderFromList.getNumber() == orderNumber) {
         orderInSystem = orderFromList;
       }
     }
 
-    assertNotNull("Expected order with number " + orderNumber + " to exist", orderInSystem);
+    // Check if the order was found
+    assertNotNull("Order with number " + orderNumber + " does not exist", orderInSystem);
   
     // Update the level
     PurchaseLevel level = PurchaseLevel.valueOf(string2);
@@ -560,7 +564,7 @@ public class OrderStepDefinitions {
 
     // Set the student name to the order
     Student student = Student.getWithName(string3);
-    assertNotNull("Expected student with name " + string3 + " is not found", student);
+    assertNotNull("Expected student with name " + string3, student);
 
     specificOrder.setStudent(student);
     assertEquals("Expected order to be assigned to student " + string3, student, orderInSystem.getStudent());
@@ -574,12 +578,18 @@ public class OrderStepDefinitions {
   public void order_is_marked_as(String string, String string2) {
     
     // Parse string into integer, then create new Order object
-    int orderNumber = Integer.parseInt(string);
-    Order new_order = new Order(orderNumber, null, null, null, null, coolSupplies);
 
-    // Add order to system
-    coolSupplies.addOrder(new_order);
- 
+    Order orderInSystem = null;
+
+    List<Order> orders = coolSupplies.getOrders();
+    for (Order order : orders) {
+      if (order.getNumber() == Integer.parseInt(string)) {
+        orderInSystem = order;
+      }
+    }
+    assertNotNull("Order not found: " + string, orderInSystem);
+
+    orderInSystem.setStatus(Status.Started);
   }
 
   /*
@@ -587,7 +597,7 @@ public class OrderStepDefinitions {
    */
   @Then("the error {string} shall be raised")
   public void the_error_shall_be_raised(String string) {
-    throw new IllegalArgumentException(string);
+    assertTrue("The expected error ** " + string + " ** was not raised. Found: " + errString, errString.contains(string));
   }
 
   /*
@@ -643,9 +653,8 @@ public class OrderStepDefinitions {
       Student student = Student.getWithName(studentName);
       assertEquals("Expected order to have student " + studentName, student, order.getStudent());
 
-      // Check status 
-      // TODO: need state machine
-      //assertEquals("", status, order.)
+      // Check status
+      assertEquals("Expected the order to have status: " + status, status, order.getStatusFullName());
       
       // Check auhtorization code
       assertEquals("Expected authorization code "+ authorizationCode, authorizationCode, order.getAuthorizationCode());
