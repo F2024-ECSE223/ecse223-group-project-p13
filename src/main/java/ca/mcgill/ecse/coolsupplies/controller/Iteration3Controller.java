@@ -30,7 +30,7 @@ public class Iteration3Controller {
   public static String payForOrder(String orderNumber, String authCode) { 
     // Validate the authorization code
     if (authCode == null || authCode.trim().isEmpty()) {
-      throw new Exception("Authorization code is invalid");
+      return "Authorization code is invalid";
   }
 
   // Parse the order number
@@ -38,13 +38,13 @@ public class Iteration3Controller {
   try {
       orderNum = Integer.parseInt(orderNumber);
   } catch (NumberFormatException e) {
-      throw new Exception("Order number is invalid");
+      return "Order number is invalid";
   }
 
   // Retrieve the order
   Order order = Order.getWithNumber(orderNum);
   if (order == null) {
-      throw new Exception("Order " + orderNumber + " does not exist");
+      return "Order " + orderNumber + " does not exist";
   }
 
   // Check the order's state
@@ -52,21 +52,21 @@ public class Iteration3Controller {
   if (!state.equals("Started")) {
       switch (state) {
           case "Paid":
-              throw new Exception("The order is already paid");
+              return "The order is already paid";
           case "Penalized":
-              throw new Exception("Cannot pay for a penalized order");
+              return "Cannot pay for a penalized order";
           case "Prepared":
-              throw new Exception("Cannot pay for a prepared order");
+              return "Cannot pay for a prepared order";
           case "PickedUp":
-              throw new Exception("Cannot pay for a picked up order");
+              return "Cannot pay for a picked up order";
           default:
-              throw new Exception("Cannot pay for the order in its current state");
+              return "Cannot pay for the order in its current state";
       }
   }
 
   // Check if the order has items
   if (order.numberOfOrderItems() == 0) {
-      throw new Exception("Order " + orderNumber + " has no items");
+      return "Order " + orderNumber + " has no items";
   }
 
   // Perform the payment
@@ -75,7 +75,7 @@ public class Iteration3Controller {
       order.payForOrder(); // Assuming this triggers the state transition to "Paid"
   } catch (Exception e) {
       // Handle exceptions from the state machine
-      throw new Exception("Unable to process payment: " + e.getMessage());
+      return "Unable to process payment: " + e.getMessage();
   }
 
   }
@@ -100,7 +100,7 @@ public class Iteration3Controller {
   }
 
   public static String viewOrder(String orderNumber) {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+    return coolSupplies.getOrder(orderNumber);
   }
 
   public static String startSchoolYear() {
