@@ -85,9 +85,11 @@ public class CoolSuppliesFeatureSet1Controller {
    * @param newPhoneNumber: an integer corresponding to the parent's new phone number
    * @return String: the exit status message corresponding to the right situation.
    **/
-  public static String updateParent(String email, String newPassword, String newName, int newPhoneNumber) {
-    // checking all constraints of the Parent's attributes
-    if (newName == null || newName.equals("")) {
+  public static String updateParent(String email, String newPassword, String newName,
+                                    int newPhoneNumber) {
+
+    // checking all constraints of the parent's attributes
+    if (newName == null || newName.equals("")){
       return "The name must not be empty.";
     } else if (newPassword == null || newPassword.equals("")) {
       return "The password must not be empty.";

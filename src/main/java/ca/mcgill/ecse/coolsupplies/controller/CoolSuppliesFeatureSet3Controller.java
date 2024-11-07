@@ -77,8 +77,8 @@ public class CoolSuppliesFeatureSet3Controller {
     // Set new name and new price
     item.setName(newName);
     item.setPrice(newPrice);
-
-    return "";
+    
+    return "";  // Success message
   }
 
   /**
@@ -103,9 +103,8 @@ public class CoolSuppliesFeatureSet3Controller {
       item.delete();
 
       return "";
-    } else {
-      return "";
-    }
+    } 
+    else return "";  // Success message
   }
 
   /**
