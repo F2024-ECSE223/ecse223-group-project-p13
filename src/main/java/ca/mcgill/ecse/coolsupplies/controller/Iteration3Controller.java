@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
+import java.util.List;
 /* Project Imports */
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
@@ -7,7 +8,7 @@ import ca.mcgill.ecse.coolsupplies.model.*;
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
 
-  public static String updateOrder(String newLevel, String student) {
+  public static String updateOrder(String newLevel, String student, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
@@ -15,26 +16,24 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String updateOrderQuantity(String item, String quantity) {
+  public static String updateOrderQuantity(String item, String quantity, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String deleteItem(String item) {
+  public static String deleteItem(String item, String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payForOrder() {
+  public static String payForOrder(String orderNumber, String authCode) { 
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String payPenaltyForOrder() {
+  public static String payPenaltyForOrder(String orderNumber, String authCode, String penaltyAuthCode) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
   /**
    * @author Kenny-Alexander Joseph
-   * @param orderNumber is a string representing the number of the order
-   * @return en empty string if the order was picked up successfully or an error message if not
    */  
   public static String pickUpOrder(String orderNumber){
     // Validate the order number
@@ -67,11 +66,11 @@ public class Iteration3Controller {
    }
   }
 
-  public static String cancelOrder() {
+  public static String cancelOrder(String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String viewAllOrders() {
+  public static List<Order> viewAllOrders() {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
@@ -79,7 +78,7 @@ public class Iteration3Controller {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 
-  public static String startSchoolYear() {
+  public static String startSchoolYear(String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
   }
 }
