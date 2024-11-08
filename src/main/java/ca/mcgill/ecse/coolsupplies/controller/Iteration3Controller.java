@@ -7,6 +7,7 @@ import java.util.List;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 import java.util.*;
 
 /* Util Imports */
@@ -83,6 +84,12 @@ public class Iteration3Controller {
  
 
     Order.getWithNumber(orderNumberInt).setLevel(level);
+    //autosave
+    try {
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
     return "";
 
   }
@@ -129,6 +136,12 @@ public class Iteration3Controller {
 
                   //Add the item to the order
                   if (Order.getWithNumber(orderNum).addOrderItem(itemOrdered)) {
+                      //autosave
+                      try {
+                        CoolSuppliesPersistence.save();
+                      } catch (RuntimeException e) {
+                        return e.getMessage();
+                      }
                       return "";
                   } else {
                       return "Item could not be added to the order.";
@@ -227,6 +240,13 @@ public class Iteration3Controller {
       // Successfully update item
       if ((orderItem.getItem().getName()).equals(item)) {
         orderItem.setQuantity(Integer.parseInt(quantity));
+        
+        //autosave
+        try {
+          CoolSuppliesPersistence.save();
+        } catch (RuntimeException e) {
+          return e.getMessage();
+        }
         return "";
       }
     }
@@ -303,6 +323,13 @@ public class Iteration3Controller {
       return "Cannot delete items from a picked up order";
     }
     orItemToDel.delete();
+
+    //autosave
+    try {
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
     return "";
   }
 
@@ -340,6 +367,12 @@ public class Iteration3Controller {
     order.pay();
     order.setAuthorizationCode(authCode);
 
+    //autosave
+    try {
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
     return "";
   }
 
@@ -379,6 +412,12 @@ public class Iteration3Controller {
     order.setAuthorizationCode(authCode);
     order.payForEverything();
 
+    //autosave
+    try {
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }    
     return "";
   }
 
@@ -403,6 +442,13 @@ public class Iteration3Controller {
     }
 
     order.receiveOrder();
+    
+    //autosave
+    try {
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
     return "";
   }
 
@@ -428,6 +474,12 @@ public class Iteration3Controller {
 
     order.delete();
 
+    //autosave
+    try {
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
     return "";
   }
 
@@ -574,6 +626,13 @@ public class Iteration3Controller {
           if (particularOrder.startSchoolYear()) {
               //if the order is started it becomes penalized
               //if the order is paid it becomes prepared
+                  
+              //autosave
+              try {
+                CoolSuppliesPersistence.save();
+              } catch (RuntimeException e) {
+                return e.getMessage();
+              }
               return "";
           }
           else return "The School year could not be started.";
