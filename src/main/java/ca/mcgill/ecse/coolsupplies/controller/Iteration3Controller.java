@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
 import java.util.List;
+import javax.management.RuntimeErrorException;
 /* Project Imports */
 import java.util.List;
 
@@ -32,7 +33,17 @@ public class Iteration3Controller {
   public static String updateOrder(String newLevel, String student, String orderNumber) {
 
     int orderNumberInt = Integer.parseInt(orderNumber);
+
+    // checking that the level exist
+    if(!(newLevel.equals("Mandatory") || newLevel.equals("Recommended") || newLevel.equals("Optional"))){
+      return "Purchase level " + newLevel + " does not exist.";
+    }
+
     BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(newLevel);
+    // checking if the order exists
+    if (Order.getWithNumber(orderNumberInt) == null){
+      return "Order " + orderNumberInt + " does not exist";
+    }
 
     // checking for the status
     if(Order.getWithNumber(orderNumberInt).getStatusFullName().equals("Paid")){
@@ -45,40 +56,31 @@ public class Iteration3Controller {
       return "Cannot update a picked up order";
     }
 
-    // checking that the student exists
+   // checking that the student exists
     Boolean doesStudentExists = false;
     for (Student studentEntity : coolSupplies.getStudents()){
-      if (studentEntity.toString().equals(student)){
+      if (studentEntity.getName().equals(student)){
         doesStudentExists = true;
       }
     }
 
     if (!doesStudentExists){
-      return "Student" + student + "does not exist.";
+      return "Student " + student + " does not exist.";
     }
 
-
-    // checking if the order exists
-    if (Order.getWithNumber(orderNumberInt) == null){
-      return "Order" + orderNumberInt + "does not exist";
-    }
-
-    // checking that the level exist
-    if(!(newLevel.equals("Mandatory") || newLevel.equals("Recommended") || newLevel.equals("Optional"))){
-      return "Purchase level" + newLevel + "does not exist.";
-    }
-
-    //checking if student of parent
+   //checking if student of parent
     Boolean isStudentOfParent = false;
     for (Student studentOfParent : Order.getWithNumber(orderNumberInt).getParent().getStudents()){
-      if (studentOfParent.toString().equals(student)){
+      if (studentOfParent.getName().equals(student)){
         isStudentOfParent = true;
         Order.getWithNumber(orderNumberInt).setStudent(studentOfParent);
       }
     }
     if (!isStudentOfParent){
-      return "Student" + student + "is not a child of the parent" + Order.getWithNumber(orderNumberInt).getParent().getEmail() + ".";
+      return "Student " + student + " is not a child of the parent " + Order.getWithNumber(orderNumberInt).getParent().getEmail() + ".";
     }
+
+ 
 
     Order.getWithNumber(orderNumberInt).setLevel(level);
     return "";
@@ -97,7 +99,10 @@ public class Iteration3Controller {
 
       int itemQuantity = Integer.parseInt(quantity);
       int orderNum = Integer.parseInt(orderNumber);
-
+      //Verify that the order exists in the system
+      if (Order.getWithNumber(orderNum) == null) {
+          return "Order " + orderNumber + " does not exist.";
+      }
 
       //cannot add an item to a paid, penalized, prepared or picked up order
       if (Order.getWithNumber(orderNum).getStatusFullName().equals("Paid")) {
@@ -108,30 +113,19 @@ public class Iteration3Controller {
           return "Cannot add items to a picked up order.";
       } else if (Order.getWithNumber(orderNum).getStatusFullName().equals("Prepared")) {
           return "Cannot add items to a prepared order.";
-
-          //can only add an item to an order with status "Started"
-      }else{
-
+      } else {
           //Check that the quantity is bigger than 0
           if (itemQuantity <= 0) return "Quantity must be greater than 0.";
 
-          //Verify that the order exists in the system
-          if (Order.getWithNumber(orderNum) == null) {
-              return "Order " + orderNumber + "does not exist.";
-          }
-
           //Verify that the item exists
           if (InventoryItem.hasWithName(item)) {
-
+            for (OrderItem orderItem: Order.getWithNumber(orderNum).getOrderItems()) {
+              if (orderItem.getItem().equals(InventoryItem.getWithName(item))) {
+                return "Item " + item + " already exists in the order " + orderNumber + ".";
+              }
+            }
                   //create a new ItemOrdered for the item we want to add
                   OrderItem itemOrdered = new OrderItem(itemQuantity, coolSupplies, Order.getWithNumber(orderNum), InventoryItem.getWithName(item));
-
-                  //Check that the item is not already present in the order
-                  for (OrderItem itemAlreadyInOrder : Order.getWithNumber(orderNum).getOrderItems()) {
-                      if (itemOrdered.equals(itemAlreadyInOrder)) {
-                          return "Item " + item + "already exists in the order " + orderNumber;
-                      }
-                  }
 
                   //Add the item to the order
                   if (Order.getWithNumber(orderNum).addOrderItem(itemOrdered)) {
@@ -140,7 +134,7 @@ public class Iteration3Controller {
                       return "Item could not be added to the order.";
                   }
 
-          } else return "Item " + item + "does not exist.";
+          } else return "Item " + item + " does not exist.";
 
       }
   }
@@ -152,46 +146,36 @@ public class Iteration3Controller {
 
     // Obtain the order object
     int orderNumberInt = Integer.parseInt(orderNumber);
-    List<Order> orderList = coolSupplies.getOrders();
-    Order order = null;
-
-    // Find order from the orders in the system
-    for (Order orderFromList : orderList) {
-      if (orderFromList.getNumber() == orderNumberInt) {
-        order = orderFromList;
-      }
-    }
+    Order order = Order.getWithNumber(orderNumberInt);
 
     // Error if orderNumber is not in system
     if (order == null) {
-	    return "Item " + item + " does not exist in the order " + orderNumber + ".";
+	    return "Order " + orderNumber + " does not exist";
     }
 
     // Check if item is in the system
-    Item itemObject = null;
-    List<Item> itemList = coolSupplies.getItems();
-    for (Item itemFromList : itemList) {
-      if (itemFromList.getName().equals(item)) {
-        itemObject = itemFromList;
+    InventoryItem itemObject = null;
+    for (OrderItem orItem: coolSupplies.getOrderItems()) {
+      if (orItem.getItem().getName().equals(item)) {
+        itemObject = orItem.getItem();
+      }
+    }
+
+    for (GradeBundle bundle : coolSupplies.getBundles()) {
+      if (bundle.getName().equals(item)) {
+        itemObject = bundle;
+      }
+    }
+
+    for (Item iItem : coolSupplies.getItems()) {
+      if (iItem.getName().equals(item)) {
+        itemObject = iItem;
       }
     }
 
     // Error if item is not in system
     if (itemObject == null) {
-      return "Item" + item + " does not exist.";
-    }
-
-    for (OrderItem orderItem : order.getOrderItems()) {
-
-      // Successfully update item
-      if ((orderItem.getItem().getName()).equals(item)) {
-        orderItem.setQuantity(Integer.parseInt(quantity));
-        return "";
-      }
-      // Item not found in system
-      else {
-        return "Item " + item + " does not exist in the order " + orderNumber + ".";
-      }
+      return "Item " + item + " does not exist.";
     }
 
     // Quantity must be greater than 0
@@ -199,9 +183,24 @@ public class Iteration3Controller {
       return "Quantity must be greater than 0.";
     }
 
+    InventoryItem itemToUpdate = null;
+    OrderItem orItemToUpdate = null;
+
+    for (OrderItem orderItem : order.getOrderItems()) {
+      // Successfully update item
+      if ((orderItem.getItem().getName()).equals(item)) {
+        itemToUpdate = orderItem.getItem();
+        orItemToUpdate = orderItem;
+      }
+    }
+
+    if (itemToUpdate == null) {
+      return "Item " + item + " does not exist in the order " + orderNumber + ".";
+    }
+
     // Test if order exists, by checking if orderNumber is in the system
     Order orderExists = null;
-    for (Order orderFromList : orderList) {
+    for (Order orderFromList : coolSupplies.getOrders()) {
       if (orderFromList.getNumber() == orderNumberInt) {
         orderExists = orderFromList;
       }
@@ -245,6 +244,9 @@ public class Iteration3Controller {
   public static String deleteItem(String item, String orderNumber) {
     int orderNum = Integer.parseInt(orderNumber);
     Order myOrder = Order.getWithNumber(orderNum);
+    if(myOrder == null){
+      return "Order " + orderNumber + " does not exist";
+    }
     List<OrderItem> items = myOrder.getOrderItems();
     InventoryItem itemToDel = null;
     OrderItem orItemToDel = null;
@@ -252,10 +254,12 @@ public class Iteration3Controller {
     List<GradeBundle> bundlesInSystem = CoolSuppliesApplication.getCoolSupplies().getBundles();
 
     InventoryItem inItem = null;     //checking if the inputted item is an item in the system
+    String thing  = "";
     for(OrderItem orItem: itemsInSystem) {
-      if(orItem.getItem().getName().equals(item)){
+      if (orItem.getItem().getName().equals(item)) {
         inItem = orItem.getItem();
       }
+      thing += orItem.getItem().getName() + "\n";
     }
 
     for(GradeBundle bundle: bundlesInSystem){
@@ -263,6 +267,13 @@ public class Iteration3Controller {
         inItem = bundle;
       }
     }
+
+    for (Item iItem : coolSupplies.getItems()) {
+      if (iItem.getName().equals(item)) {
+        inItem = iItem;
+      }
+    }
+
     if(inItem == null) {
       return "Item " + item + " does not exist.";
     }
@@ -275,12 +286,10 @@ public class Iteration3Controller {
       }
     }
     if(itemToDel == null){
-      return "Item " + item +" does not exist in order" + orderNumber + ".";
+      return "Item " + item +" does not exist in the order " + orderNumber + ".";
     }
 
-    if(myOrder == null){
-      return "Order " + orderNumber + " does not exist";
-    }
+    
     if(myOrder.getStatusFullName().equals("Paid")){
       return "Cannot delete items from a paid order";
     }
@@ -305,6 +314,31 @@ public class Iteration3Controller {
     if (authCode == null || authCode.trim().isEmpty()) {
       return "Authorization code is invalid";
     }
+
+    Order order = Order.getWithNumber(Integer.parseInt(orderNumber));
+
+    if (order == null) {
+      return "Order " + orderNumber + " does not exist";
+    }
+
+    if (!order.hasOrderItems()) {
+      return "Order " + orderNumber + " has no items";
+    }
+
+    if (order.getStatus() == Order.Status.Paid) {
+      return "The order is already paid";
+    }
+
+    if (order.getStatus() == Order.Status.PickedUp) {
+      return "Cannot pay for a picked up order";
+    }
+
+    if (order.getStatus() != Order.Status.Started) {
+      return "Cannot pay for a " + order.getStatusFullName().toLowerCase() + " order";
+    }
+
+    order.pay();
+    order.setAuthorizationCode(authCode);
 
     return "";
   }
@@ -372,8 +406,29 @@ public class Iteration3Controller {
     return "";
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param orderNumber
+   * @return
+   */
   public static String cancelOrder(String orderNumber) {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+    Order order = Order.getWithNumber(Integer.parseInt(orderNumber));
+
+    if (order == null) {
+      return "Order " + orderNumber + " does not exist";
+    }
+
+    if (order.getStatus() == Order.Status.PickedUp) {
+      return "Cannot cancel a picked up order";
+    }
+
+    if (order.getStatus() != Order.Status.Started && order.getStatus() != Order.Status.Paid) {
+      return "Cannot cancel a " + order.getStatusFullName().toLowerCase() + " order";
+    }
+
+    order.delete();
+
+    return "";
   }
 
   /**

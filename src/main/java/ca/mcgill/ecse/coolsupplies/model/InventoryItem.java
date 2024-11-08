@@ -5,7 +5,7 @@ package ca.mcgill.ecse.coolsupplies.model;
 import java.util.*;
 
 // line 39 "../../../../../CoolSuppliesPersistence.ump"
-// line 58 "../../../../../CoolSupplies.ump"
+// line 60 "../../../../../CoolSupplies.ump"
 public abstract class InventoryItem
 {
 

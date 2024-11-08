@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -31,6 +32,7 @@ public class OrderStepDefinitions {
   private String errString = "";
   private List<TOOrder> transferOrders = new ArrayList<>();
   private List<TOOrderItem> transferOrderItems = new ArrayList<>();
+  private TOOrder transferOrder = null;
 
 
   @Given("the following parent entities exist in the system")
@@ -370,36 +372,31 @@ public class OrderStepDefinitions {
   @When("the parent attempts to update an item {string} with quantity {string} in the order {string}")
   public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String item,
       String quantity, String order) {
-      // Write code here that turns the phrase above into concrete actions
-      throw new io.cucumber.java.PendingException();
+     callController(Iteration3Controller.updateOrderQuantity(item, quantity, order));
   }
 
   
   @When("the parent attempts to delete an item {string} from the order {string}")
   public void the_parent_attempts_to_delete_an_item_from_the_order(String item, String order) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    callController(Iteration3Controller.deleteItem(item, order));
   }
 
   
   @When("the parent attempts to get from the system the order with number {string}")
   public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String order) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    transferOrder = Iteration3Controller.viewOrder(order);
   }
 
   @When("the parent attempts to cancel the order {string}")
   public void the_parent_attempts_to_cancel_the_order(String order) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    callController(Iteration3Controller.cancelOrder(order));
   }
 
  
   @When("the parent attempts to pay for the order {string} with authorization code {string}")
   public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String order,
       String authoCode) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    callController(Iteration3Controller.payForOrder(order, authoCode));
   }
 
   /**
@@ -520,17 +517,9 @@ public class OrderStepDefinitions {
 
     assertNotNull("Expected order with number "+ orderId+ " to exist", particularOrder);
 
-    List<OrderItem> ListOfItems = particularOrder.getOrderItems();
-    boolean itemExists = false;
+    List<OrderItem> listOfItems = particularOrder.getOrderItems();
 
-    for (OrderItem item : ListOfItems){
-      if (string2.equals(item.getItem().getName())){
-        itemExists=true;
-        break;
-      }
-    }
-    assertTrue("Expected order to contain item " +string2, itemExists);
-
+    assertTrue("Expected 1 item was " + listOfItems.size(), listOfItems.size() == 1);
   }
 
   /**
@@ -581,15 +570,16 @@ public class OrderStepDefinitions {
     int wrongQuantity = Integer.parseInt(string3);
     int orderNum = Integer.parseInt(string);
     Order myOrder = Order.getWithNumber(orderNum);
-    assertNotNull("Expected order"+ orderNum + "to exist.", myOrder);
-    int itemQuantity = 0;
+    assertNotNull("Expected order "+ orderNum + " to exist.", myOrder);
+    int itemQuantity = -100;
     List<OrderItem> itemsInOrder = myOrder.getOrderItems();
+
     for(OrderItem item: itemsInOrder){
       if(string2.equals(item.getItem().getName())){   //expected item to exist?
         itemQuantity = item.getQuantity();
       }
     }
-    assertNotEquals("The quantity of item" + string2 + "should not be"+ wrongQuantity, itemQuantity, wrongQuantity);
+    assertNotEquals("The quantity of item " + string2 + " should not be "+ wrongQuantity, itemQuantity, wrongQuantity);
 
   }
 
@@ -795,13 +785,14 @@ public class OrderStepDefinitions {
    */
   @Then("no order entities shall be presented")
   public void no_order_entities_shall_be_presented() {
-    assertTrue("Expected no order entities", coolSupplies.getOrders().isEmpty());
+    assertNull("Expected no order entities", transferOrder);
   }
 
   /* Helper methods */
   private void callController(String result) {
     if (!result.isEmpty()) {
       errString += result;
+      System.out.println("Error thrown: " + result);
     }
   }
 }

@@ -7,7 +7,7 @@ import java.util.*;
 import java.sql.Date;
 
 // line 1 "../../../../../CoolSuppliesPersistence.ump"
-// line 5 "../../../../../CoolSupplies.ump"
+// line 6 "../../../../../CoolSupplies.ump"
 public class CoolSupplies
 {
 

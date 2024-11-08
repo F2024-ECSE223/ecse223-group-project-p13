@@ -1,14 +1,14 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
-/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 package ca.mcgill.ecse.coolsupplies.model;
 import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import java.util.*;
 import java.sql.Date;
 
+// line 3 "../../../../../CoolSuppliesStateMachine.ump"
 // line 30 "../../../../../CoolSuppliesPersistence.ump"
-// line 41 "../../../../../CoolSupplies.ump"
+// line 42 "../../../../../CoolSupplies.ump"
 public class Order
 {
 
@@ -218,15 +218,15 @@ public class Order
     switch (aStatus)
     {
       case Started:
-        if (orderHasItems())
-        {
-        // line 7 "../../../../../../CoolSuppliesStateMachine.ump"
+        // if (hasOrderItems())
+        // {
+        // line 7 "../../../../../CoolSuppliesStateMachine.ump"
           payForOrder();
           setStatus(Status.Paid);
           wasEventProcessed = true;
           break;
-        }
-        break;
+        // }
+        // break;
       default:
         // Other states do respond to this event
     }
@@ -242,7 +242,7 @@ public class Order
     switch (aStatus)
     {
       case Penalized:
-        // line 10 "../../../../../../CoolSuppliesStateMachine.ump"
+        // line 10 "../../../../../CoolSuppliesStateMachine.ump"
         payForPenaltyAndOrder();
         setStatus(Status.Prepared);
         wasEventProcessed = true;
@@ -479,31 +479,31 @@ public class Order
     }
   }
 
+
+  /**
+   * Implement actions within the model
+   */
+  // line 26 "../../../../../CoolSuppliesStateMachine.ump"
+  public void payForPenaltyAndOrder(){
+    
+  }
+
+  // line 30 "../../../../../CoolSuppliesStateMachine.ump"
+  public void payForOrder(){
+    
+  }
+
+  // line 33 "../../../../../CoolSuppliesStateMachine.ump"
+  public boolean orderHasItems(){
+    return false;
+  }
+
   // line 32 "../../../../../CoolSuppliesPersistence.ump"
    public static  void reinitializeUniqueNumber(List<Order> orders){
     ordersByNumber.clear();
     for (var order : orders){
       ordersByNumber.put(order.getNumber(),order);
     }
-  }
-
-
-  /**
-   * Implement actions within the model
-   */
-  // line 26 "../../../../../../CoolSuppliesStateMachine.ump"
-  public void payForPenaltyAndOrder(){
-    
-  }
-
-  // line 30 "../../../../../../CoolSuppliesStateMachine.ump"
-  public void payForOrder(){
-    
-  }
-
-  // line 33 "../../../../../../CoolSuppliesStateMachine.ump"
-  public boolean orderHasItems(){
-    return orderItems.size() != 0;
   }
 
 

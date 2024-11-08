@@ -5,7 +5,7 @@ package ca.mcgill.ecse.coolsupplies.model;
 import java.util.*;
 
 // line 11 "../../../../../CoolSuppliesPersistence.ump"
-// line 18 "../../../../../CoolSupplies.ump"
+// line 19 "../../../../../CoolSupplies.ump"
 public abstract class User
 {
 
@@ -101,7 +101,7 @@ public abstract class User
   // line 13 "../../../../../CoolSuppliesPersistence.ump"
    public static  void reinitializeUniqueEmail(SchoolAdmin admin, List<Parent> parents){
     usersByEmail.clear();
-    if (admin.getEmail() != null) usersByEmail.put(admin.getEmail(), admin);
+    if (admin != null) usersByEmail.put(admin.getEmail(), admin);
     for (var parent : parents){
       usersByEmail.put(parent.getEmail(),parent);
     }

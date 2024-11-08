@@ -5,7 +5,7 @@ package ca.mcgill.ecse.coolsupplies.model;
 import java.util.*;
 
 // line 51 "../../../../../CoolSuppliesPersistence.ump"
-// line 81 "../../../../../CoolSupplies.ump"
+// line 83 "../../../../../CoolSupplies.ump"
 public class Grade
 {
 

@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse.coolsupplies.model;
 
-// line 52 "../../../../../CoolSupplies.ump"
+// line 54 "../../../../../CoolSupplies.ump"
 public class OrderItem
 {
 
