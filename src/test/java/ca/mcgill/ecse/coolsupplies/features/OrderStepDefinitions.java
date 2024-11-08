@@ -369,6 +369,9 @@ public class OrderStepDefinitions {
   }
 
 
+  /**
+   * @author Trevor Piltch 
+   */
   @When("the parent attempts to update an item {string} with quantity {string} in the order {string}")
   public void the_parent_attempts_to_update_an_item_with_quantity_in_the_order(String item,
       String quantity, String order) {
@@ -376,23 +379,35 @@ public class OrderStepDefinitions {
   }
 
   
+  /**
+   * @author Trevor Piltch
+   */
   @When("the parent attempts to delete an item {string} from the order {string}")
   public void the_parent_attempts_to_delete_an_item_from_the_order(String item, String order) {
     callController(Iteration3Controller.deleteItem(item, order));
   }
 
-  
+
+  /**
+   * @author Trevor Piltch
+   */
   @When("the parent attempts to get from the system the order with number {string}")
   public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String order) {
     transferOrder = Iteration3Controller.viewOrder(order);
   }
 
+  /**
+   * @author Trevor Piltch
+   */
   @When("the parent attempts to cancel the order {string}")
   public void the_parent_attempts_to_cancel_the_order(String order) {
     callController(Iteration3Controller.cancelOrder(order));
   }
 
  
+  /**
+   * @author Trevor Piltch
+   */
   @When("the parent attempts to pay for the order {string} with authorization code {string}")
   public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String order,
       String authoCode) {
