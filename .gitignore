@@ -12,3 +12,7 @@ bin
 */**/__pycache__
 
 **/*.class
+
+# Ignore IntelliJ stuff
+.idea
+.settings

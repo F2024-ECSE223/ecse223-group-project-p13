@@ -1,5 +1,8 @@
 namespace ca.mcgill.ecse.coolsupplies.model;
 
+use CoolSuppliesStateMachine.ump;
+use CoolSuppliesPersistence.ump;
+
 class CoolSupplies {
   depend ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
   1 <@>- 0..1 SchoolAdmin admin;
@@ -45,6 +48,7 @@ class Order {
   lazy penaltyAuthorizationCode;
   * -- 1 Parent parent;
   * -- 1 Student student;
+  boolean isPickedUp = false;
 }
 
 associationClass OrderItem {

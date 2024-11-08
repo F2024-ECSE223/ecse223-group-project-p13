@@ -6,6 +6,7 @@ import ca.mcgill.ecse.coolsupplies.model.*;  //del
 
 import ca.mcgill.ecse.coolsupplies.model.*;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 public class CoolSuppliesFeatureSet3Controller {
   private static final CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
@@ -19,6 +20,7 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static String addItem(String name, int price) {
+    try {
     // Validate name - name cannot already be in system
     Item item = (Item) Item.getWithName(name);
     if (item != null) {
@@ -39,6 +41,11 @@ public class CoolSuppliesFeatureSet3Controller {
     Item newItem = new Item(name, price, coolSupplies);
     coolSupplies.addItem(newItem);
 
+    //autosave
+    CoolSuppliesPersistence.save();
+  } catch (RuntimeException e) {
+    return e.getMessage();
+  }
     return ""; // Success message
   }
 
@@ -52,6 +59,7 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static String updateItem(String name, String newName, int newPrice) {
+    try {
     // Validate input - item must exist
     Item item = (Item) Item.getWithName(name);
     if (item == null) {
@@ -78,6 +86,12 @@ public class CoolSuppliesFeatureSet3Controller {
     item.setName(newName);
     item.setPrice(newPrice);
     
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
+
     return "";  // Success message
   }
 
@@ -89,6 +103,7 @@ public class CoolSuppliesFeatureSet3Controller {
    * @author Dimitri Christopoulos
    */
   public static String deleteItem(String name) {
+    try {
     // Check if list of items is empty
     if (coolSupplies.hasItems()) {
 
@@ -102,9 +117,14 @@ public class CoolSuppliesFeatureSet3Controller {
       // If list is not empty, get item and delete it
       item.delete();
 
+      //autosave
+      CoolSuppliesPersistence.save();
       return "";
     } 
     else return "";  // Success message
+    } catch (RuntimeException e) {
+        return e.getMessage();
+      }
   }
 
   /**

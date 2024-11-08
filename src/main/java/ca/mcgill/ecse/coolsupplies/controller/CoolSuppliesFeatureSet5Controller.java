@@ -10,6 +10,7 @@ import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.model.GradeBundle;
 import ca.mcgill.ecse.coolsupplies.model.Item;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 public class CoolSuppliesFeatureSet5Controller {
 
@@ -76,6 +77,8 @@ public class CoolSuppliesFeatureSet5Controller {
     // Create new BundleItem
     try {
       new BundleItem(quantity, purchaseLevel, cs, bundle, item);
+      //autosave
+      CoolSuppliesPersistence.save();
       return "BundleItem successfully added";
     } catch (RuntimeException e) {
       return e.getMessage();
@@ -93,6 +96,7 @@ public class CoolSuppliesFeatureSet5Controller {
    *         This method updates the quantity and purchase level of an existing BundleItem.
    */
   public static String updateBundleItem(String itemName, String bundleName, int newQuantity, String newLevel) {
+    try {
     if (newQuantity <= 0) {
       return "The quantity must be greater than 0.";
     }
@@ -150,6 +154,12 @@ public class CoolSuppliesFeatureSet5Controller {
     bundleItem.setQuantity(newQuantity);
     bundleItem.setLevel(purchaseLevel);
 
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
+
     return "BundleItem successfully updated";
   }
 
@@ -162,6 +172,7 @@ public class CoolSuppliesFeatureSet5Controller {
    *         This method deletes an existing BundleItem from the system.
    */
   public static String deleteBundleItem(String itemName, String bundleName) {
+    try {
     CoolSupplies cs = CoolSuppliesApplication.getCoolSupplies();
 
     // Find the GradeBundle
@@ -209,6 +220,11 @@ public class CoolSuppliesFeatureSet5Controller {
 
     // Delete the BundleItem
     bundleItem.delete();
+    //autosave
+    CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+        return e.getMessage();
+    }
     return "BundleItem successfully deleted";
   }
  
