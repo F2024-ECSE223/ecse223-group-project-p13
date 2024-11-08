@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
+import java.util.List;
 /* Project Imports */
 import java.util.List;
 
@@ -341,8 +342,38 @@ public class Iteration3Controller {
     return "";
   }
 
-  public static String pickUpOrder(String orderNumber) {
-    throw new UnsupportedOperationException("Not Implemented yet.");
+  /**
+   * @author Kenny-Alexander Joseph
+   */  
+  public static String pickUpOrder(String orderNumber){
+    // Validate the order number
+    int orderNum;
+    try {
+      orderNum = Integer.parseInt(orderNumber);
+    } catch (NumberFormatException e) {
+      throw new Exception("Order number is invalid");
+    }
+
+    // Retrieve the order
+    Order order = Order.getWithNumber(orderNum);
+    if (order == null) {
+      throw new Exception("Order " + orderNumber + " does not exist");
+   }
+
+    // Check the order's state
+    String state = order.getStatusFullName(); // Assuming this method exists
+    if (state.equals("Started") || state.equals("Paid")) {
+      // Perform the cancellation
+      try {
+        order.cancelOrder(); // Assuming this triggers the state transition to "Cancelled"
+        return "Order " + orderNumber + " has been cancelled successfully.";
+       } catch (Exception e) {
+        throw new Exception("Unable to cancel order: " + e.getMessage());
+       }
+    } else {
+      // Cannot cancel orders in other states
+      throw new Exception("Cannot cancel the order in its current state: " + state);
+   }
   }
 
   public static String cancelOrder(String orderNumber) {

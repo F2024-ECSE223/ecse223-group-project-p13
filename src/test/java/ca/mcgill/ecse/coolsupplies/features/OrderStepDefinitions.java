@@ -352,12 +352,14 @@ public class OrderStepDefinitions {
       throw new io.cucumber.java.PendingException();
   }
 
+  
   @When("the parent attempts to delete an item {string} from the order {string}")
   public void the_parent_attempts_to_delete_an_item_from_the_order(String item, String order) {
     // Write code here that turns the phrase above into concrete actions
     throw new io.cucumber.java.PendingException();
   }
 
+  
   @When("the parent attempts to get from the system the order with number {string}")
   public void the_parent_attempts_to_get_from_the_system_the_order_with_number(String order) {
     // Write code here that turns the phrase above into concrete actions
@@ -370,6 +372,7 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+ 
   @When("the parent attempts to pay for the order {string} with authorization code {string}")
   public void the_parent_attempts_to_pay_for_the_order_with_authorization_code(String order,
       String authoCode) {
@@ -377,42 +380,62 @@ public class OrderStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /**
+   * @author Kenny-Alexander Joseph
+   */
   @When("the admin attempts to start a school year for the order {string}")
   public void the_admin_attempts_to_start_a_school_year_for_the_order(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    callController(Iteration3Controller.startSchoolYear(string));
   }
 
+  /**
+   * @author Kenny-Alexander Joseph
+   */  
   @When("the parent attempts to pay penalty for the order {string} with penalty authorization code {string} and authorization code {string}")
   public void the_parent_attempts_to_pay_penalty_for_the_order_with_penalty_authorization_code_and_authorization_code(
       String string, String string2, String string3) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    callController(Iteration3Controller.payPenaltyForOrder(string, string2, string3));
   }
 
+  /**
+   * @author Kenny-Alexander Joseph
+   */
   @When("the student attempts to pickup the order {string}")
   public void the_student_attempts_to_pickup_the_order(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    
+    callController(Iteration3Controller.pickUpOrder(string));
   }
 
+  /**
+   * @author Kenny-Alexander Joseph
+   */
   @When("the school admin attempts to get from the system all orders")
   public void the_school_admin_attempts_to_get_from_the_system_all_orders() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    for (Order order : coolSupplies.getOrders()) {
+    callController(Iteration3Controller.viewOrder(String.valueOf(order.getNumber())));
+    }
   }
 
+  /**
+   * @author Kenny-Alexander Joseph
+   */
   @Then("the order {string} shall contain penalty authorization code {string}")
   public void the_order_shall_contain_penalty_authorization_code(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-  
+    Order order = Order.getWithNumber(Integer.parseInt(string));
+    assertNotNull(order,"Expected order with number "+string+ " to exist");
+    String penaltyCode = order.getPenaltyAuthorizationCode();
+    assertEquals(penaltyCode,string2,"Expected order with number "+string+" to have penalty authorization code "+string2);
   }
 
+  /**
+   * @author Kenny-Alexander Joseph
+   */
   @Then("the order {string} shall not contain penalty authorization code {string}")
   public void the_order_shall_not_contain_penalty_authorization_code(String string,
       String string2) {
-    // Write code here that turns the phrase above into concrete actions
-
+    Order order = Order.getWithNumber(Integer.parseInt(string));
+    assertNotNull(order,"Expected order with number "+string+ " to exist");
+    String penaltyCode = order.getPenaltyAuthorizationCode();
+    assertNotEquals("Expected order with number "+string+" to not have penalty authorization code "+string2,penaltyCode,string2);
   }
 
 
