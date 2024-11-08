@@ -2,7 +2,6 @@
 package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
-import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -11,6 +10,7 @@ import java.util.Map;
 import java.sql.Date;
 
 import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.controller.*;
 
 /* Helper Imports */
 import java.util.List;
@@ -311,18 +311,40 @@ public class OrderStepDefinitions {
             }
             break;
         case "Prepared":
-            if (!order.getStatusFullName().equals("Prepared")) {
-                order.pay();
-                order.startSchoolYear();
+            if (order.getStatusFullName().equals("Started")) {
+              order.pay();
+              order.startSchoolYear();
+            }
+
+            if (order.getStatusFullName().equals("Paid")) {
+              order.startSchoolYear();
+            }
+
+            if (order.getStatusFullName().equals("Penalized")) {
+              order.payForEverything();
             }
             break;
         case "PickedUp":
-            if (!order.getStatusFullName().equals("PickedUp")) {
-                order.pay();
-                order.startSchoolYear();
-                order.receiveOrder();
-            }
-            break;
+          if (order.getStatusFullName().equals("Started")) {
+            order.pay();
+            order.startSchoolYear();
+          }
+
+          if (order.getStatusFullName().equals("Paid")) {
+            order.startSchoolYear();
+          }
+
+          if (order.getStatusFullName().equals("Penalized")) {
+            order.payForEverything();
+          }
+
+          if (order.getStatusFullName().equals("Prepared")) {
+            order.receiveOrder();
+          }
+
+          System.out.println(order.getStatusFullName());
+
+          break;
     }
   }
 
@@ -411,7 +433,7 @@ public class OrderStepDefinitions {
   @When("the school admin attempts to get from the system all orders")
   public void the_school_admin_attempts_to_get_from_the_system_all_orders() {
     for (Order order : coolSupplies.getOrders()) {
-    callController(Iteration3Controller.viewOrder(String.valueOf(order.getNumber())));
+      Iteration3Controller.viewOrder(String.valueOf(order.getNumber()));
     }
   }
 
@@ -421,9 +443,9 @@ public class OrderStepDefinitions {
   @Then("the order {string} shall contain penalty authorization code {string}")
   public void the_order_shall_contain_penalty_authorization_code(String string, String string2) {
     Order order = Order.getWithNumber(Integer.parseInt(string));
-    assertNotNull(order,"Expected order with number "+string+ " to exist");
+    assertNotNull("Expected order with number "+string+ " to exist", order);
     String penaltyCode = order.getPenaltyAuthorizationCode();
-    assertEquals(penaltyCode,string2,"Expected order with number "+string+" to have penalty authorization code "+string2);
+    assertEquals(penaltyCode, string2);
   }
 
   /**
@@ -433,7 +455,7 @@ public class OrderStepDefinitions {
   public void the_order_shall_not_contain_penalty_authorization_code(String string,
       String string2) {
     Order order = Order.getWithNumber(Integer.parseInt(string));
-    assertNotNull(order,"Expected order with number "+string+ " to exist");
+    assertNotNull("Expected order with number "+string+ " to exist", order);
     String penaltyCode = order.getPenaltyAuthorizationCode();
     assertNotEquals("Expected order with number "+string+" to not have penalty authorization code "+string2,penaltyCode,string2);
   }
@@ -599,9 +621,9 @@ public class OrderStepDefinitions {
   public void the_order_shall_be_marked_as(String string, String string2) {
     int orderNum = Integer.parseInt(string);
     Order myOrder = Order.getWithNumber(orderNum);
-    assertNotNull("Expected order"+ orderNum + "to exist.", myOrder);
+    assertNotNull("Expected order "+ orderNum + " to exist. ", myOrder);
     String orderStatus = myOrder.getStatusFullName();
-    assertEquals("Expected order" + orderNum + "to be marked as" + string2 + "found" + orderStatus, string2, orderStatus);
+    assertEquals("Expected order " + orderNum + " to be marked as " + string2 + " found " + orderStatus, string2, orderStatus);
 
   }
 
@@ -641,15 +663,13 @@ public class OrderStepDefinitions {
     assertNotNull("Order with number " + orderNumber + " does not exist", orderInSystem);
   
     // Update the level
-    PurchaseLevel level = PurchaseLevel.valueOf(string2);
-    orderInSystem.setLevel(level);
+    BundleItem.PurchaseLevel level = BundleItem.PurchaseLevel.valueOf(string2);
     assertEquals("Expected order to have level " + level, level, orderInSystem.getLevel());
 
     // Set the student name to the order
     Student student = Student.getWithName(string3);
     assertNotNull("Expected student with name " + string3, student);
 
-    specificOrder.setStudent(student);
     assertEquals("Expected order to be assigned to student " + string3, student, orderInSystem.getStudent());
       
   }
@@ -671,8 +691,6 @@ public class OrderStepDefinitions {
       }
     }
     assertNotNull("Order not found: " + string, orderInSystem);
-
-    orderInSystem.setStatus(Status.Started);
   }
 
   /*

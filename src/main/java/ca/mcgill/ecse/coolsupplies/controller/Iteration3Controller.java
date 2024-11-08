@@ -317,7 +317,7 @@ public class Iteration3Controller {
    * 
    * Pays for the penalty for the order.
    */
-  public static String payPenaltyForOrder(String orderNumber, String authCode, String penaltyAuthCode) {
+  public static String payPenaltyForOrder(String orderNumber, String penaltyAuthCode, String authCode) {
     Integer num = Integer.parseInt(orderNumber);
     Order order = Order.getWithNumber(num);
 
@@ -325,12 +325,16 @@ public class Iteration3Controller {
       return "Order " + orderNumber + " does not exist";
     }
 
+    if (order.getStatus() == Order.Status.PickedUp) {
+      return "Cannot pay penalty for a picked up order.";
+    }
+
     if (order.getStatus() != Order.Status.Penalized) {
-      return "Cannot pay penalty for a " + order.getStatus() + " order";
+      return "Cannot pay penalty for a " + order.getStatusFullName().toLowerCase() + " order";
     }
 
     if (authCode.isEmpty()) {
-      return "Authorization code is invalid.";
+      return "Authorization code is invalid";
     }
 
     if (penaltyAuthCode.isEmpty()) {
@@ -338,6 +342,8 @@ public class Iteration3Controller {
     }
 
     order.setPenaltyAuthorizationCode(penaltyAuthCode);
+    order.setAuthorizationCode(authCode);
+    order.payForEverything();
 
     return "";
   }
@@ -346,39 +352,29 @@ public class Iteration3Controller {
    * @author Kenny-Alexander Joseph
    */  
   public static String pickUpOrder(String orderNumber){
-    // Validate the order number
-    int orderNum;
-    try {
-      orderNum = Integer.parseInt(orderNumber);
-    } catch (NumberFormatException e) {
-      throw new Exception("Order number is invalid");
-    }
+    int orderNum = Integer.parseInt(orderNumber);
 
-    // Retrieve the order
     Order order = Order.getWithNumber(orderNum);
     if (order == null) {
-      throw new Exception("Order " + orderNumber + " does not exist");
+      return "Order " + orderNum + " does not exist";
    }
 
     // Check the order's state
-    String state = order.getStatusFullName(); // Assuming this method exists
-    if (state.equals("Started") || state.equals("Paid")) {
-      // Perform the cancellation
-      try {
-        order.cancelOrder(); // Assuming this triggers the state transition to "Cancelled"
-        return "Order " + orderNumber + " has been cancelled successfully.";
-       } catch (Exception e) {
-        throw new Exception("Unable to cancel order: " + e.getMessage());
-       }
-    } else {
-      // Cannot cancel orders in other states
-      throw new Exception("Cannot cancel the order in its current state: " + state);
-   }
+    String state = order.getStatusFullName().toLowerCase(); 
+    if (state.equals("pickedup")) {
+      return "The order is already picked up";
+    }
+    if (!state.equals("prepared")) {
+      return "Cannot pickup a " + state + " order";
+    }
+
+    order.receiveOrder();
+    return "";
   }
 
   public static String cancelOrder(String orderNumber) {
     throw new UnsupportedOperationException("Not Implemented yet.");
-}
+  }
 
   /**
    * @author Edouard Dupont
@@ -393,6 +389,114 @@ public class Iteration3Controller {
 
     return toOrders;
   }
+
+/**
+   * This method allows the user to view all the details of an order.
+   * @author Clara Dupuis
+   * @param orderNumber is a string representing the number of the order that we want to view
+   * @return a TOOrder object
+   */
+  public static TOOrder viewOrder(String orderNumber) {
+
+    int orderNum = Integer.parseInt(orderNumber);
+
+    Order particularOrder = Order.getWithNumber(orderNum);
+
+    if (particularOrder == null){
+        return null;
+    }
+
+    String studentName = particularOrder.getStudent().getName();
+    String parentName = particularOrder.getParent().getName();
+    String date = particularOrder.getDate().toString();
+    String OrderNumber = Integer.toString(particularOrder.getNumber());
+    String authorizationCode = particularOrder.getAuthorizationCode();
+    String penaltyAuthorizationCode = particularOrder.getPenaltyAuthorizationCode();
+    String statusString = particularOrder.getStatusFullName();
+    String levelString = particularOrder.getLevel().toString();
+
+    
+
+  double totalPrice = 0;
+  List<TOOrderItem> orderItemList = new ArrayList<>();
+
+  for (OrderItem orderItem: particularOrder.getOrderItems()) {
+      int quantityOrdered = orderItem.getQuantity();
+      InventoryItem inventoryItem = orderItem.getItem();
+
+      String itemQuantityStr = String.valueOf(quantityOrdered);
+
+      String itemName = "";
+      String gradeBundleStr = "";
+      String itemPriceStr = "";
+      String discountStr = "0";
+
+      double itemTotalPrice = 0;
+
+      if (inventoryItem instanceof Item) {
+          Item item = (Item) inventoryItem;
+
+          itemName = item.getName();
+          int itemPrice = item.getPrice();
+          int priceOfItem = item.getPrice() * quantityOrdered;
+          totalPrice += priceOfItem;
+          itemTotalPrice = priceOfItem;
+          itemPriceStr = String.valueOf(priceOfItem);
+      }
+
+      else if (inventoryItem instanceof GradeBundle) {
+
+          GradeBundle gradeBundle = (GradeBundle) inventoryItem;
+
+          itemName = gradeBundle.getName();
+          gradeBundleStr = gradeBundle.getName();
+          int discount = gradeBundle.getDiscount();
+          discountStr = String.valueOf(discount);
+
+          double priceOfBundle = 0;
+
+          BundleItem.PurchaseLevel purchaseLevel = particularOrder.getLevel();
+
+          List<BundleItem> itemsInBundle = gradeBundle.getBundleItems();
+
+
+          int numberOfIterations = 0; //used to count if discount should be applied
+
+          for (BundleItem bundleItem : itemsInBundle){
+
+              int quantityInBundle = bundleItem.getQuantity();;
+              int priceOfBundleItem = 0;
+
+              if (purchaseLevel.compareTo(bundleItem.getLevel()) >= 0){
+                  Item itemInBundle = bundleItem.getItem();
+                  priceOfBundleItem = itemInBundle.getPrice();
+              }
+
+              priceOfBundle += (quantityInBundle * priceOfBundleItem);
+
+              numberOfIterations+=1;
+          }
+
+          if (numberOfIterations>1){
+              priceOfBundle = priceOfBundle*((double) (1-discount)/100);
+          }
+
+          priceOfBundle *=quantityOrdered;
+          itemTotalPrice = priceOfBundle;
+          itemPriceStr = String.valueOf(priceOfBundle);
+
+          totalPrice += priceOfBundle;
+      }
+
+      TOOrderItem toOrderItem = new TOOrderItem(itemQuantityStr, itemName, gradeBundleStr, itemPriceStr, discountStr);
+
+      orderItemList.add(toOrderItem);
+
+  }
+
+   return new TOOrder(parentName, studentName, statusString, orderNumber, date, levelString, authorizationCode, penaltyAuthorizationCode, totalPrice, orderItemList.toArray(new TOOrderItem[0]));
+}
+
    
     /**
      * This method starts a school year by changing the status of an order
@@ -407,7 +511,7 @@ public class Iteration3Controller {
 
       //verify that the order exists in the system
       if (particularOrder == null) {
-          return "Order " + orderNumber + "does not exist.";
+          return "Order " + orderNumber + " does not exist.";
       }
 
       //Start a school year if the order is started or if it is paid

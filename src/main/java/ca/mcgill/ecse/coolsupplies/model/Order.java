@@ -503,7 +503,7 @@ public class Order
 
   // line 33 "../../../../../../CoolSuppliesStateMachine.ump"
   public boolean orderHasItems(){
-    return false;
+    return orderItems.size() != 0;
   }
 
 
