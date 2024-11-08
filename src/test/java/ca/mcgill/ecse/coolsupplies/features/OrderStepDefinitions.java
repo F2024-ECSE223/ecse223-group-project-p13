@@ -304,7 +304,7 @@ public class OrderStepDefinitions {
             break;
         case "Paid":
             if (order.getStatusFullName().equals("Started")) {
-                order.pay();
+                order.pay("");
             }
             break;
         case "Penalized":
@@ -314,7 +314,7 @@ public class OrderStepDefinitions {
             break;
         case "Prepared":
             if (order.getStatusFullName().equals("Started")) {
-              order.pay();
+              order.pay("");
               order.startSchoolYear();
             }
 
@@ -323,12 +323,12 @@ public class OrderStepDefinitions {
             }
 
             if (order.getStatusFullName().equals("Penalized")) {
-              order.payForEverything();
+              order.payForEverything("", "");
             }
             break;
         case "PickedUp":
           if (order.getStatusFullName().equals("Started")) {
-            order.pay();
+            order.pay("");
             order.startSchoolYear();
           }
 
@@ -337,7 +337,7 @@ public class OrderStepDefinitions {
           }
 
           if (order.getStatusFullName().equals("Penalized")) {
-            order.payForEverything();
+            order.payForEverything("", "");
           }
 
           if (order.getStatusFullName().equals("Prepared")) {

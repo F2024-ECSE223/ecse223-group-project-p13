@@ -364,8 +364,7 @@ public class Iteration3Controller {
       return "Cannot pay for a " + order.getStatusFullName().toLowerCase() + " order";
     }
 
-    order.pay();
-    order.setAuthorizationCode(authCode);
+    order.pay(authCode);
 
     //autosave
     try {
@@ -408,9 +407,7 @@ public class Iteration3Controller {
       return "Penalty authorization code is invalid";
     }
 
-    order.setPenaltyAuthorizationCode(penaltyAuthCode);
-    order.setAuthorizationCode(authCode);
-    order.payForEverything();
+    order.payForEverything(authCode, penaltyAuthCode);
 
     //autosave
     try {

@@ -4,10 +4,10 @@ class Order {
   status {
     Started {
       startSchoolYear -> Penalized;
-      pay [ orderHasItems() ] / { payForOrder(); } -> Paid;
+      pay(String authCode)  / { payForOrder(authCode); } -> Paid;
     }
     Penalized {
-      payForEverything / { payForPenaltyAndOrder(); } -> Prepared;
+      payForEverything(String authCode, String penaltyAuthCode) / { payForPenaltyAndOrder(authCode, penaltyAuthCode); } -> Prepared;
     }
     Paid {
       startSchoolYear -> Prepared;
@@ -21,15 +21,11 @@ class Order {
   }
 
   // Implement actions within the model
-  void payForPenaltyAndOrder() {
+  void payForPenaltyAndOrder(String authCode, String penaltyAuthCode) {
 
   }
 
-  void payForOrder() {
+  void payForOrder(String authCode) {
     
-  }
-  
-  boolean orderHasItems() {
-    return false;
   }
 }

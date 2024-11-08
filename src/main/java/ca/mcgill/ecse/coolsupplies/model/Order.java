@@ -210,7 +210,7 @@ public class Order
     return wasEventProcessed;
   }
 
-  public boolean pay()
+  public boolean pay(String authCode)
   {
     boolean wasEventProcessed = false;
     
@@ -218,15 +218,11 @@ public class Order
     switch (aStatus)
     {
       case Started:
-        // if (hasOrderItems())
-        // {
         // line 7 "../../../../../CoolSuppliesStateMachine.ump"
-          payForOrder();
-          setStatus(Status.Paid);
-          wasEventProcessed = true;
-          break;
-        // }
-        // break;
+        payForOrder(authCode);
+        setStatus(Status.Paid);
+        wasEventProcessed = true;
+        break;
       default:
         // Other states do respond to this event
     }
@@ -234,7 +230,7 @@ public class Order
     return wasEventProcessed;
   }
 
-  public boolean payForEverything()
+  public boolean payForEverything(String authCode,String penaltyAuthCode)
   {
     boolean wasEventProcessed = false;
     
@@ -243,7 +239,7 @@ public class Order
     {
       case Penalized:
         // line 10 "../../../../../CoolSuppliesStateMachine.ump"
-        payForPenaltyAndOrder();
+        payForPenaltyAndOrder(authCode, penaltyAuthCode);
         setStatus(Status.Prepared);
         wasEventProcessed = true;
         break;
@@ -484,18 +480,14 @@ public class Order
    * Implement actions within the model
    */
   // line 26 "../../../../../CoolSuppliesStateMachine.ump"
-  public void payForPenaltyAndOrder(){
-    
+  public void payForPenaltyAndOrder(String authCode, String penaltyAuthCode){
+    this.setAuthorizationCode(authCode);
+    this.setPenaltyAuthorizationCode(penaltyAuthCode);
   }
 
   // line 30 "../../../../../CoolSuppliesStateMachine.ump"
-  public void payForOrder(){
-    
-  }
-
-  // line 33 "../../../../../CoolSuppliesStateMachine.ump"
-  public boolean orderHasItems(){
-    return false;
+  public void payForOrder(String authCode){
+    this.setAuthorizationCode(authCode);
   }
 
   // line 32 "../../../../../CoolSuppliesPersistence.ump"
