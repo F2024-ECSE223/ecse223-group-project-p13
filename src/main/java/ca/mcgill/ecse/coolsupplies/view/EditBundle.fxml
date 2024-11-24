@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="623.0" prefWidth="738.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.editbundle.HelloController">
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+  </padding>
+   <children>
+      <AnchorPane fx:id="menuBar" prefHeight="118.0" prefWidth="689.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-11-24%20002113.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="labelAdmin" layoutY="86.0" prefHeight="32.0" prefWidth="404.0" text="Admin &gt; Edit Bundle &gt; [Selected Bundle Name]">
+               <font>
+                  <Font name="MS Outlook" size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="labelAdmin1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="577.0">
+         <children>
+            <Label fx:id="newName" layoutX="220.0" layoutY="11.0" prefHeight="27.0" prefWidth="162.0" text="New Bundle Name ">
+               <font>
+                  <Font name="Rockwell" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="bundleNameText" layoutX="396.0" layoutY="12.0" prefHeight="26.0" prefWidth="287.0" />
+            <Label fx:id="newGrade" layoutX="223.0" layoutY="61.0" prefHeight="27.0" prefWidth="135.0" text="New Grade">
+               <font>
+                  <Font name="Rockwell" size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="newGradeOptions" layoutX="396.0" layoutY="61.0" prefHeight="26.0" prefWidth="287.0" promptText="Please select a grade" />
+            <Button fx:id="deleteButton" layoutX="362.0" layoutY="162.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="106.0" text="Delete Bundle " textFill="#fa0b0b">
+               <font>
+                  <Font name="Rockwell" size="12.0" />
+               </font>
+            </Button>
+            <Label fx:id="newDiscount" layoutX="220.0" layoutY="116.0" text="New Discount ">
+               <font>
+                  <Font name="Rockwell" size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="396.0" layoutY="114.0" prefHeight="26.0" prefWidth="287.0" />
+            <Button fx:id="saveButton" layoutX="493.0" layoutY="162.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="106.0" text="Save Changes " />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
