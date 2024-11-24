@@ -64,7 +64,7 @@ public class CoolSuppliesFxmlView extends Application {
     HBox header = createHeader();
 
     VBox navigation = new VBox(10);
-    String[] pages = {"Account", "Students"};
+    String[] pages = {"Account", "Students", "Orders"};
 
     for (String page : pages) {
       Button button = createNavButton(page);
@@ -121,6 +121,12 @@ public class CoolSuppliesFxmlView extends Application {
 
         mainContent.getChildren().add(root);
         return;
+      }
+      else if (page.toLowerCase().equals("orders")){
+        var root = (Pane) FXMLLoader.load(getClass().getResource("addItem.fxml"));
+        mainContent.getChildren().add(root);
+        return;
+
       }
       else {
         StackPane content = new StackPane();
