@@ -158,7 +158,7 @@ public class CoolSuppliesFxmlView extends Application {
 
     buttons.getChildren().addAll(admin, parent);
 
-    Text title = new Text("Welcom to CoolSupplies");
+    Text title = new Text("Welcome to CoolSupplies");
 
     box.getChildren().addAll(title, buttons);
 
