@@ -236,7 +236,7 @@ public class Order
     return wasEventProcessed;
   }
 
-  public boolean updateItem(OrderItem item,int quantity)
+public boolean updateItem(OrderItem item,int quantity)
   {
     boolean wasEventProcessed = false;
     
@@ -611,68 +611,70 @@ public class Order
 
   // line 42 "../../../../../CoolSuppliesStateMachine.ump"
    private boolean isStudentOfParent(Student student){
-    // TODO needs to be completed
-    return true;
+     return this.parent.getStudents().contains(student);
   }
 
   // line 47 "../../../../../CoolSuppliesStateMachine.ump"
    private boolean isNotItemOfOrderAndQuantityPositive(InventoryItem item, int quantity){
-    // TODO needs to be completed
-    return true;
+    for (OrderItem orderItem : this.getOrderItems()) {
+      if (orderItem.getItem().equals(item)) {
+        return false;
+      }
+    }
+
+    return quantity > 0;
   }
 
   // line 52 "../../../../../CoolSuppliesStateMachine.ump"
    private boolean isItemOfOrderAndQuantityPositive(OrderItem item, int quantity){
-    // TODO needs to be completed
-    return true;
+     return !(this.orderItems.contains(item)) && (quantity > 0);
   }
 
   // line 57 "../../../../../CoolSuppliesStateMachine.ump"
    private boolean isItemOfOrder(OrderItem item){
-    // TODO needs to be completed
-    return true;
+     return this.orderItems.contains(item);
   }
 
   // line 62 "../../../../../CoolSuppliesStateMachine.ump"
    private boolean isNotNullOrEmpty(String code){
-    // TODO needs to be completed
-    return true;
+     return (code != null) && (!code.isEmpty());
   }
 
   // line 67 "../../../../../CoolSuppliesStateMachine.ump"
    private boolean isNotNullOrEmpty(String code1, String code2){
-    // TODO needs to be completed
-    return true;
+     return isNotNullOrEmpty(code1) && isNotNullOrEmpty(code2);
   }
 
   // line 72 "../../../../../CoolSuppliesStateMachine.ump"
-   private void doUpdateOrder(PurchaseLevel level, Student student){
-    // TODO needs to be completed
+  private void doUpdateOrder(PurchaseLevel level, Student student) {
+    this.setLevel(level);
+    this.setStudent(student);
   }
 
   // line 76 "../../../../../CoolSuppliesStateMachine.ump"
    private void doAddItem(InventoryItem item, int quantity){
-    // TODO needs to be completed
+     new OrderItem(quantity, coolSupplies, this, item);
   }
 
   // line 80 "../../../../../CoolSuppliesStateMachine.ump"
    private void doUpdateItem(OrderItem item, int quantity){
-    // TODO needs to be completed
+     item.setQuantity(quantity);
   }
 
   // line 84 "../../../../../CoolSuppliesStateMachine.ump"
    private void doDeleteItem(OrderItem item){
-    // TODO needs to be completed
+     this.orderItems.remove(item);
   }
 
   // line 88 "../../../../../CoolSuppliesStateMachine.ump"
    private void doPay(String authorizationCode){
-    // TODO needs to be completed
+     this.authorizationCode = authorizationCode;
   }
 
   // line 92 "../../../../../CoolSuppliesStateMachine.ump"
    private void doPayPenalty(String authorizationCode, String penaltyAuthorizationCode){
-    // TODO needs to be completed
+     this.authorizationCode = authorizationCode;
+     this.penaltyAuthorizationCode = penaltyAuthorizationCode;
   }
 
   // line 32 "../../../../../CoolSuppliesPersistence.ump"

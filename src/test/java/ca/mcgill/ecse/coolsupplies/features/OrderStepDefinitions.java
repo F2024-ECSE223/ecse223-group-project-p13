@@ -1,4 +1,3 @@
-
 package ca.mcgill.ecse.coolsupplies.features;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.sql.Date;
 
+/* Project Imports */
 import ca.mcgill.ecse.coolsupplies.model.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 
@@ -35,17 +35,12 @@ public class OrderStepDefinitions {
   private TOOrder transferOrder = null;
 
 
+  /**
+   * @author Lune Letailleur
+   */
   @Given("the following parent entities exist in the system")
   public void the_following_parent_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-
     List<Map<String,String >> entities = dataTable.asMaps();
 
     for (var entity:entities){
@@ -63,13 +58,6 @@ public class OrderStepDefinitions {
   @Given("the following grade entities exist in the system")
   public void the_following_grade_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
     List<Map<String, String>> entities = dataTable.asMaps();
 
     for (var entity : entities) {
@@ -108,13 +96,6 @@ public class OrderStepDefinitions {
   @Given("the following student entities exist for a parent in the system")
   public void the_following_student_entities_exist_for_a_parent_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
     List<Map<String, String>> entities = dataTable.asMaps();
 
     for (var entity : entities) {
@@ -134,13 +115,6 @@ public class OrderStepDefinitions {
   @Given("the following item entities exist in the system")
   public void the_following_item_entities_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List[E], List[List[E]], List[Map[K,V]], Map[K,V] or
-    // Map[K, List[V]]. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
     List<Map<String, String>> entities = dataTable.asMaps();
 
     for (var entity : entities) {
@@ -303,9 +277,12 @@ public class OrderStepDefinitions {
             // Default status; do nothing
             break;
         case "Paid":
-            if (order.getStatusFullName().equals("Started")) {
-                order.pay("");
-            }
+          if (order.getStatusFullName().equals("Started")) {
+            OrderItem exampleItem =
+                new OrderItem(1, coolSupplies, order, new Item("example", 5, coolSupplies));
+            order.pay("0000");
+            exampleItem.delete();
+          }
             break;
         case "Penalized":
             if (order.getStatusFullName().equals("Started")) {
@@ -314,7 +291,7 @@ public class OrderStepDefinitions {
             break;
         case "Prepared":
             if (order.getStatusFullName().equals("Started")) {
-              order.pay("");
+              order.pay("0000");
               order.startSchoolYear();
             }
 
@@ -323,12 +300,12 @@ public class OrderStepDefinitions {
             }
 
             if (order.getStatusFullName().equals("Penalized")) {
-              order.payPenalty("", "");
+              order.payPenalty("0000", "0000");
             }
             break;
         case "PickedUp":
           if (order.getStatusFullName().equals("Started")) {
-            order.pay("");
+            order.pay("0000");
             order.startSchoolYear();
           }
 
@@ -337,15 +314,12 @@ public class OrderStepDefinitions {
           }
 
           if (order.getStatusFullName().equals("Penalized")) {
-            order.payPenalty("", "");
+            order.payPenalty("1234", "1234");
           }
 
           if (order.getStatusFullName().equals("Prepared")) {
             order.pickup();
           }
-
-          System.out.println(order.getStatusFullName());
-
           break;
     }
   }
