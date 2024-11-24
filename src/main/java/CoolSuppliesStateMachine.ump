@@ -1,31 +1,95 @@
-namespace ca.mcgill.ecse.coolsupplies.model;
-
 class Order {
+
+  // the following state machine does not include transitions that throw exceptions 
+  // to indicate to the caller that the transition is not possible - these transitions 
+  // (e.g., the negation of a condition) need to be added with appropriate exception messages
+
+  // it is assumed that input is not checked in the Controller,
+  // i.e., the Controller only ensures that the state machine can be called
+
   status {
     Started {
-      startSchoolYear -> Penalized;
-      pay(String authCode)  / { payForOrder(authCode); } -> Paid;
-    }
-    Penalized {
-      payForEverything(String authCode, String penaltyAuthCode) / { payForPenaltyAndOrder(authCode, penaltyAuthCode); } -> Prepared;
+      updateOrder(PurchaseLevel level, Student student) [isStudentOfParent(student)] / { doUpdateOrder(level, student); } -> Started;
+      addItem(InventoryItem item, int quantity) [isNotItemOfOrderAndQuantityPositive(item, quantity)] / { 
+        doAddItem(item, quantity);
+      } -> Started;
+      updateItem(OrderItem item, int quantity) [isItemOfOrderAndQuantityPositive(item, quantity)] / { 
+        doUpdateItem(item, quantity);
+      } -> Started;
+      deleteItem(OrderItem item) [isItemOfOrder(item)] / { doDeleteItem(item); } -> Started;
+      pay(String authorizationCode) [isNotNullOrEmpty(authorizationCode) && hasOrderItems()] / { doPay(authorizationCode); } -> Paid;
+      startSchoolYear() -> Penalized;
+      cancel() -> Final;
     }
     Paid {
-      startSchoolYear -> Prepared;
+      startSchoolYear() -> Prepared;
+      // refund is out of scope for this application
+      cancel() -> Final;
+    }
+    Penalized {
+      payPenalty(String authorizationCode, String penaltyAuthorizationCode) [isNotNullOrEmpty(authorizationCode, penaltyAuthorizationCode)] / {
+        doPayPenalty(authorizationCode, penaltyAuthorizationCode);
+      } -> Prepared;
     }
     Prepared {
-      receiveOrder -> PickedUp;
+      pickup() -> PickedUp;
     }
     PickedUp {
-      // Final state
     }
   }
 
-  // Implement actions within the model
-  void payForPenaltyAndOrder(String authCode, String penaltyAuthCode) {
-
+  private boolean isStudentOfParent(Student student) {
+    // TODO needs to be completed
+    return true;
   }
 
-  void payForOrder(String authCode) {
-    
+  private boolean isNotItemOfOrderAndQuantityPositive(InventoryItem item, int quantity) {
+    // TODO needs to be completed
+    return true;
   }
+
+  private boolean isItemOfOrderAndQuantityPositive(OrderItem item, int quantity) {
+    // TODO needs to be completed
+    return true;
+  }
+
+  private boolean isItemOfOrder(OrderItem item) {
+    // TODO needs to be completed
+    return true;
+  }
+
+  private boolean isNotNullOrEmpty(String code) {
+    // TODO needs to be completed
+    return true;
+  }
+
+  private boolean isNotNullOrEmpty(String code1, String code2) {
+    // TODO needs to be completed
+    return true;
+  }
+  
+  private void doUpdateOrder(PurchaseLevel level, Student student) {
+    // TODO needs to be completed
+  }
+
+  private void doAddItem(InventoryItem item, int quantity) {
+    // TODO needs to be completed
+  }
+
+  private void doUpdateItem(OrderItem item, int quantity) {
+    // TODO needs to be completed
+  }
+
+  private void doDeleteItem(OrderItem item) {
+    // TODO needs to be completed
+  }
+
+  private void doPay(String authorizationCode) {
+    // TODO needs to be completed
+  }
+
+  private void doPayPenalty(String authorizationCode, String penaltyAuthorizationCode) {
+    // TODO needs to be completed
+  }
+
 }

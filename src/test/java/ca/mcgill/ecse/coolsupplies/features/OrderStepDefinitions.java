@@ -323,7 +323,7 @@ public class OrderStepDefinitions {
             }
 
             if (order.getStatusFullName().equals("Penalized")) {
-              order.payForEverything("", "");
+              order.payPenalty("", "");
             }
             break;
         case "PickedUp":
@@ -337,11 +337,11 @@ public class OrderStepDefinitions {
           }
 
           if (order.getStatusFullName().equals("Penalized")) {
-            order.payForEverything("", "");
+            order.payPenalty("", "");
           }
 
           if (order.getStatusFullName().equals("Prepared")) {
-            order.receiveOrder();
+            order.pickup();
           }
 
           System.out.println(order.getStatusFullName());

@@ -6,7 +6,7 @@ import ca.mcgill.ecse.coolsupplies.model.BundleItem.PurchaseLevel;
 import java.util.*;
 import java.sql.Date;
 
-// line 3 "../../../../../CoolSuppliesStateMachine.ump"
+// line 1 "../../../../../CoolSuppliesStateMachine.ump"
 // line 30 "../../../../../CoolSuppliesPersistence.ump"
 // line 42 "../../../../../CoolSupplies.ump"
 public class Order
@@ -31,7 +31,7 @@ public class Order
   private boolean isPickedUp;
 
   //Order State Machines
-  public enum Status { Started, Penalized, Paid, Prepared, PickedUp }
+  public enum Status { Started, Final, Paid, Penalized, Prepared, PickedUp }
   private Status status;
 
   //Order Associations
@@ -188,6 +188,126 @@ public class Order
     return status;
   }
 
+  public boolean updateOrder(PurchaseLevel level,Student student)
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        if (isStudentOfParent(student))
+        {
+        // line 12 "../../../../../CoolSuppliesStateMachine.ump"
+          doUpdateOrder(level, student);
+          setStatus(Status.Started);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean addItem(InventoryItem item,int quantity)
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        if (isNotItemOfOrderAndQuantityPositive(item,quantity))
+        {
+        // line 13 "../../../../../CoolSuppliesStateMachine.ump"
+          doAddItem(item, quantity);
+          setStatus(Status.Started);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean updateItem(OrderItem item,int quantity)
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        if (isItemOfOrderAndQuantityPositive(item,quantity))
+        {
+        // line 16 "../../../../../CoolSuppliesStateMachine.ump"
+          doUpdateItem(item, quantity);
+          setStatus(Status.Started);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean deleteItem(OrderItem item)
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        if (isItemOfOrder(item))
+        {
+        // line 19 "../../../../../CoolSuppliesStateMachine.ump"
+          doDeleteItem(item);
+          setStatus(Status.Started);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean pay(String authorizationCode)
+  {
+    boolean wasEventProcessed = false;
+    
+    Status aStatus = status;
+    switch (aStatus)
+    {
+      case Started:
+        if (isNotNullOrEmpty(authorizationCode)&&hasOrderItems())
+        {
+        // line 20 "../../../../../CoolSuppliesStateMachine.ump"
+          doPay(authorizationCode);
+          setStatus(Status.Paid);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
   public boolean startSchoolYear()
   {
     boolean wasEventProcessed = false;
@@ -210,7 +330,7 @@ public class Order
     return wasEventProcessed;
   }
 
-  public boolean pay(String authCode)
+  public boolean cancel()
   {
     boolean wasEventProcessed = false;
     
@@ -218,9 +338,11 @@ public class Order
     switch (aStatus)
     {
       case Started:
-        // line 7 "../../../../../CoolSuppliesStateMachine.ump"
-        payForOrder(authCode);
-        setStatus(Status.Paid);
+        setStatus(Status.Final);
+        wasEventProcessed = true;
+        break;
+      case Paid:
+        setStatus(Status.Final);
         wasEventProcessed = true;
         break;
       default:
@@ -230,7 +352,7 @@ public class Order
     return wasEventProcessed;
   }
 
-  public boolean payForEverything(String authCode,String penaltyAuthCode)
+  public boolean payPenalty(String authorizationCode,String penaltyAuthorizationCode)
   {
     boolean wasEventProcessed = false;
     
@@ -238,10 +360,14 @@ public class Order
     switch (aStatus)
     {
       case Penalized:
-        // line 10 "../../../../../CoolSuppliesStateMachine.ump"
-        payForPenaltyAndOrder(authCode, penaltyAuthCode);
-        setStatus(Status.Prepared);
-        wasEventProcessed = true;
+        if (isNotNullOrEmpty(authorizationCode,penaltyAuthorizationCode))
+        {
+        // line 30 "../../../../../CoolSuppliesStateMachine.ump"
+          doPayPenalty(authorizationCode, penaltyAuthorizationCode);
+          setStatus(Status.Prepared);
+          wasEventProcessed = true;
+          break;
+        }
         break;
       default:
         // Other states do respond to this event
@@ -250,7 +376,7 @@ public class Order
     return wasEventProcessed;
   }
 
-  public boolean receiveOrder()
+  public boolean pickup()
   {
     boolean wasEventProcessed = false;
     
@@ -271,6 +397,14 @@ public class Order
   private void setStatus(Status aStatus)
   {
     status = aStatus;
+
+    // entry actions and do activities
+    switch(status)
+    {
+      case Final:
+        delete();
+        break;
+    }
   }
   /* Code from template association_GetOne */
   public Parent getParent()
@@ -475,19 +609,70 @@ public class Order
     }
   }
 
-
-  /**
-   * Implement actions within the model
-   */
-  // line 26 "../../../../../CoolSuppliesStateMachine.ump"
-  public void payForPenaltyAndOrder(String authCode, String penaltyAuthCode){
-    this.setAuthorizationCode(authCode);
-    this.setPenaltyAuthorizationCode(penaltyAuthCode);
+  // line 42 "../../../../../CoolSuppliesStateMachine.ump"
+   private boolean isStudentOfParent(Student student){
+    // TODO needs to be completed
+    return true;
   }
 
-  // line 30 "../../../../../CoolSuppliesStateMachine.ump"
-  public void payForOrder(String authCode){
-    this.setAuthorizationCode(authCode);
+  // line 47 "../../../../../CoolSuppliesStateMachine.ump"
+   private boolean isNotItemOfOrderAndQuantityPositive(InventoryItem item, int quantity){
+    // TODO needs to be completed
+    return true;
+  }
+
+  // line 52 "../../../../../CoolSuppliesStateMachine.ump"
+   private boolean isItemOfOrderAndQuantityPositive(OrderItem item, int quantity){
+    // TODO needs to be completed
+    return true;
+  }
+
+  // line 57 "../../../../../CoolSuppliesStateMachine.ump"
+   private boolean isItemOfOrder(OrderItem item){
+    // TODO needs to be completed
+    return true;
+  }
+
+  // line 62 "../../../../../CoolSuppliesStateMachine.ump"
+   private boolean isNotNullOrEmpty(String code){
+    // TODO needs to be completed
+    return true;
+  }
+
+  // line 67 "../../../../../CoolSuppliesStateMachine.ump"
+   private boolean isNotNullOrEmpty(String code1, String code2){
+    // TODO needs to be completed
+    return true;
+  }
+
+  // line 72 "../../../../../CoolSuppliesStateMachine.ump"
+   private void doUpdateOrder(PurchaseLevel level, Student student){
+    // TODO needs to be completed
+  }
+
+  // line 76 "../../../../../CoolSuppliesStateMachine.ump"
+   private void doAddItem(InventoryItem item, int quantity){
+    // TODO needs to be completed
+  }
+
+  // line 80 "../../../../../CoolSuppliesStateMachine.ump"
+   private void doUpdateItem(OrderItem item, int quantity){
+    // TODO needs to be completed
+  }
+
+  // line 84 "../../../../../CoolSuppliesStateMachine.ump"
+   private void doDeleteItem(OrderItem item){
+    // TODO needs to be completed
+  }
+
+  // line 88 "../../../../../CoolSuppliesStateMachine.ump"
+   private void doPay(String authorizationCode){
+    // TODO needs to be completed
+  }
+
+  // line 92 "../../../../../CoolSuppliesStateMachine.ump"
+   private void doPayPenalty(String authorizationCode, String penaltyAuthorizationCode){
+    // TODO needs to be completed
   }
 
   // line 32 "../../../../../CoolSuppliesPersistence.ump"

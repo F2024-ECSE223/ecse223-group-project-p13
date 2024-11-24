@@ -407,7 +407,7 @@ public class Iteration3Controller {
       return "Penalty authorization code is invalid";
     }
 
-    order.payForEverything(authCode, penaltyAuthCode);
+    order.payPenalty(authCode, penaltyAuthCode);
 
     //autosave
     try {
@@ -438,7 +438,7 @@ public class Iteration3Controller {
       return "Cannot pickup a " + state + " order";
     }
 
-    order.receiveOrder();
+    order.pickup();
     
     //autosave
     try {
