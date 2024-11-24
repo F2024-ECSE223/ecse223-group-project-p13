@@ -3,6 +3,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.GroupLayout.Alignment;
 import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -43,6 +44,7 @@ public class CoolSuppliesFxmlView extends Application {
     updateContent("Home");
 
     root.setLeft(sidebar);
+    // splashScreen();
     root.setCenter(mainContent);
 
     Scene scene = new Scene(root, 800, 600);
@@ -62,7 +64,7 @@ public class CoolSuppliesFxmlView extends Application {
     HBox header = createHeader();
 
     VBox navigation = new VBox(10);
-    String[] pages = {"Home", "Manage", "Settings", "Help"};
+    String[] pages = {"Account", "Students"};
 
     for (String page : pages) {
       Button button = createNavButton(page);
@@ -106,22 +108,59 @@ public class CoolSuppliesFxmlView extends Application {
   private void updateContent(String page) {
     mainContent.getChildren().clear();
 
-    if (page.toLowerCase().equals("manage")) {
-      try {
+    try {
+      if (page.toLowerCase().equals("account")) {
         var root = (Pane) FXMLLoader.load(getClass().getResource("ParentManager.fxml"));
 
         mainContent.getChildren().add(root);
         return;
-      } catch (IOException e) {
-        System.out.println(e);
+
       }
-    } else {
-      StackPane content = new StackPane();
-      Text text = new Text("This is the " + page + " page");
-      text.setStyle("-fx-font-size: 24px;");
-      content.getChildren().add(text);
-      mainContent.getChildren().add(content);
+      else if (page.toLowerCase().equals("students")) {
+        var root = (Pane) FXMLLoader.load(getClass().getResource("students.fxml"));
+
+        mainContent.getChildren().add(root);
+        return;
+      }
+      else {
+        StackPane content = new StackPane();
+        Text text = new Text("This is the " + page + " page");
+        text.setStyle("-fx-font-size: 24px;");
+        content.getChildren().add(text);
+        mainContent.getChildren().add(content);
+      }
+    } catch (IOException e) {
+      System.out.println(e);
     }
+  }
+
+  private void splashScreen() {
+    mainContent.getChildren().clear();
+
+    VBox box = new VBox();
+    box.setPadding(new Insets(16));
+
+    HBox buttons = new HBox();
+    Button admin = new Button("Admin");
+
+
+    Button parent = new Button("Parent");
+
+    // parent.setOnAction(e -> 
+
+    // );
+
+    buttons.getChildren().addAll(admin, parent);
+
+    Text title = new Text("Welcom to CoolSupplies");
+
+    box.getChildren().addAll(title, buttons);
+
+    mainContent.getChildren().add(box);
+  }
+
+  private void updateTab(String source) {
+
   }
 
   public void registerRefreshEvent(Node node) {

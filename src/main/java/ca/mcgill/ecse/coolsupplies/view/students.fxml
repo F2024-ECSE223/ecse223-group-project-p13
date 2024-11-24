@@ -31,7 +31,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </TextField>
-            <Button id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#searchStudent" text="Search">
+            <Button id="searchButton" alignment="CENTER" mnemonicParsing="false" text="Search">
                <HBox.margin>
                   <Insets left="40.0" />
                </HBox.margin>
