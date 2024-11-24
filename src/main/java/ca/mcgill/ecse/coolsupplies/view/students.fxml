@@ -9,21 +9,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="592.0" text="CoolSupplies" textAlignment="CENTER" textFill="#5c80bc">
-         <font>
-            <Font name="Bernard MT Condensed" size="33.0" />
-         </font>
-      </Label>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="584.0" text="List of Students registered in CoolSupplies application" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <TextField alignment="CENTER" maxWidth="-Infinity" prefHeight="26.0" prefWidth="193.0" promptText="Search student by name">
@@ -59,7 +47,7 @@
                </HBox.margin>
             </Label>
             <ComboBox id="gradeInputCombo" prefWidth="150.0" />
-            <Button id="addButton" mnemonicParsing="false" onAction="#addStudent" text="Add">
+            <Button id="addButton" mnemonicParsing="false" text="Add">
                <HBox.margin>
                   <Insets left="80.0" />
                </HBox.margin>
