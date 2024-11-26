@@ -1,9 +1,11 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import java.io.IOException;
+import java.rmi.registry.Registry;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.GroupLayout.Alignment;
 import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -19,8 +21,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -30,21 +35,23 @@ public class CoolSuppliesFxmlView extends Application {
   private List<Node> refreshableNodes = new ArrayList<>();
 
   private StackPane mainContent;
+  private BorderPane root;
+
+  private ParentManagerView parentManager = new ParentManagerView();
+  private AdminManagerView adminManager = new AdminManagerView();
+
+  private static Font title = new Font(30);
+  
+  private static Image icon =
+      new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
 
   @Override
   public void start(Stage primaryStage) {
     Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
-    BorderPane root = new BorderPane();
-
-    VBox sidebar = createSidebar();
-    sidebar.setPrefWidth(200);
-
+    root = new BorderPane();
     mainContent = new StackPane();
-
-    updateContent("Home");
-
-    root.setLeft(sidebar);
-    // splashScreen();
+   
+    splashScreen();
     root.setCenter(mainContent);
 
     Scene scene = new Scene(root, 800, 600);
@@ -56,118 +63,72 @@ public class CoolSuppliesFxmlView extends Application {
     primaryStage.show();
   }
 
-  private VBox createSidebar() {
-    VBox sidebar = new VBox(10);
-    sidebar.setPadding(new Insets(10));
-    sidebar.setAlignment(Pos.TOP_CENTER);
-
-    HBox header = createHeader();
-
-    VBox navigation = new VBox(10);
-    String[] pages = {"Account", "Students", "Orders"};
-
-    for (String page : pages) {
-      Button button = createNavButton(page);
-      navigation.getChildren().add(button);
-    }
-
-    sidebar.getChildren().addAll(header, navigation);
-
-    return sidebar;
-  }
-
-  private HBox createHeader() {
-    HBox header = new HBox(10);
-    header.setPadding(new Insets(15));
-    header.setAlignment(Pos.CENTER_LEFT);
-
-    Text title = new Text("CoolSupplies");
-    ImageView imageView = new ImageView();
-    Image icon = new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
-    imageView.setImage(icon);
-    imageView.setFitHeight(60);
-    imageView.setFitWidth(60);
-    imageView.setPreserveRatio(true);
-
-    header.getChildren().addAll(imageView, title);
-
-    return header;
-  }
-
-  private Button createNavButton(String text) {
-    Button button = new Button(text);
-    button.setMaxWidth(Double.MAX_VALUE);
-    button.setAlignment(Pos.CENTER_LEFT);
-    button.setPadding(new Insets(10));
-
-    button.setOnAction(e -> updateContent(text));
-
-    return button;
-  }
-
-  private void updateContent(String page) {
-    mainContent.getChildren().clear();
-
-    try {
-      if (page.toLowerCase().equals("account")) {
-        var root = (Pane) FXMLLoader.load(getClass().getResource("ParentManager.fxml"));
-
-        mainContent.getChildren().add(root);
-        return;
-
-      }
-      else if (page.toLowerCase().equals("students")) {
-        var root = (Pane) FXMLLoader.load(getClass().getResource("students.fxml"));
-
-        mainContent.getChildren().add(root);
-        return;
-      }
-      else if (page.toLowerCase().equals("orders")){
-        var root = (Pane) FXMLLoader.load(getClass().getResource("addItem.fxml"));
-        mainContent.getChildren().add(root);
-        return;
-
-      }
-      else {
-        StackPane content = new StackPane();
-        Text text = new Text("This is the " + page + " page");
-        text.setStyle("-fx-font-size: 24px;");
-        content.getChildren().add(text);
-        mainContent.getChildren().add(content);
-      }
-    } catch (IOException e) {
-      System.out.println(e);
-    }
-  }
-
   private void splashScreen() {
     mainContent.getChildren().clear();
+    root.getChildren().clear();
 
     VBox box = new VBox();
-    box.setPadding(new Insets(16));
+    box.setPrefSize(400, 600);
+    box.setAlignment(Pos.CENTER);
 
     HBox buttons = new HBox();
-    Button admin = new Button("Admin");
+    buttons.setAlignment(Pos.CENTER);
+    buttons.setSpacing(60);
 
+    Button admin = new Button("Admin");
+    admin.setPrefSize(100, 80);
+    admin.setOnAction(e -> updateTab("admin"));
 
     Button parent = new Button("Parent");
-
-    // parent.setOnAction(e -> 
-
-    // );
+    parent.setPrefSize(100, 80);
+    parent.setOnAction(e -> updateTab("parent"));
 
     buttons.getChildren().addAll(admin, parent);
 
-    Text title = new Text("Welcome to CoolSupplies");
+    VBox header = new VBox(16);
+    header.setPadding(new Insets(0, 0, 16, 0));
+    header.setAlignment(Pos.CENTER);
 
-    box.getChildren().addAll(title, buttons);
+    ImageView imageView = new ImageView(CoolSuppliesFxmlView.icon);
+    imageView.setFitHeight(100);
+    imageView.setFitWidth(100);
+    imageView.setScaleX(3);
+    imageView.setScaleY(3);
+
+    imageView.setPreserveRatio(true);
+
+    Text title = new Text("Welcome to CoolSupplies, TechnoDupes!");
+    title.setFont(CoolSuppliesFxmlView.title);
+
+    LocalDate currentDate = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE MMMM, YYYY");
+    String formattedDate = "Today is " + currentDate.format(formatter);
+
+    Text date = new Text(formattedDate);
+
+    header.getChildren().addAll(imageView, title, date);
+
+    box.getChildren().addAll(header, buttons);
 
     mainContent.getChildren().add(box);
   }
 
   private void updateTab(String source) {
+    if (source.equalsIgnoreCase("parent")) {
+      parentManager.setContent(mainContent);
+      VBox sidebar = parentManager.createSidebar();
 
+      root.setLeft(sidebar);
+    }
+    else if (source.equalsIgnoreCase("admin")) {
+      adminManager.setContent(mainContent);
+      VBox sidebar = adminManager.createSidebar();
+
+      root.setLeft(sidebar);
+    }
   }
+
+ 
 
   public void registerRefreshEvent(Node node) {
     refreshableNodes.add(node);
