@@ -15,7 +15,7 @@
    <children>
       <AnchorPane prefHeight="86.0" prefWidth="652.0">
          <children>
-            <TextField alignment="CENTER" layoutX="14.0" layoutY="32.0" maxWidth="-Infinity" prefHeight="26.0" prefWidth="193.0" promptText="Search student by name" />
+            <TextField id=searchStudent alignment="CENTER" layoutX="14.0" layoutY="32.0" maxWidth="-Infinity" prefHeight="26.0" prefWidth="193.0" promptText="Search student by name" />
             <Button id="searchButton" alignment="CENTER" layoutX="255.0" layoutY="32.0" mnemonicParsing="false" text="Search" />
          </children>
       </AnchorPane>
