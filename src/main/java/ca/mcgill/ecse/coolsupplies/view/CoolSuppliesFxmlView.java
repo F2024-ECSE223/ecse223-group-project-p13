@@ -120,7 +120,6 @@ public class CoolSuppliesFxmlView extends Application {
   private void updateTab(String source) {
     if (source.equalsIgnoreCase("parent")) {
       parentManager = new ParentManagerView(root, mainContent);
-      parentManager.setContent(mainContent);
       parentManager.setSignOut((a) -> {
         this.splashScreen();
         return null;
@@ -130,7 +129,6 @@ public class CoolSuppliesFxmlView extends Application {
       root.setLeft(sidebar);
     } else if (source.equalsIgnoreCase("admin")) {
       adminManager = new AdminManagerView(root, mainContent);
-      adminManager.setContent(mainContent);
       adminManager.setSignOut((a) -> {
         this.splashScreen();
         return null;

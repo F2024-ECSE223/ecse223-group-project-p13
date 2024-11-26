@@ -1,23 +1,10 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import java.io.IOException;
-import java.util.function.Function;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class AdminManagerView {
+public class AdminManagerView extends ManagerView {
   /* Menu Items */
   private static final String ACCOUNT = "Account";
   private static final String PARENTS = "Parents";
@@ -27,76 +14,13 @@ public class AdminManagerView {
   private static final String BUNDLES = "Bundles";
   private static final String ORDERS = "Orders";
 
-  private StackPane mainContent;
-  private Function<Void, Void> signOut;
-
-  private BorderPane root;
-
-  public void setContent(StackPane mainContent) {
-    this.mainContent = mainContent;
-  }
-
-  public void setSignOut(Function<Void, Void> signOut) {
-    this.signOut = signOut;
-  }
-
   public AdminManagerView(BorderPane root, StackPane mainContent) {
     this.root = root;
     this.mainContent = mainContent;
   }
 
-  public VBox createSidebar() {
-    VBox sidebar = new VBox(10);
-    sidebar.setPadding(new Insets(10));
-    sidebar.setAlignment(Pos.TOP_CENTER);
-    this.createMenubar();
-
-    HBox header = createHeader();
-
-    VBox navigation = new VBox(10);
-    String[] pages = {ACCOUNT, PARENTS, GRADES, STUDENTS, ITEMS, BUNDLES, ORDERS};
-
-    for (String page : pages) {
-      Button button = createNavButton(page);
-      navigation.getChildren().add(button);
-    }
-
-    sidebar.getChildren().addAll(header, navigation);
-    this.updateContent(ACCOUNT);
-
-    return sidebar;
-  }
-
-  private HBox createHeader() {
-    HBox header = new HBox(10);
-    header.setPadding(new Insets(15));
-    header.setAlignment(Pos.CENTER_LEFT);
-
-    Text title = new Text("CoolSupplies");
-    ImageView imageView = new ImageView();
-    Image icon = new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
-    imageView.setImage(icon);
-    imageView.setFitHeight(60);
-    imageView.setFitWidth(60);
-    imageView.setPreserveRatio(true);
-
-    header.getChildren().addAll(imageView, title);
-
-    return header;
-  }
-
-  private Button createNavButton(String text) {
-    Button button = new Button(text);
-    button.setMaxWidth(Double.MAX_VALUE);
-    button.setAlignment(Pos.CENTER_LEFT);
-    button.setPadding(new Insets(10));
-
-    button.setOnAction(e -> updateContent(text));
-
-    return button;
-  }
-
-  private void updateContent(String page) {
+  @Override
+  public void updateContent(String page) {
     mainContent.getChildren().clear();
 
     if (page.equals(STUDENTS)) {
@@ -111,27 +35,8 @@ public class AdminManagerView {
     }
   }
 
-  private void createMenubar() {
-    HBox box = new HBox(16);
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
-    Button signOut = new Button("Sign Out");
-    signOut.setOnAction( e -> 
-      this.signOut.apply(null)
-    );
-
-    Text version = new Text("v1.0.0");
-    box.getChildren().addAll(version, spacer, signOut);
-    this.root.setBottom(box);
-  }
-
-  private void setMain(String fxml) {
-    try {
-      var root = (Pane) FXMLLoader.load(getClass().getResource("fxml/" + fxml));
-
-      mainContent.getChildren().add(root);
-    } catch (IOException e) {
-      System.out.println(e);
-    }
+  @Override
+  public String[] getTabs() {
+    return new String[] {ACCOUNT, PARENTS, STUDENTS, GRADES, ITEMS, BUNDLES, ORDERS};
   }
 }
