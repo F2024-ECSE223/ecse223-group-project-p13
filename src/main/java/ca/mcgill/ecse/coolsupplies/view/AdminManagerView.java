@@ -107,7 +107,6 @@ public class AdminManagerView {
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
     Button signOut = new Button("Sign Out");
-    signOut.setOnAction(e -> this.signOut.call());
 
     Text version = new Text("v1.0.0");
     box.getChildren().addAll(version, spacer, signOut);

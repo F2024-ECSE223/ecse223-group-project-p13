@@ -1,7 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import java.io.IOException;
-import java.rmi.registry.Registry;
+import java.awt.Taskbar;
+import java.awt.Toolkit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventType;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -20,9 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -50,6 +46,8 @@ public class CoolSuppliesFxmlView extends Application {
     Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
     root = new BorderPane();
     mainContent = new StackPane();
+
+    setAppIcon();
    
     splashScreen();
     root.setCenter(mainContent);
@@ -63,6 +61,10 @@ public class CoolSuppliesFxmlView extends Application {
     primaryStage.show();
   }
 
+  /**
+   * @author Trevor Piltch
+   * @brief Creates the initial launch screen with options to switch to parent or admin views.
+   */
   private void splashScreen() {
     mainContent.getChildren().clear();
     root.getChildren().clear();
@@ -128,8 +130,7 @@ public class CoolSuppliesFxmlView extends Application {
     }
   }
 
- 
-
+  /* MARK: Helper Methods */
   public void registerRefreshEvent(Node node) {
     refreshableNodes.add(node);
   }
@@ -152,5 +153,21 @@ public class CoolSuppliesFxmlView extends Application {
 
   public static CoolSuppliesFxmlView getInstance() {
     return instance;
+  }
+
+  /**
+   * @author Trevor Piltch
+   * @brief Sets the application icon for the dock or taskbar depending on the operating system
+   */
+  private void setAppIcon() {
+    if (Taskbar.isTaskbarSupported()) {
+      Taskbar taskbar = Taskbar.getTaskbar();
+
+      if (taskbar.isSupported(java.awt.Taskbar.Feature.ICON_IMAGE)) {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        java.awt.Image image = tk.getImage(CoolSuppliesFxmlView.class.getResource("resources/app_icon.png"));
+        taskbar.setIconImage(image);
+      }
+    }
   }
 }
