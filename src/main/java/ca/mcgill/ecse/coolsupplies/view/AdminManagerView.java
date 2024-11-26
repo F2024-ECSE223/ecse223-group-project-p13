@@ -1,13 +1,14 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
+import java.util.function.Function;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -27,21 +28,28 @@ public class AdminManagerView {
   private static final String ORDERS = "Orders";
 
   private StackPane mainContent;
-  private HBox header;
-  private Callable<Void> signOut;
+  private Function<Void, Void> signOut;
+
+  private BorderPane root;
 
   public void setContent(StackPane mainContent) {
     this.mainContent = mainContent;
   }
 
-  public void setHeader(HBox header) {
-    this.header = header;
+  public void setSignOut(Function<Void, Void> signOut) {
+    this.signOut = signOut;
+  }
+
+  public AdminManagerView(BorderPane root, StackPane mainContent) {
+    this.root = root;
+    this.mainContent = mainContent;
   }
 
   public VBox createSidebar() {
     VBox sidebar = new VBox(10);
     sidebar.setPadding(new Insets(10));
     sidebar.setAlignment(Pos.TOP_CENTER);
+    this.createMenubar();
 
     HBox header = createHeader();
 
@@ -93,7 +101,8 @@ public class AdminManagerView {
 
     if (page.equals(STUDENTS)) {
       setMain("students.fxml");
-    } else {
+    } 
+    else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");
       text.setStyle("-fx-font-size: 24px;");
@@ -102,19 +111,23 @@ public class AdminManagerView {
     }
   }
 
- private void createMenubar() {
+  private void createMenubar() {
     HBox box = new HBox(16);
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
     Button signOut = new Button("Sign Out");
+    signOut.setOnAction( e -> 
+      this.signOut.apply(null)
+    );
 
     Text version = new Text("v1.0.0");
     box.getChildren().addAll(version, spacer, signOut);
+    this.root.setBottom(box);
   }
 
   private void setMain(String fxml) {
     try {
-      var root = (Pane) FXMLLoader.load(getClass().getResource(fxml));
+      var root = (Pane) FXMLLoader.load(getClass().getResource("fxml/" + fxml));
 
       mainContent.getChildren().add(root);
     } catch (IOException e) {

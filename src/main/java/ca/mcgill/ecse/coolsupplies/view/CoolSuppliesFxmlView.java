@@ -33,11 +33,11 @@ public class CoolSuppliesFxmlView extends Application {
   private StackPane mainContent;
   private BorderPane root;
 
-  private ParentManagerView parentManager = new ParentManagerView();
-  private AdminManagerView adminManager = new AdminManagerView();
+  private ParentManagerView parentManager;
+  private AdminManagerView adminManager;
 
   private static Font title = new Font(30);
-  
+
   private static Image icon =
       new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
 
@@ -48,9 +48,8 @@ public class CoolSuppliesFxmlView extends Application {
     mainContent = new StackPane();
 
     setAppIcon();
-   
+
     splashScreen();
-    root.setCenter(mainContent);
 
     Scene scene = new Scene(root, 800, 600);
 
@@ -60,6 +59,8 @@ public class CoolSuppliesFxmlView extends Application {
     primaryStage.setScene(scene);
     primaryStage.show();
   }
+
+  /* MARK: Views */
 
   /**
    * @author Trevor Piltch
@@ -103,7 +104,7 @@ public class CoolSuppliesFxmlView extends Application {
     title.setFont(CoolSuppliesFxmlView.title);
 
     LocalDate currentDate = LocalDate.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE MMMM, YYYY");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE MMMM dd, YYYY");
     String formattedDate = "Today is " + currentDate.format(formatter);
 
     Text date = new Text(formattedDate);
@@ -113,17 +114,27 @@ public class CoolSuppliesFxmlView extends Application {
     box.getChildren().addAll(header, buttons);
 
     mainContent.getChildren().add(box);
+    root.setCenter(mainContent);
   }
 
   private void updateTab(String source) {
     if (source.equalsIgnoreCase("parent")) {
+      parentManager = new ParentManagerView(root, mainContent);
       parentManager.setContent(mainContent);
+      parentManager.setSignOut((a) -> {
+        this.splashScreen();
+        return null;
+      });
       VBox sidebar = parentManager.createSidebar();
 
       root.setLeft(sidebar);
-    }
-    else if (source.equalsIgnoreCase("admin")) {
+    } else if (source.equalsIgnoreCase("admin")) {
+      adminManager = new AdminManagerView(root, mainContent);
       adminManager.setContent(mainContent);
+      adminManager.setSignOut((a) -> {
+        this.splashScreen();
+        return null;
+      });
       VBox sidebar = adminManager.createSidebar();
 
       root.setLeft(sidebar);
@@ -165,7 +176,8 @@ public class CoolSuppliesFxmlView extends Application {
 
       if (taskbar.isSupported(java.awt.Taskbar.Feature.ICON_IMAGE)) {
         Toolkit tk = Toolkit.getDefaultToolkit();
-        java.awt.Image image = tk.getImage(CoolSuppliesFxmlView.class.getResource("resources/app_icon.png"));
+        java.awt.Image image =
+            tk.getImage(CoolSuppliesFxmlView.class.getResource("resources/app_icon.png"));
         taskbar.setIconImage(image);
       }
     }
