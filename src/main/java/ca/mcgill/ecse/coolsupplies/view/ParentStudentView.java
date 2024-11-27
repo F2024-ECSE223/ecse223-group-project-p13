@@ -2,11 +2,9 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
-import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet4Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import ca.mcgill.ecse.coolsupplies.controller.TOStudent;
-import javafx.beans.value.ObservableStringValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

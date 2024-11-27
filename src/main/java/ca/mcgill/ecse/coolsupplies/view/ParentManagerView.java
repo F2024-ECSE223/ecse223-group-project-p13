@@ -20,9 +20,13 @@ public class ParentManagerView extends ManagerView {
 
     if (page.equals(STUDENTS)) {
       new ParentStudentView(mainContent);
-
       return;
-    } else {
+    }
+    else if (page.equals(ORDERS)) {
+      new OrderView(mainContent);
+      return;
+    }
+    else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");
       text.setStyle("-fx-font-size: 24px;");

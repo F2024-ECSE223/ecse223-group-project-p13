@@ -442,7 +442,7 @@ public class Iteration3Controller {
     List<TOOrder> toOrders = new ArrayList<>();
 
     for (Order order : orders) {
-      toOrders.add(convertOrder(order));
+      toOrders.add(viewOrder(Integer.toString(order.getNumber())));
     }
 
     return toOrders;
