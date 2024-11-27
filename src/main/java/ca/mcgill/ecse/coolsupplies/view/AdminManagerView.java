@@ -24,10 +24,17 @@ public class AdminManagerView extends ManagerView {
   public void updateContent(String page) {
     mainContent.getChildren().clear();
 
-    if (page.equals(STUDENTS)) {
+    if (page.equals(ACCOUNT)) {
+      setMain("Update_Admin_password.fxml");
+      return;
+    }
+    else if (page.equals(STUDENTS)) {
       setMain("students.fxml");
       return;
     } 
+    else if (page.equals(PARENTS)) {
+      setMain("remove_parent.fxml");
+    }
     else if (page.equals("Start School Year")){
       StackPane content = new StackPane();
       Text text = new Text("School year started successfully!");

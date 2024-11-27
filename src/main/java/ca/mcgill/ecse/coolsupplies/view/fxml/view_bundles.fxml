@@ -9,22 +9,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ScrollPane prefHeight="407.0" prefWidth="600.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="605.0">
                <children>
-                  <Button layoutX="406.0" layoutY="25.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="159.0" text="New Bundle" textFill="#023c40" />
+                  <Button id="newBundles" layoutX="406.0" layoutY="25.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="159.0" text="New Bundle" textFill="#023c40">
+                     <font>
+                        <Font name="Rockwell" size="18.0" />
+                     </font>
+                  </Button>
                   <Label layoutX="43.0" layoutY="36.0" prefHeight="43.0" prefWidth="177.0" text="All Bundles" textFill="#023c40">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="Rockwell" size="26.0" />
                      </font>
                   </Label>
                   <ScrollPane layoutX="24.0" layoutY="103.0" prefHeight="263.0" prefWidth="540.0">
                      <content>
                         <TableView prefHeight="262.0" prefWidth="540.0">
                           <columns>
-                            <TableColumn prefWidth="277.2459487915039" text="Bundle Name" />
-                            <TableColumn prefWidth="245.7541
+                            <TableColumn id="bundleName" prefWidth="277.2459487915039" text="Bundle Name" />
+                            <TableColumn id="bundkeGrade" prefWidth="245.75411987304688" text="Bundle Grade" />
+                          </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</VBox>
