@@ -19,7 +19,7 @@ public class RegisterParentView {
     private TextField phoneRegisterParent;
 
     @FXML
-    private TextField passwordRegisterParent;
+    private PasswordField passwordRegisterParent;
 
     @FXML
     private Button buttonSaveRegisterParent;
@@ -38,7 +38,7 @@ public class RegisterParentView {
         String password = passwordRegisterParent.getText();
 
         String message = CoolSuppliesFeatureSet1Controller.addParent(email, password, name, phoneNumber);
-        if (message.isEmpty())
+        if (!message.isEmpty())
         {
             errorMessageRegisterParent.setText(message);
         }
