@@ -18,7 +18,10 @@ public class ParentManagerView extends ManagerView {
   public void updateContent(String page) {
     mainContent.getChildren().clear();
 
-    if (page.equals(STUDENTS)) {
+    if (page.equals(ACCOUNT)) {
+      setMain("update_parent.fxml");
+    }
+    else if (page.equals(STUDENTS)) {
       new ParentStudentView(mainContent);
       return;
     }
