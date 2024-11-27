@@ -24,7 +24,11 @@ public class AdminManagerView extends ManagerView {
   public void updateContent(String page) {
     mainContent.getChildren().clear();
 
-    if (page.equals(STUDENTS)) {
+    if (page.equals(ACCOUNT)) {
+      setMain("Update_Admin_password.fxml");
+      return;
+    }
+    else if (page.equals(STUDENTS)) {
       setMain("students.fxml");
       return;
     } 
