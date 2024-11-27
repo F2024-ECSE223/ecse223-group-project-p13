@@ -5,6 +5,8 @@ import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import ca.mcgill.ecse.coolsupplies.controller.TOStudent;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -23,13 +25,17 @@ import javafx.scene.text.Text;
 public class ParentStudentView {
   private StackPane mainContent;
   private String err = "";
-  private String parentEmail = "";
+  private StringProperty parentEmail = new SimpleStringProperty(""); 
 
   private ObservableList<TOStudent> associatedList;
   private ObservableList<TOStudent> allList;
 
   public ParentStudentView(StackPane mainContent) {
     this.mainContent = mainContent;
+    this.associatedList = FXCollections.observableArrayList(
+        CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail.get()));
+    this.allList =
+        FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
 
     ListView<TOStudent> list = this.createAssociatedList();
     ListView<TOStudent> fullList = this.createFullList();
@@ -78,8 +84,16 @@ public class ParentStudentView {
         TOParent selected = box.getSelectionModel().getSelectedItem();
 
         if (selected != null) {
-          this.parentEmail = selected.getEmail();
-          updateLists();
+          this.parentEmail.set(selected.getEmail());
+          this.parentEmail.addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+              associatedList.clear();
+              associatedList
+                  .addAll(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(newValue));
+                  updateLists();
+                  
+            }
+          });
         }
       });
 
@@ -93,9 +107,6 @@ public class ParentStudentView {
 
   // MARK: List of students associated with parent
   private ListView<TOStudent> createAssociatedList() {
-    associatedList = FXCollections
-        .observableList(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail));
-
     ListView<TOStudent> listView = new ListView<>(associatedList);
     listView.setCellFactory(l -> new ListCell<TOStudent>() {
       @Override
@@ -124,8 +135,7 @@ public class ParentStudentView {
     Button delete = new Button("Remove");
     delete.setOnAction((e) -> {
       err =
-          CoolSuppliesFeatureSet6Controller.deleteStudentFromParent(student.getName(), parentEmail);
-        
+          CoolSuppliesFeatureSet6Controller.deleteStudentFromParent(student.getName(), parentEmail.get());
           CoolSuppliesFxmlView.handleErr(err);
 
       if (err.isEmpty()) {
@@ -149,7 +159,7 @@ public class ParentStudentView {
 
     Button delete = new Button("Add");
     delete.setOnAction((e) -> {
-      err = CoolSuppliesFeatureSet6Controller.addStudentToParent(student.getName(), parentEmail);
+      err = CoolSuppliesFeatureSet6Controller.addStudentToParent(student.getName(), parentEmail.get());
       CoolSuppliesFxmlView.handleErr(err);
       if (err.isEmpty()) {
         associatedList.add(student);
@@ -167,8 +177,6 @@ public class ParentStudentView {
   }
 
   private ListView<TOStudent> createFullList() {
-    updateLists();
-
     ListView<TOStudent> listView = new ListView<>(allList);
     listView.setCellFactory(l -> new ListCell<TOStudent>() {
       @Override
@@ -186,9 +194,6 @@ public class ParentStudentView {
   }
 
   private void updateLists() {
-    associatedList.clear();
-    associatedList.addAll(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail));
-    allList = FXCollections.observableList(CoolSuppliesFeatureSet2Controller.getStudents());
     allList.filtered((student) -> {
       return !associatedList.contains(student);
     });

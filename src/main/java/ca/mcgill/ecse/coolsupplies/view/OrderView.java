@@ -56,12 +56,14 @@ public class OrderView {
     VBox content = new VBox(16);
 
     HBox selection = new HBox(16);
+    selection.setAlignment(Pos.CENTER_LEFT);
     Text label1 = new Text("Parent: ");
     Text label2 = new Text("Student: ");
 
     selection.getChildren().addAll(label1, selectParent(), label2, selectStudent(), createOrderLevel());
 
     TextField orderID = new TextField("");
+    orderID.setPromptText("Order number");
 
     content.getChildren().addAll(selection, orderID);
 
