@@ -3,6 +3,7 @@ package ca.mcgill.ecse.coolsupplies.application;
 import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
 import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 import ca.mcgill.ecse.coolsupplies.view.CoolSuppliesFxmlView;
+import ca.mcgill.ecse.coolsupplies.view.DemoFileCreator;
 import javafx.application.Application;
 
 public class CoolSuppliesApplication {
@@ -10,6 +11,7 @@ public class CoolSuppliesApplication {
   private static CoolSupplies coolSupplies;
 
   public static void main(String[] args) {
+    DemoFileCreator.createDemoData();
     Application.launch(CoolSuppliesFxmlView.class, args);
   }
 

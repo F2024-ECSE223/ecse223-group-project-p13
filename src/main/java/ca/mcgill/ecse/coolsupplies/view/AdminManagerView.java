@@ -25,6 +25,7 @@ public class AdminManagerView extends ManagerView {
 
     if (page.equals(STUDENTS)) {
       setMain("students.fxml");
+      return;
     } 
     else {
       StackPane content = new StackPane();

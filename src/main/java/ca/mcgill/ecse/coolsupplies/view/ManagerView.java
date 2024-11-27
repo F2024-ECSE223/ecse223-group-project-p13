@@ -2,6 +2,9 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import java.io.IOException;
 import java.util.function.Function;
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +24,8 @@ public abstract class ManagerView {
   public StackPane mainContent;
   public BorderPane root;
   public Function<Void, Void> signOut;
+
+  private Boolean isLight = true;
 
   public VBox createSidebar() {
     VBox sidebar = new VBox(10);
@@ -82,14 +87,29 @@ public abstract class ManagerView {
 
   private void createMenubar() {
     HBox box = new HBox(16);
+    box.setPadding(new Insets(16, 16, 16, 16));
+
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
+
     Button signOut = new Button("Sign Out");
     signOut.setOnAction(e -> this.signOut.apply(null));
 
+    Button theme = new Button(isLight ? "Dark" : "Light");
+    theme.setOnAction((e) -> {
+      if (isLight) {
+        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+      } 
+      else {
+        Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+      }
+      this.isLight = !this.isLight;
+      this.createMenubar();
+    });
+
     Text version = new Text("v1.0.0");
-    box.getChildren().addAll(version, spacer, signOut);
-    this.root.setBottom(box);
+    box.getChildren().addAll(version, spacer, theme, signOut);
+    this.root.setTop(box);
   }
 
   public void setMain(String fxml) {

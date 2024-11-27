@@ -36,9 +36,10 @@ public class CoolSuppliesFxmlView extends Application {
   private ParentManagerView parentManager;
   private AdminManagerView adminManager;
 
-  private static Font title = new Font(30);
+  public static Font title = new Font(26);
+  public static Font title2 = new Font(22);
 
-  private static Image icon =
+  public static Image icon =
       new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
 
   @Override
@@ -178,6 +179,12 @@ public class CoolSuppliesFxmlView extends Application {
             tk.getImage(CoolSuppliesFxmlView.class.getResource("resources/app_icon.png"));
         taskbar.setIconImage(image);
       }
+    }
+  }
+
+  public static void handleErr(String err) {
+    if (!err.isEmpty()) {
+      System.out.println("ERROR: " + err);
     }
   }
 }
