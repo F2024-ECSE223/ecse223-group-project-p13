@@ -36,6 +36,10 @@ public class AdminManagerView extends ManagerView {
       mainContent.getChildren().add(content);
     
     }
+    else if (page.equals(BUNDLES)) {
+      setMain("viewBundles.fxml");
+      return;
+    }
     else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");
