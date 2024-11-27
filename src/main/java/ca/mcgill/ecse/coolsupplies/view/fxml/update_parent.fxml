@@ -17,38 +17,38 @@
             <AnchorPane prefHeight="608.0" prefWidth="600.0">
                <children>
                   <Separator layoutY="52.0" prefHeight="3.0" prefWidth="600.0" />
-                  <Label layoutX="136.0" layoutY="14.0" text="Update Account Information ">
+                  <Label layoutX="136.0" layoutY="14.0" prefHeight="32.0" prefWidth="450.0" text="Update Account Information ">
                      <font>
                         <Font name="Rockwell" size="26.0" />
                      </font>
                   </Label>
-                  <Label layoutX="59.0" layoutY="76.0" text="Enter Old Password">
+                  <Label layoutX="59.0" layoutY="76.0" prefHeight="27.0" prefWidth="433.0" text="Enter Old Password">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="56.0" layoutY="171.0" text="Enter New Password (if changed)">
+                  <Label layoutX="56.0" layoutY="171.0" prefHeight="27.0" prefWidth="460.0" text="Enter New Password (if changed)">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="57.0" layoutY="263.0" text="Enter New Password Again (if changed)">
+                  <Label layoutX="57.0" layoutY="263.0" prefHeight="27.0" prefWidth="510.0" text="Enter New Password Again (if changed)">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="59.0" layoutY="366.0" text="Enter phone number (if changed)">
+                  <Label layoutX="59.0" layoutY="366.0" prefHeight="27.0" prefWidth="492.0" text="Enter phone number (if changed)">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="58.0" layoutY="454.0" text="Enter name (if changed)">
+                  <Label layoutX="58.0" layoutY="454.0" prefHeight="27.0" prefWidth="457.0" text="Enter name (if changed)">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="60.0" layoutY="394.0" prefHeight="26.0" prefWidth="337.0" />
-                  <TextField layoutX="57.0" layoutY="481.0" prefHeight="26.0" prefWidth="338.0" />
+                  <TextField layoutX="60.0" layoutY="394.0" prefHeight="26.0" prefWidth="406.0" />
+                  <TextField layoutX="57.0" layoutY="481.0" prefHeight="26.0" prefWidth="403.0" />
                   <PasswordField layoutX="57.0" layoutY="290.0" prefHeight="26.0" prefWidth="404.0" />
                   <PasswordField layoutX="56.0" layoutY="198.0" prefHeight="26.0" prefWidth="404.0" />
                   <PasswordField layoutX="59.0" layoutY="103.0" prefHeight="26.0" prefWidth="402.0" />
