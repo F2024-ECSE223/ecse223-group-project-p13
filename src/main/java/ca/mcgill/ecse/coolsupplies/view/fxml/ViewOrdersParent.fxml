@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="567.0" prefWidth="688.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="org.example.viewordersparent.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <children>
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="463.0" prefWidth="285.0">
+         <children>
+            <ScrollPane fx:id="ordersScroll" layoutX="111.0" layoutY="88.0" prefHeight="346.0" prefWidth="529.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="346.0" prefWidth="529.0">
+                     <children>
+                        <TableView fx:id="ordersTable" layoutX="2.0" layoutY="5.0" prefHeight="329.0" prefWidth="512.0">
+                           <columns>
+                              <TableColumn fx:id="orderNo" prefWidth="103.99993586540222" text="Order Number " />
+                              <TableColumn fx:id="OrderStudent" prefWidth="194.40008544921875" text="Student " />
+                              <TableColumn fx:id="dateOrdered" prefWidth="123.19996643066406" text="Date Ordered " />
+                              <TableColumn fx:id="orderStatus" prefWidth="86.40003967285156" text="Status " />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
