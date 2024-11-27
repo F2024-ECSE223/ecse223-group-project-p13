@@ -13,6 +13,7 @@ public class AdminManagerView extends ManagerView {
   private static final String ITEMS = "Items";
   private static final String BUNDLES = "Bundles";
   private static final String ORDERS = "Orders";
+  private static final String YEAR = "Start School Year";
 
   public AdminManagerView(BorderPane root, StackPane mainContent) {
     this.root = root;
@@ -27,6 +28,14 @@ public class AdminManagerView extends ManagerView {
       setMain("students.fxml");
       return;
     } 
+    else if (page.equals("Start School Year")){
+      StackPane content = new StackPane();
+      Text text = new Text("School year started successfully!");
+      text.setStyle("-fx-font-size: 24px;");
+      content.getChildren().add(text);
+      mainContent.getChildren().add(content);
+    
+    }
     else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");
@@ -38,6 +47,6 @@ public class AdminManagerView extends ManagerView {
 
   @Override
   public String[] getTabs() {
-    return new String[] {ACCOUNT, PARENTS, STUDENTS, GRADES, ITEMS, BUNDLES, ORDERS};
+    return new String[] {ACCOUNT, PARENTS, STUDENTS, GRADES, ITEMS, BUNDLES, ORDERS, YEAR};
   }
 }
