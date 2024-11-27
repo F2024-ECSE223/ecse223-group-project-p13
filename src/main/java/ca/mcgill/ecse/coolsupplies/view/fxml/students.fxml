@@ -28,19 +28,19 @@
       </TableView>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="53.0" text="Name:" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="53.0" text="Name:" HBox.hgrow="ALWAYS" />
             <TextField id="nameInput">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
             </TextField>
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="64.0" text="Grade: ">
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="64.0" text="Grade: " HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
             </Label>
             <ComboBox id="gradeInputCombo" prefWidth="150.0" />
-            <Button id="addButton" mnemonicParsing="false" text="Add">
+            <Button id="addButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="56.0" text="Add">
                <HBox.margin>
                   <Insets left="80.0" />
                </HBox.margin>
