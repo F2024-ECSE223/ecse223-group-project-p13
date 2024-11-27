@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class UpdateAdminView {
@@ -21,10 +22,10 @@ public class UpdateAdminView {
 
 
     @FXML
-    public void saveButtonClickedUpdateAdmin (){
+    public void saveButtonClickedUpdateAdmin (ActionEvent event){
        String  newPassword = newPasswordUpdateAdmin.getText();
        String message = CoolSuppliesFeatureSet1Controller.updateAdmin(newPassword);
-       if (message.isEmpty())
+       if (!message.isEmpty())
        {
            errorMessage.setText(message);
        }
