@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="409.0" prefWidth="600.0">
+         <children>
+            <Separator layoutY="46.0" prefHeight="14.0" prefWidth="600.0" />
+            <Label layoutX="175.0" layoutY="14.0" text="Register New Parent " textFill="#023c40">
+               <font>
+                  <Font name="Rockwell" size="26.0" />
+               </font>
+            </Label>
+            <Label layoutX="32.0" layoutY="89.0" text="Enter email address ">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Label>
+            <TextField layoutX="32.0" layoutY="116.0" prefHeight="26.0" prefWidth="209.0" />
+            <Label layoutX="31.0" layoutY="164.0" text="Enter name (optional) ">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Label>
+            <TextField layoutX="31.0" layoutY="191.0" prefHeight="26.0" prefWidth="209.0" />
+            <Label layoutX="31.0" layoutY="245.0" prefHeight="27.0" prefWidth="324.0" text="Enter phone number (optional) ">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Label>
+            <TextField layoutX="31.0" layoutY="272.0" prefHeight="26.0" prefWidth="209.0" />
+            <Label layoutX="312.0" layoutY="89.0" text="Enter password ">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="312.0" layoutY="164.0" text="Enter password again ">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Label>
+            <PasswordField layoutX="312.0" layoutY="117.0" prefHeight="26.0" prefWidth="226.0" />
+            <PasswordField layoutX="311.0" layoutY="197.0" prefHeight="26.0" prefWidth="226.0" />
+            <Button layoutX="398.0" layoutY="301.0" mnemonicParsing="false" text="SAVE">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
