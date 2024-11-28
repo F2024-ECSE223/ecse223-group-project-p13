@@ -3,12 +3,11 @@ package ca.mcgill.ecse.coolsupplies.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 
 import java.awt.event.ActionEvent;
 
-public class UpdateParent {
+public class UpdateParentView {
 
     @FXML
     private TextField emailUpdateParent;
@@ -37,10 +36,7 @@ public class UpdateParent {
         String password = passwordUpdateParent.getText();
 
         String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name,phone);
-        if (!message.isEmpty())
-        {
-            errorMessageUpdateParent.setText(message);
-        }
+        errorMessageUpdateParent.setText(message);
     }
 
 }

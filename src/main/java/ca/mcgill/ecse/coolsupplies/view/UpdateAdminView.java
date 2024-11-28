@@ -25,10 +25,7 @@ public class UpdateAdminView {
     public void saveButtonClickedUpdateAdmin (ActionEvent event){
        String  newPassword = newPasswordUpdateAdmin.getText();
        String message = CoolSuppliesFeatureSet1Controller.updateAdmin(newPassword);
-       if (!message.isEmpty())
-       {
-           errorMessage.setText(message);
-       }
+       errorMessage.setText(message);
 
 
        // ADD ERROR LABEL

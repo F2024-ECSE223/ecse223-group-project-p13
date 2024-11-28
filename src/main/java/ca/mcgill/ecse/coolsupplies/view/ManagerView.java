@@ -1,10 +1,15 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import java.io.IOException;
+import java.text.NumberFormat.Style;
 import java.util.function.Function;
 import atlantafx.base.theme.PrimerDark;
 import atlantafx.base.theme.PrimerLight;
+import atlantafx.base.theme.Styles;
 import javafx.application.Application;
+import javafx.beans.value.ObservableBooleanValue;
+import javafx.beans.value.ObservableStringValue;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -94,6 +99,7 @@ public abstract class ManagerView {
 
     Button signOut = new Button("Sign Out");
     signOut.setOnAction(e -> this.signOut.apply(null));
+    signOut.getStyleClass().add(Styles.ACCENT);
 
     Button theme = new Button(isLight ? "Dark" : "Light");
     theme.setOnAction((e) -> {
@@ -114,7 +120,11 @@ public abstract class ManagerView {
 
   public void setMain(String fxml) {
     try {
-      var root = (Pane) FXMLLoader.load(getClass().getResource("fxml/" + fxml));
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(this.getClass().getResource("fxml/"+fxml));
+      loader.setClassLoader(this.getClass().getClassLoader());
+
+      var root = (Pane) loader.load();
 
       mainContent.getChildren().add(root);
     } catch (IOException e) {
