@@ -44,6 +44,10 @@ public class AdminManagerView extends ManagerView {
       setMain("viewBundles.fxml");
       return;
     }
+    else if (page.equals(GRADES)) {
+      setMain("add-updategrade.fxml");
+      return;
+    }
     else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");
