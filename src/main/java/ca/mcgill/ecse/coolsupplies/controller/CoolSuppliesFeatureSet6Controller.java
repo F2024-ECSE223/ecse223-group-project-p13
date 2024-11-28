@@ -36,7 +36,9 @@ public class CoolSuppliesFeatureSet6Controller {
       return PARENT_MISSING_MESSAGE;
     }
 
-    parent.addStudent(studentToAdd);
+    if (!parent.addStudent(studentToAdd)) {
+      return "Student already assigned to parent";
+    }
     //autosave
     CoolSuppliesPersistence.save();
     } catch (RuntimeException e) {

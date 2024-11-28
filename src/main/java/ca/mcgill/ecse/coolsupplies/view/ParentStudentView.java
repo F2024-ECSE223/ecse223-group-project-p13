@@ -1,5 +1,8 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
@@ -36,16 +39,8 @@ public class ParentStudentView {
         CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail.get()));
     this.allList =
         FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
-   this.parentEmail.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-              associatedList.clear();
-              associatedList
-                  .addAll(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(newValue));
-                  updateLists();
-            }
-          });
-
-    ListView<TOStudent> list = this.createAssociatedList();
+    ListView<TOStudent> associatedListView = new ListView<>(associatedList);
+    this.createAssociatedList(associatedListView);
     ListView<TOStudent> fullList = this.createFullList();
     HBox parent = selectParent();
 
@@ -57,17 +52,21 @@ public class ParentStudentView {
 
     VBox view = new VBox();
     view.setPadding(new Insets(16, 16, 16, 16));
-    view.getChildren().addAll(parent, title, list, title2, fullList);
+    view.getChildren().addAll(parent, title, associatedListView, title2, fullList);
 
     this.mainContent.getChildren().add(view);
+    this.parentEmail.addListener((observable, oldValue, newValue) -> {
+      if (!newValue.isEmpty()) {
+        associatedList.clear();
+        associatedList.addAll(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(newValue));
+        updateLists();
+      }
+    });
   }
 
   // MARK: Select the Parent
   private HBox selectParent() {
     HBox header = new HBox();
-
-    Text title = new Text("Hello, Parent!");
-    title.setFont(CoolSuppliesFxmlView.title);
 
       ObservableList<TOParent> parents =
           FXCollections.observableList(CoolSuppliesFeatureSet1Controller.getParents());
@@ -99,27 +98,26 @@ public class ParentStudentView {
       Region spacer = new Region();
       HBox.setHgrow(spacer, Priority.ALWAYS);
 
-      header.getChildren().addAll(title, spacer, box);
+      header.getChildren().addAll(spacer, box);
 
     return header;
   }
 
   // MARK: List of students associated with parent
-  private ListView<TOStudent> createAssociatedList() {
-    ListView<TOStudent> listView = new ListView<>(associatedList);
+  private void createAssociatedList(ListView<TOStudent> listView) {
+    listView.setItems(associatedList);
+    listView.setCellFactory(null);
     listView.setCellFactory(l -> new ListCell<TOStudent>() {
       @Override
       protected void updateItem(TOStudent student, boolean empty) {
         super.updateItem(student, empty);
         if (empty || student == null) {
-          setText(null);
+          setGraphic(null);
         } else {
           setGraphic(createListItem(student));
         }
       }
     });
-
-    return listView;
   }
 
   /**
@@ -132,6 +130,7 @@ public class ParentStudentView {
     content.setAlignment(Pos.CENTER_LEFT);
 
     Button delete = new Button("Remove");
+    delete.getStyleClass().add(Styles.DANGER);
     delete.setOnAction((e) -> {
       err =
           CoolSuppliesFeatureSet6Controller.deleteStudentFromParent(student.getName(), parentEmail.get());
@@ -139,7 +138,7 @@ public class ParentStudentView {
 
       if (err.isEmpty()) {
         associatedList.remove(student);
-        updateLists();
+        allList.add(student);
       }
     });
 
@@ -157,22 +156,29 @@ public class ParentStudentView {
     HBox content = new HBox();
     content.setAlignment(Pos.CENTER_LEFT);
 
-    Button delete = new Button("Add");
-    delete.setOnAction((e) -> {
-      err = CoolSuppliesFeatureSet6Controller.addStudentToParent(student.getName(), parentEmail.get());
-      CoolSuppliesFxmlView.handleErr(err);
-      if (err.isEmpty()) {
-        associatedList.add(student);
-        updateLists();
-      }
-    });
-
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     Text label = new Text(student.getName() + " - " + student.getGradeLevel());
 
-    content.getChildren().addAll(label, spacer, delete);
+    content.getChildren().addAll(label, spacer);
+
+    Button add = new Button("Add");
+    add.getStyleClass().add(Styles.SUCCESS);
+    add.setOnAction((e) -> {
+      err = CoolSuppliesFeatureSet6Controller.addStudentToParent(student.getName(),
+          parentEmail.get());
+      CoolSuppliesFxmlView.handleErr(err);
+      if (err.isEmpty()) {
+        associatedList.add(student);
+        allList.remove(student);
+        updateLists();
+      }
+    });
+    add.visibleProperty().bind(this.parentEmail.isNotEmpty());
+
+    content.getChildren().add(add);
+
     return content;
 
   }
@@ -184,7 +190,7 @@ public class ParentStudentView {
       protected void updateItem(TOStudent student, boolean empty) {
         super.updateItem(student, empty);
         if (empty || student == null) {
-          setText(null);
+          setGraphic(null);
         } else {
           setGraphic(createFullListItem(student));
         }
@@ -195,8 +201,13 @@ public class ParentStudentView {
   }
 
   private void updateLists() {
-    allList = allList.filtered((student) -> {
-      return !associatedList.contains(student);
-    });
+    List<TOStudent> newList = allList.stream()
+        .filter(student -> associatedList.stream()
+            .noneMatch(associatedStudent -> associatedStudent.getName().equals(student.getName())))
+        .collect(Collectors.toList());
+
+
+    allList.clear();
+    allList.setAll(newList);
   }
 }
