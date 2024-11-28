@@ -78,8 +78,8 @@ public class ViewBundleView {
             Parent root = loader.load();
 
             // Pass the bundle to the controller
-            EditBundleController controller = loader.getController();
-            controller.initData(bundle);
+           // EditBundleController controller = loader.getController();
+           // controller.initData(bundle);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
