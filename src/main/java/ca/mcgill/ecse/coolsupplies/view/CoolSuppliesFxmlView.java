@@ -16,7 +16,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -215,6 +217,10 @@ public class CoolSuppliesFxmlView extends Application {
   public static void handleErr(String err) {
     if (!err.isEmpty()) {
       System.out.println("ERROR: " + err);
+
+      Alert errAlert = new Alert(AlertType.ERROR);
+      errAlert.setContentText(err);
+      errAlert.show();
     }
   }
 }

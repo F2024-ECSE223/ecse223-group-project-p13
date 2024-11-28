@@ -1,5 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import atlantafx.base.theme.PrimerLight;
+import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
@@ -83,9 +85,11 @@ public class OrderView {
         if (empty || order == null) {
           setText(null);
         } else {
-          HBox cell = new HBox();
+          HBox cell = new HBox(16);
           cell.setAlignment(Pos.CENTER_LEFT);
+
           Button cancelOrder = new Button("Cancel");
+          cancelOrder.getStyleClass().addAll(Styles.DANGER);
           cancelOrder.setOnAction(e -> {
             // TODO: Add cancel workflow
           });

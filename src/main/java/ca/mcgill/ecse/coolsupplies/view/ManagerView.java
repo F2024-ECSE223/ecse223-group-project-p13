@@ -1,10 +1,14 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import java.io.IOException;
+import java.text.NumberFormat.Style;
 import java.util.function.Function;
 import atlantafx.base.theme.PrimerDark;
 import atlantafx.base.theme.PrimerLight;
+import atlantafx.base.theme.Styles;
 import javafx.application.Application;
+import javafx.beans.value.ObservableBooleanValue;
+import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -95,6 +99,7 @@ public abstract class ManagerView {
 
     Button signOut = new Button("Sign Out");
     signOut.setOnAction(e -> this.signOut.apply(null));
+    signOut.getStyleClass().add(Styles.ACCENT);
 
     Button theme = new Button(isLight ? "Dark" : "Light");
     theme.setOnAction((e) -> {
