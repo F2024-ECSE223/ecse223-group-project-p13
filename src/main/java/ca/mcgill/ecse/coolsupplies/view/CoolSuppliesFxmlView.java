@@ -2,6 +2,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import java.awt.Taskbar;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,6 +21,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -71,7 +76,7 @@ public class CoolSuppliesFxmlView extends Application {
     mainContent.getChildren().clear();
     root.getChildren().clear();
 
-    VBox box = new VBox();
+    VBox box = new VBox(16);
     box.setPrefSize(400, 600);
     box.setAlignment(Pos.CENTER);
 
@@ -101,7 +106,7 @@ public class CoolSuppliesFxmlView extends Application {
 
     imageView.setPreserveRatio(true);
 
-    Text title = new Text("Welcome to CoolSupplies, TechnoDupes!");
+    Text title = new Text("Welcome to CoolSupplies!");
     title.setFont(CoolSuppliesFxmlView.title);
 
     LocalDate currentDate = LocalDate.now();
@@ -112,7 +117,12 @@ public class CoolSuppliesFxmlView extends Application {
 
     header.getChildren().addAll(imageView, title, date);
 
-    box.getChildren().addAll(header, buttons);
+    Button register = new Button("Register");
+    register.setOnAction((e) -> {
+      updateTab("register");
+    });
+
+    box.getChildren().addAll(header, buttons, register);
 
     mainContent.getChildren().add(box);
     root.setCenter(mainContent);
@@ -137,6 +147,26 @@ public class CoolSuppliesFxmlView extends Application {
       VBox sidebar = adminManager.createSidebar();
 
       root.setLeft(sidebar);
+    }
+    else if (source.equalsIgnoreCase("register")) {
+      try {
+        var register = (Pane) FXMLLoader.load(getClass().getResource("fxml/register_parent.fxml"));
+        HBox header = new HBox();
+        header.setPadding(new Insets(16, 16, 16, 16));
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button back = new Button("Back");
+        back.setOnAction((e) -> splashScreen());
+
+        header.getChildren().addAll(back, spacer);
+
+        this.root.setTop(header);
+        this.root.setCenter(register);
+      } catch (IOException e) {
+        System.out.println(e);
+      }
     }
   }
 

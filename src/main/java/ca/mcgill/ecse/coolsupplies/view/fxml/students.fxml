@@ -7,29 +7,22 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="652.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="652.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.StudentManagementView">
    <children>
-      <AnchorPane prefHeight="86.0" prefWidth="652.0">
-         <children>
-            <TextField id="searchStudent" alignment="CENTER" layoutX="14.0" layoutY="32.0" maxWidth="-Infinity" prefHeight="26.0" prefWidth="193.0" promptText="Search student by name" />
-            <Button id="searchButton" alignment="CENTER" layoutX="255.0" layoutY="32.0" mnemonicParsing="false" text="Search" />
-         </children>
-      </AnchorPane>
-      <TableView maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="tableView" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <columns>
-            <TableColumn id="nameColumn" prefWidth="250.0" text="Name" />
-            <TableColumn id="gradeColumn" minWidth="-Infinity" prefWidth="250.0" text="Grade" />
-            <TableColumn id="ActionColumn" minWidth="-Infinity" prefWidth="150.39996337890625" text="Actions" />
+            <TableColumn id="columnName" fx:id="columnName" prefWidth="250.0" text="Name" />
+            <TableColumn id="columnGrade" fx:id="columnGrade" minWidth="-Infinity" prefWidth="250.0" text="Grade" />
+            <TableColumn id="columnAction" fx:id="columnActions" minWidth="-Infinity" prefWidth="150.39996337890625" text="Actions" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="53.0" text="Name:" HBox.hgrow="ALWAYS" />
-            <TextField id="nameInput">
+            <TextField id="nameInput" fx:id="nameInput">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -39,8 +32,8 @@
                   <Insets left="20.0" />
                </HBox.margin>
             </Label>
-            <ComboBox id="gradeInputCombo" prefWidth="150.0" />
-            <Button id="addButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="56.0" text="Add">
+            <ComboBox id="gradeInputCombo" fx:id="gradeInput" prefWidth="150.0" />
+            <Button id="addButton" fx:id="addButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="56.0" text="Add">
                <HBox.margin>
                   <Insets left="80.0" />
                </HBox.margin>

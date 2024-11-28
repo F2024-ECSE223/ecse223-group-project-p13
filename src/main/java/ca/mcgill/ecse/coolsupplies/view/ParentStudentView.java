@@ -36,6 +36,14 @@ public class ParentStudentView {
         CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail.get()));
     this.allList =
         FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
+   this.parentEmail.addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+              associatedList.clear();
+              associatedList
+                  .addAll(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(newValue));
+                  updateLists();
+            }
+          });
 
     ListView<TOStudent> list = this.createAssociatedList();
     ListView<TOStudent> fullList = this.createFullList();
@@ -85,15 +93,6 @@ public class ParentStudentView {
 
         if (selected != null) {
           this.parentEmail.set(selected.getEmail());
-          this.parentEmail.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-              associatedList.clear();
-              associatedList
-                  .addAll(CoolSuppliesFeatureSet6Controller.getStudentsOfParent(newValue));
-                  updateLists();
-                  
-            }
-          });
         }
       });
 
@@ -140,6 +139,7 @@ public class ParentStudentView {
 
       if (err.isEmpty()) {
         associatedList.remove(student);
+        updateLists();
       }
     });
 
@@ -163,6 +163,7 @@ public class ParentStudentView {
       CoolSuppliesFxmlView.handleErr(err);
       if (err.isEmpty()) {
         associatedList.add(student);
+        updateLists();
       }
     });
 
@@ -194,7 +195,7 @@ public class ParentStudentView {
   }
 
   private void updateLists() {
-    allList.filtered((student) -> {
+    allList = allList.filtered((student) -> {
       return !associatedList.contains(student);
     });
   }

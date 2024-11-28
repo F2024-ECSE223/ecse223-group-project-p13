@@ -32,6 +32,9 @@ public class AdminManagerView extends ManagerView {
       setMain("students.fxml");
       return;
     } 
+    else if (page.equals(PARENTS)) {
+      setMain("remove_parent.fxml");
+    }
     else if (page.equals("Start School Year")){
       StackPane content = new StackPane();
       Text text = new Text("School year started successfully!");
