@@ -29,12 +29,12 @@ public class ViewBundleView {
     private TableColumn<TOGradeBundle, String> bundleGrade;
 
     @FXML
-    private Label errorMessage;
+    private Label errorLabel;
 
     @FXML
     public void initialize() {
         // Initialize errorMessage label
-        errorMessage.setText("");
+        errorLabel.setText("");
 
         // Set up the table columns
         bundleName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -112,11 +112,11 @@ public class ViewBundleView {
 
     // Method to display error messages
     private void displayError(String message) {
-        errorMessage.setText(message);
+        errorLabel.setText(message);
     }
 
     // Method to clear error messages
     private void clearError() {
-        errorMessage.setText("");
+        errorLabel.setText("");
     }
 }

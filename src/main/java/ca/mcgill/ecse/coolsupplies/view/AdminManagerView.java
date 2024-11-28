@@ -44,7 +44,7 @@ public class AdminManagerView extends ManagerView {
     
     }
     else if (page.equals(BUNDLES)) {
-      setMain("viewBundles.fxml");
+      setMain("view_Bundles.fxml");
       return;
     }
     else if (page.equals(GRADES)) {
