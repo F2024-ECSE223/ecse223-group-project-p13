@@ -1,6 +1,5 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
@@ -17,8 +16,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
-
-
 
 
 public class StudentManagementView {
@@ -74,8 +71,6 @@ private List<String> getGradeLevels() {
 
 
 
-
-
   @FXML
   private void AddStudent(ActionEvent AddStudent){
       String name = nameInput.getText();
@@ -98,8 +93,16 @@ private List<String> getGradeLevels() {
         private final Button updateButton = new Button("Update");
         private final Button saveButton = new Button("Save");
         private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default buttons
+        private final HBox saveFunction = new HBox(10, saveButton);
 
         {
+            deleteButton.setPrefWidth(80);
+            deleteButton.setPrefHeight(30);
+            updateButton.setPrefWidth(80);
+            updateButton.setPrefHeight(30);
+            saveButton.setPrefWidth(80);
+            saveButton.setPrefHeight(30);
+
             // Configure delete button
             deleteButton.setOnAction(event -> {
                 TOStudent student = getTableView().getItems().get(getIndex());
@@ -108,39 +111,38 @@ private List<String> getGradeLevels() {
 
             // Configure update button
             updateButton.setOnAction(event -> {
-                TOStudent student = getTableView().getItems().get(getIndex());
-                enableEditMode(getIndex());
-
-                // Replace "Update" button with "Save" button
-                buttons.getChildren().setAll(saveButton, deleteButton);
-                setGraphic(buttons); // Explicitly update the graphic
-            });
+              TOStudent student = getTableView().getItems().get(getIndex());
+              enableEditMode(student, getIndex());
+          
+              // Replace "Update" button with "Save" button
+              // buttons.getChildren().clear();
+              // buttons.getChildren().addAll(saveButton, deleteButton);
+          
+              // Force refresh
+              // getTableView().refresh();
+              setGraphic(saveFunction);
+          });
+          
 
             // Configure save button
             saveButton.setOnAction(event -> {
-                TOStudent student = getTableView().getItems().get(getIndex());
-
-                // Fetch edited values
-                String newName = columnName.getCellObservableValue(getIndex()).getValue();
-                String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
-
-                if (newName == null || newName.trim().isEmpty() || newGrade == null || newGrade.trim().isEmpty()) {
-                    errorLabel.setText("Name and grade cannot be empty.");
-                    return;
-                }
-
-                updateStudent(student.getName(), newName, newGrade);
-
-                // Restore "Update" button after saving
-                buttons.getChildren().setAll(updateButton, deleteButton);
-                setGraphic(buttons); // Explicitly update the graphic
-
-                // Disable edit mode
-                //disableEditMode();
-            });
-
-            // Set the default buttons (Update + Delete)
-            setGraphic(buttons);
+              TOStudent student = getTableView().getItems().get(getIndex());
+          
+              // Fetch edited values
+              String newName = columnName.getCellObservableValue(getIndex()).getValue();
+              String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
+          
+              updateStudent(student.getName(), newName, newGrade);
+          
+              // Restore "Update" button after saving
+              buttons.getChildren().clear();
+              buttons.getChildren().addAll(updateButton, deleteButton);
+          
+              // Force refresh
+              getTableView().refresh();
+              setGraphic(buttons);
+          });
+          
         }
 
         @Override
@@ -149,13 +151,20 @@ private List<String> getGradeLevels() {
             if (empty) {
                 setGraphic(null);
             } else {
+                // Refresh buttons based on edit mode or default mode
                 setGraphic(buttons);
             }
         }
     });
 }
+
   
-private void enableEditMode(int rowIndex) {
+
+
+
+
+  
+private void enableEditMode(TOStudent student, int rowIndex) {
   editingRowIndex = rowIndex; // Track the row being edited
 
   tableView.setEditable(true); // Enable editing on the table
@@ -201,21 +210,20 @@ private void enableEditMode(int rowIndex) {
   });
 
   // Notify the user about edit mode
-  errorLabel.setText("Edit mode enabled for row " + (rowIndex + 1) + ". Click 'Save' to apply changes.");
+  errorLabel.setText("Edit mode enabled for student " +  student.getName()+ ". Click 'Save' to apply changes.");
 }
 
-
             
-    private void updateStudent(String currentName, String newName, String newGrade) {
+  private void updateStudent(String currentName, String newName, String newGrade) {
      
-        String result = CoolSuppliesFeatureSet2Controller.updateStudent(currentName, newName, newGrade);
-        if (result.isEmpty()) {
-            errorLabel.setText("Student updated successfully.");
-            refreshTable();
-        } else {
-            errorLabel.setText(result); // Display error from the controller
-        }
-    }
+      String result = CoolSuppliesFeatureSet2Controller.updateStudent(currentName, newName, newGrade);
+      if (result.isEmpty()) {
+          errorLabel.setText("Student updated successfully.");
+          refreshTable();
+      } else {
+          errorLabel.setText(result); // Display error from the controller
+      }
+  }
 
     private void deleteStudent(String name) {
         // Call the backend function and display the error or success message
@@ -228,11 +236,12 @@ private void enableEditMode(int rowIndex) {
         }
     }
 
-
    
     private void refreshTable() {
       studentList.setAll(CoolSuppliesFeatureSet2Controller.getStudents());
       tableView.setItems(studentList);
   }
 }
+
+
 
