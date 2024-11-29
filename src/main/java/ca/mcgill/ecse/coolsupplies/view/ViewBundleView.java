@@ -70,12 +70,14 @@ public class ViewBundleView {
 
     @FXML
     public void newBundle(ActionEvent event) {
-        try {
-            openNewBundlePage();
-            clearError();
-        } catch (Exception e) {
-            displayError("Failed to open the new bundle page: " + e.getMessage());
-        }
+        
+        
+        // try {
+        //     openNewBundlePage();
+        //     clearError();
+        // } catch (Exception e) {
+        //     displayError("Failed to open the new bundle page: " + e.getMessage());
+        // }
 
   }
 
@@ -99,18 +101,18 @@ public class ViewBundleView {
         }
     }
 
-    private void openNewBundlePage() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
-            Parent root = loader.load();
+    // private void openNewBundlePage() {
+    //     try {
+    //         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
+    //         Parent root = loader.load();
     
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add New Bundle");
-            stage.show();
-        } catch (IOException e) {
-            displayError("Failed to open the new bundle page: " + e.getMessage());
-        }
+    //         Stage stage = new Stage();
+    //         stage.setScene(new Scene(root));
+    //         stage.setTitle("Add New Bundle");
+    //         stage.show();
+    //     } catch (IOException e) {
+    //         displayError("Failed to open the new bundle page: " + e.getMessage());
+    //     }
 
 
         // try {
@@ -129,7 +131,7 @@ public class ViewBundleView {
         // } catch (IOException e) {
         //     throw new RuntimeException(e); // Let the calling method handle it
         // }
-    }
+    // }
 
     // private List<TOGradeBundle> getAllBundles() {
     //     return CoolSuppliesFeatureSet4Controller.getBundles();
