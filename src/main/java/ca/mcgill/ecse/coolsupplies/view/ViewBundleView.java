@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.List;
@@ -31,23 +32,25 @@ public class ViewBundleView {
     @FXML
     private Label errorLabel;
 
+    private ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
+
     @FXML
     public void initialize() {
-        // Initialize errorMessage label
-        errorLabel.setText("");
 
         // Set up the table columns
-        bundleName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        bundleGrade.setCellValueFactory(new PropertyValueFactory<>("gradeLevel"));
+        bundleName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
+
+        // Load initial data into the table
+        refreshTable();
 
         // Load data into the table
-        ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
-        try {
-            bundleList.addAll(getAllBundles());
-            bundlesTable.setItems(bundleList);
-        } catch (Exception e) {
-            displayError("Failed to load bundles: " + e.getMessage());
-        }
+        // try {
+        //     bundleList.addAll(getAllBundles());
+        //     bundlesTable.setItems(bundleList);
+        // } catch (Exception e) {
+        //     displayError("Failed to load bundles: " + e.getMessage());
+        // }
 
         // Add listener for row double-clicks
         bundlesTable.setRowFactory(tv -> {
@@ -62,7 +65,7 @@ public class ViewBundleView {
         });
     }
 
-    @FXML
+    // @FXML
     public void newBundle(ActionEvent event) {
         try {
             openNewBundlePage();
@@ -106,17 +109,22 @@ public class ViewBundleView {
         }
     }
 
-    private List<TOGradeBundle> getAllBundles() {
-        return CoolSuppliesFeatureSet4Controller.getBundles();
-    }
+    // private List<TOGradeBundle> getAllBundles() {
+    //     return CoolSuppliesFeatureSet4Controller.getBundles();
+    // }
 
-    // Method to display error messages
+   // Method to display error messages
     private void displayError(String message) {
         errorLabel.setText(message);
     }
 
-    // Method to clear error messages
+    //Method to clear error messages
     private void clearError() {
         errorLabel.setText("");
+    }
+
+    private void refreshTable() {
+        bundleList.setAll(CoolSuppliesFeatureSet4Controller.getBundles());
+        bundlesTable.setItems(bundleList);
     }
 }
