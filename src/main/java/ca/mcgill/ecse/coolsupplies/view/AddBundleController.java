@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.coolsupplies.view;
+package org.example.iteration4_ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -15,8 +15,6 @@ public class AddBundleController {
     private Label bundleName;
     @FXML
     private Label grade;
-    @FXML
-    private Label labelAdmin;
     @FXML
     private TextField bundleNameText;
     @FXML
@@ -46,8 +44,13 @@ public class AddBundleController {
         String bundleName = bundleNameText.getText();
         String bundleDiscount= discountValue.getText();
         String bundleGrade= gradeOptions.getValue();
-
-        int discountInt = Integer.parseInt(bundleDiscount);
+        try {
+            int discountInt = Integer.parseInt(bundleDiscount);
+        }
+        catch(NumberFormatException e) {
+            Alert alert = new Alert();
+            alert.setError("Discount must be a number");
+        }
 
         String tryAddBundle = CoolSuppliesFeatureSet4Controller.addBundle(bundleName, bundleDiscount, bundleGrade);
 
@@ -55,6 +58,7 @@ public class AddBundleController {
             Alert alert = new Alert();
             alert.setError(tryAddBundle);
         }
+
 
     }
 
