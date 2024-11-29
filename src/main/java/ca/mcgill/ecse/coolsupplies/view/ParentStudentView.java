@@ -33,6 +33,11 @@ public class ParentStudentView {
   private ObservableList<TOStudent> associatedList;
   private ObservableList<TOStudent> allList;
 
+  /**
+   * @author Trevor Piltch
+   * @param mainContent - The content to add this to 
+   * Creates a new view for the user to manage their students
+   */
   public ParentStudentView(StackPane mainContent) {
     this.mainContent = mainContent;
     this.associatedList = FXCollections.observableArrayList(
@@ -64,7 +69,10 @@ public class ParentStudentView {
     });
   }
 
-  // MARK: Select the Parent
+  /**
+   * @author Trevor Piltch
+   * Create the header view to select the parent from a drop down and update internal state
+   */
   private HBox selectParent() {
     HBox header = new HBox();
 
@@ -103,7 +111,11 @@ public class ParentStudentView {
     return header;
   }
 
-  // MARK: List of students associated with parent
+  /**
+   * @author Trevor Piltch
+   * @param listView - The list to add the students to
+   * @brief Creates a list of students that are associated with the parent
+   */
   private void createAssociatedList(ListView<TOStudent> listView) {
     listView.setItems(associatedList);
     listView.setCellFactory(null);
@@ -151,7 +163,12 @@ public class ParentStudentView {
     return content;
   }
 
-  // MARK: Full list of students
+  /**
+   * @author Trevor Piltch
+   * @param student - The student to add to the list
+   * @return - A hbox represented the view to add to the list
+   * @brief - Creates a lists item for a student that is not associated with the current parent
+   */
   private HBox createFullListItem(TOStudent student) {
     HBox content = new HBox();
     content.setAlignment(Pos.CENTER_LEFT);
@@ -183,6 +200,11 @@ public class ParentStudentView {
 
   }
 
+  /**
+   * @author Trevor Piltch
+   * @return A ListView containing all the students that are not associated with a parent
+   * @brief Creates a listview containing all the students that are not associated with a parent
+   */
   private ListView<TOStudent> createFullList() {
     ListView<TOStudent> listView = new ListView<>(allList);
     listView.setCellFactory(l -> new ListCell<TOStudent>() {
@@ -200,6 +222,10 @@ public class ParentStudentView {
     return listView;
   }
 
+  /**
+   * @author Trevor piltch
+   * @brief Filters out the associated students from the list of students 
+   */
   private void updateLists() {
     List<TOStudent> newList = allList.stream()
         .filter(student -> associatedList.stream()
