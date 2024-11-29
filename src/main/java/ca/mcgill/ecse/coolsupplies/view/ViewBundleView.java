@@ -68,28 +68,16 @@ public class ViewBundleView {
         });
     }
 
-    // @FXML
+    @FXML
     public void newBundle(ActionEvent event) {
-       try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(this.getClass().getResource("EditBundle.fxml"));
-      loader.setClassLoader(this.getClass().getClassLoader());
+        try {
+            openNewBundlePage();
+            clearError();
+        } catch (Exception e) {
+            displayError("Failed to open the new bundle page: " + e.getMessage());
+        }
 
-      var root = (Pane) loader.load();
-
-      mainContent.getChildren().add(root);
-    } catch (IOException e) {
-      System.out.println(e);
-    }
   }
-       
-        // try {
-        //     openNewBundlePage();
-        //     clearError();
-        // } catch (Exception e) {
-        //     displayError("Failed to open the new bundle page: " + e.getMessage());
-        // }
-    
 
     private void openBundleDetail(TOGradeBundle bundle) {
         try {
@@ -111,20 +99,37 @@ public class ViewBundleView {
         }
     }
 
-    // private void openNewBundlePage() {
-        
-    //     try {
-    //         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
-    //         Parent root = loader.load();
+    private void openNewBundlePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
+            Parent root = loader.load();
+    
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add New Bundle");
+            stage.show();
+        } catch (IOException e) {
+            displayError("Failed to open the new bundle page: " + e.getMessage());
+        }
 
-    //         Stage stage = new Stage();
-    //         stage.setScene(new Scene(root));
-    //         stage.setTitle("Add New Bundle");
-    //         stage.show();
-    //     } catch (IOException e) {
-    //         throw new RuntimeException(e); // Let the calling method handle it
-    //     }
-    // }
+
+        // try {
+        //     FXMLLoader loader = new FXMLLoader();
+        //     loader.setLocation(this.getClass().getResource("AddBundle.fxml"));
+        //     loader.setClassLoader(this.getClass().getClassLoader());
+
+        //     var root = (Pane) loader.load();
+
+        //     mainContent.getChildren().add(root);
+
+            // Stage stage = new Stage();
+            // stage.setScene(new Scene(root));
+            // stage.setTitle("Add New Bundle");
+            // stage.show();
+        // } catch (IOException e) {
+        //     throw new RuntimeException(e); // Let the calling method handle it
+        // }
+    }
 
     // private List<TOGradeBundle> getAllBundles() {
     //     return CoolSuppliesFeatureSet4Controller.getBundles();
