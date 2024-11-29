@@ -1,4 +1,4 @@
-package org.example.iteration4_ui;
+package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
