@@ -12,10 +12,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,6 +29,9 @@ public class ItemViewController {
 
   @FXML
   private TextField new_price_text_field;
+
+  @FXML
+  private Label error;
 
   @FXML
   private Button add_item_button;
@@ -54,16 +59,21 @@ public class ItemViewController {
     item_name_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
     item_price_column.setCellValueFactory(data -> new SimpleStringProperty(""+data.getValue().getPrice()));
     
-    addButtons();
+    addButtonsColumn();
+
+    itemList.addAll(CoolSuppliesFeatureSet3Controller.getItems());
+
+    item_table_view.setItems(itemList);
     
 
   }
 
   @FXML
-  private void addButtons() {
+  private void addButtonsColumn() {
     item_options_column.setCellFactory(col -> new TableCell<>() {
       private final Button updateButton = new Button("Update");
       private final Button deleteButton = new Button("Delete");
+      private final HBox buttons = new HBox(10, updateButton, deleteButton);
   
       {
           updateButton.setOnAction(event -> {
@@ -75,6 +85,16 @@ public class ItemViewController {
               TOItem item = getTableView().getItems().get(getIndex());
               getTableView().getItems().remove(item);
           });
+      }
+
+      @Override
+      protected void updateItem(Void item, boolean empty) {
+          super.updateItem(item, empty);
+          if (empty) {
+              setGraphic(null);
+          } else {
+              setGraphic(buttons);
+          }
       }
     
     });
@@ -88,18 +108,19 @@ public class ItemViewController {
     String newPrice = new_price_text_field.getText();
 
     if (newName == null || newName.trim().isEmpty()) {
-      showError("Please input a valid item name");
+      error.setText("Please input a valid item name");
     } 
     else if (newPrice == null || newPrice.trim().isEmpty()) {
-      showError("Please input a valid item price");
+      error.setText("Please input a valid item price");
     }
     String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newName, Integer.parseInt(newPrice));
     if (addMessage.isEmpty()) {
       new_item_name_text_field.setText("");
       new_price_text_field.setText("");
+      error.setText(addMessage);
     }
     else {
-      showError(addMessage);
+      error.setText(addMessage);
     }
   }
 
