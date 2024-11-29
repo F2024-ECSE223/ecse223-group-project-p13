@@ -10,13 +10,17 @@ import javafx.scene.image.Image;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.Label;
 import javafx.util.Callback;
 import java.util.Optional;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import javafx.scene.layout.HBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TextInputDialog;
+
 
 public class GradeManagerView {
   @FXML
@@ -29,6 +33,8 @@ public class GradeManagerView {
   private TextField addGradeNameTextField;
   @FXML
   private Button addGradeNameButton;
+  @FXML
+  private Label errorLabel;
 
   private ObservableList<TOGrade> gradeList = FXCollections.observableArrayList();
   
@@ -63,17 +69,20 @@ public class GradeManagerView {
               Optional<String> result = dialog.showAndWait();
               result.ifPresent(newGrade -> {
                 //call controller
-                CoolSuppliesFeatureSet7Controller.updateGrade(grade.getLevel(),newGrade);
-                //delete old gradeTO
-                gradeList.remove(grade);
-                //add new gradeTO
-                TOGrade newGradeTO = new TOGrade(newGrade);
-                gradeList.add(newGradeTO);
-
-
-                //figure out error handling here
-
-
+                String error = CoolSuppliesFeatureSet7Controller.updateGrade(grade.getLevel(),newGrade);
+                
+                if (!error.equals("")) {
+                  errorLabel.setText(error);
+                  PauseTransition pause = new PauseTransition(Duration.seconds(4));
+                  pause.setOnFinished(wait -> errorLabel.setText(""));
+                  pause.play();
+                } else {              
+                  //delete old gradeTO
+                  gradeList.remove(grade);
+                  //add new gradeTO
+                  TOGrade newGradeTO = new TOGrade(newGrade);
+                  gradeList.add(newGradeTO);
+                }
               });              
             });
           }
@@ -106,14 +115,18 @@ public class GradeManagerView {
   @FXML
   public void addGradeNameButton(ActionEvent event) {
     String grade = addGradeNameTextField.getText();
+    String error = CoolSuppliesFeatureSet7Controller.addGrade(grade);
 
-    //figure out error handling here
-
-
-    CoolSuppliesFeatureSet7Controller.addGrade(grade);
-    TOGrade newGrade = new TOGrade(grade);
-    gradeList.add(newGrade);
-    addGradeNameTextField.clear();
+    if (!error.equals("")) {
+      errorLabel.setText(error);
+      PauseTransition pause = new PauseTransition(Duration.seconds(4));
+      pause.setOnFinished(event2 -> errorLabel.setText(""));
+      pause.play();
+    } else {
+      TOGrade newGrade = new TOGrade(grade);
+      gradeList.add(newGrade);
+      addGradeNameTextField.clear();
+    }
   }
 
 }
