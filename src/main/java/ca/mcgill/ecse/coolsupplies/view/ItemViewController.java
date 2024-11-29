@@ -1,8 +1,10 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import javax.swing.table.TableColumn;
+//import javax.swing.table.TableColumn;
+import javafx.scene.control.TableColumn;
 
 import ca.mcgill.ecse.coolsupplies.controller.TOItem;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,19 +35,26 @@ public class ItemViewController {
   private TableView<TOItem> item_table_view;
 
   @FXML
-  private TableColumn item_name_column;
+  private TableColumn<TOItem, String> item_name_column;
 
   @FXML
-  private TableColumn item_price_column;
+  private TableColumn<TOItem, String> item_price_column;  // TODO: Integer for price??
 
   @FXML
-  private TableColumn item_options_column;
+  private TableColumn<TOItem, Void> item_options_column;
 
   private ObservableList<TOItem> itemList;
 
   @FXML
-  public void initializeTable() {
+  public void initialize() {
+
     itemList = FXCollections.observableArrayList();
+
+
+    item_name_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+    item_price_column.setCellValueFactory(data -> new SimpleStringProperty(""+data.getValue().getPrice()));
+    //item_options_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getShift()));
+
   }
 
   @FXML
