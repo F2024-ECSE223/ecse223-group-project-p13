@@ -37,7 +37,8 @@ public class AdminManagerView extends ManagerView {
     }
 
     else if (page.equals(ITEMS)){
-      setMain("Item.fxml");
+      setMain("AddBundle.fxml");
+      return;
     }
     else if (page.equals("Start School Year")){
       StackPane content = new StackPane();
