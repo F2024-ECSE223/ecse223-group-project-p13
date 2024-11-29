@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.GradeManagerView">
    <children>
       <ScrollPane prefHeight="388.0" prefWidth="600.0">
          <content>
@@ -28,7 +28,7 @@
                   <Font name="Rockwell" size="12.0" />
                </font>
             </TextField>
-            <Button fx:id="addGradeNameButton" mnemonicParsing="false" onAction="#event" prefHeight="41.0" prefWidth="150.0" style="-fx-background-color: #5c80bc;" text="Add Grade" translateX="90.0" translateY="13.0">
+            <Button fx:id="addGradeNameButton" mnemonicParsing="false" onAction="#addGradeNameButton" prefHeight="41.0" prefWidth="150.0" style="-fx-background-color: #5c80bc;" text="Add Grade" translateX="90.0" translateY="13.0">
                <font>
                   <Font name="Rockwell" size="13.0" />
                </font>
