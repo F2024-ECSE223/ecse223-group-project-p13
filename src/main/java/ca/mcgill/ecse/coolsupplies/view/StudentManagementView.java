@@ -1,9 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOGrade;
@@ -11,21 +9,13 @@ import ca.mcgill.ecse.coolsupplies.controller.TOStudent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
-
-
 
 
 public class StudentManagementView {
@@ -54,6 +44,7 @@ public class StudentManagementView {
   private Label errorLabel;
 
   private ObservableList<TOStudent> studentList = FXCollections.observableArrayList();
+  private int editingRowIndex = -1;
 
   @FXML
   public void initialize(){
@@ -79,86 +70,160 @@ private List<String> getGradeLevels() {
 }
 
 
-  
-  
-    @FXML
-    private void AddStudent(ActionEvent event){
-        String name = nameInput.getText();
-        String grade = gradeInput.getValue();
-        String result = CoolSuppliesFeatureSet2Controller.addStudent(name, grade);
-        if (result.isEmpty()){
-            errorLabel.setText("Student added successfully.");
-            refreshTable();
-            nameInput.clear();
-            gradeInput.getSelectionModel().clearSelection();
-        } else {
-            errorLabel.setText(result);
-        }
-    }
+
+  @FXML
+  private void AddStudent(ActionEvent AddStudent){
+      String name = nameInput.getText();
+      String grade = gradeInput.getValue();
+      String result = CoolSuppliesFeatureSet2Controller.addStudent(name, grade);
+      if (result.isEmpty()){
+          errorLabel.setText("Student added successfully.");
+          refreshTable();
+          nameInput.clear();
+          gradeInput.getSelectionModel().clearSelection();
+      } else {
+          errorLabel.setText(result);
+      }
+  }
 
     
-    private void addActionButtonsToTable() {
-      columnActions.setCellFactory(param -> new TableCell<>() {
-          private final Button deleteButton = new Button("Delete");
-          private final Button updateButton = new Button("Update");
+  private void addActionButtonsToTable() {
+    columnActions.setCellFactory(param -> new TableCell<>() {
+        private final Button deleteButton = new Button("Delete");
+        private final Button updateButton = new Button("Update");
+        private final Button saveButton = new Button("Save");
+        private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default buttons
+        private final HBox saveFunction = new HBox(10, saveButton);
 
-          {
-              deleteButton.setOnAction(event -> {
-                  TOStudent student = getTableView().getItems().get(getIndex());
-                  deleteStudent(student.getName());
-              });
+        {
+            deleteButton.setPrefWidth(80);
+            deleteButton.setPrefHeight(30);
+            updateButton.setPrefWidth(80);
+            updateButton.setPrefHeight(30);
+            saveButton.setPrefWidth(80);
+            saveButton.setPrefHeight(30);
 
-              updateButton.setOnAction(event -> {
-                  TOStudent student = getTableView().getItems().get(getIndex());
-                  enableEditMode(student);
-              });
+            // Configure delete button
+            deleteButton.setOnAction(event -> {
+                TOStudent student = getTableView().getItems().get(getIndex());
+                deleteStudent(student.getName());
+            });
 
-              HBox buttons = new HBox(5, updateButton, deleteButton);
+            // Configure update button
+            updateButton.setOnAction(event -> {
+              TOStudent student = getTableView().getItems().get(getIndex());
+              enableEditMode(student, getIndex());
+          
+              // Replace "Update" button with "Save" button
+              // buttons.getChildren().clear();
+              // buttons.getChildren().addAll(saveButton, deleteButton);
+          
+              // Force refresh
+              // getTableView().refresh();
+              setGraphic(saveFunction);
+          });
+          
+
+            // Configure save button
+            saveButton.setOnAction(event -> {
+              TOStudent student = getTableView().getItems().get(getIndex());
+          
+              // Fetch edited values
+              String newName = columnName.getCellObservableValue(getIndex()).getValue();
+              String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
+          
+              updateStudent(student.getName(), newName, newGrade);
+          
+              // Restore "Update" button after saving
+              buttons.getChildren().clear();
+              buttons.getChildren().addAll(updateButton, deleteButton);
+          
+              // Force refresh
+              getTableView().refresh();
               setGraphic(buttons);
-          }
-
-          @Override
-          protected void updateItem(Void item, boolean empty) {
-              super.updateItem(item, empty);
-              if (empty) {
-                  setGraphic(null);
-              }
-          }
-      });
-  }
-
-    private void enableEditMode(TOStudent student) {
-      tableView.setEditable(true);
-
-      columnName.setCellFactory(TextFieldTableCell.forTableColumn());
-      columnGrade.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(getGradeLevels())));
-
-      columnName.setOnEditCommit(event -> {
-          String newName = event.getNewValue();
-          updateStudent(student.getName(), newName, student.getGradeLevel());
-      });
-
-      columnGrade.setOnEditCommit(event -> {
-          String newGrade = event.getNewValue();
-          updateStudent(student.getName(), student.getName(), newGrade);
-      });
-  }
-
-
-    private void updateStudent(String currentName, String newName, String newGrade) {
-        if (newName.isEmpty() || newGrade.isEmpty()) {
-            errorLabel.setText("Please fill in all fields to update.");
-            return;
+          });
+          
         }
 
-        String result = CoolSuppliesFeatureSet2Controller.updateStudent(currentName, newName, newGrade);
-        if (result.isEmpty()) {
-            errorLabel.setText("Student updated successfully.");
-            refreshTable();
-        } else {
-            errorLabel.setText(result); // Display error from the controller
+        @Override
+        protected void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+                setGraphic(null);
+            } else {
+                // Refresh buttons based on edit mode or default mode
+                setGraphic(buttons);
+            }
         }
-    }
+    });
+}
+
+  
+
+
+
+
+  
+private void enableEditMode(TOStudent student, int rowIndex) {
+  editingRowIndex = rowIndex; // Track the row being edited
+
+  tableView.setEditable(true); // Enable editing on the table
+
+  // Allow editing only for the specific row in the "Name" column
+  columnName.setCellFactory(param -> new TextFieldTableCell<>() {
+      @Override
+      public void startEdit() {
+          if (getIndex() == editingRowIndex) { // Allow editing only for the specified row
+              super.startEdit();
+          }
+      }
+
+      @Override
+      public void updateItem(String item, boolean empty) {
+          super.updateItem(item, empty);
+          if (getIndex() == editingRowIndex) {
+              setEditable(true);
+          } else {
+              setEditable(false);
+          }
+      }
+  });
+
+  // Allow editing only for the specific row in the "Grade" column
+  columnGrade.setCellFactory(param -> new ComboBoxTableCell<>(FXCollections.observableArrayList(getGradeLevels())) {
+      @Override
+      public void startEdit() {
+          if (getIndex() == editingRowIndex) { // Allow editing only for the specified row
+              super.startEdit();
+          }
+      }
+
+      @Override
+      public void updateItem(String item, boolean empty) {
+          super.updateItem(item, empty);
+          if (getIndex() == editingRowIndex) {
+              setEditable(true);
+          } else {
+              setEditable(false);
+          }
+      }
+  });
+
+  // Notify the user about edit mode
+  errorLabel.setText("Edit mode enabled for student " +  student.getName()+ ". Click 'Save' to apply changes.");
+}
+
+            
+  private void updateStudent(String currentName, String newName, String newGrade) {
+     
+      String result = CoolSuppliesFeatureSet2Controller.updateStudent(currentName, newName, newGrade);
+      if (result.isEmpty()) {
+          errorLabel.setText("Student updated successfully.");
+          refreshTable();
+      } else {
+          errorLabel.setText(result); // Display error from the controller
+      }
+  }
 
     private void deleteStudent(String name) {
         // Call the backend function and display the error or success message
@@ -171,11 +236,12 @@ private List<String> getGradeLevels() {
         }
     }
 
-
    
     private void refreshTable() {
       studentList.setAll(CoolSuppliesFeatureSet2Controller.getStudents());
       tableView.setItems(studentList);
   }
 }
+
+
 

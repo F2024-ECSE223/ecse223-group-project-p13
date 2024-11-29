@@ -17,7 +17,7 @@
                <content>
                   <TableView fx:id="item_table_view" prefHeight="299.0" prefWidth="586.0">
                     <columns>
-                      <TableColumn fx:id="item_item_column" prefWidth="150.0" text="Item" />
+                      <TableColumn fx:id="item_name_column" prefWidth="150.0" text="Item" />
                         <TableColumn fx:id="item_price_column" prefWidth="75.0" text="Price" />
                       <TableColumn fx:id="item_options_column" prefWidth="150.0" text="Options" />
                     </columns>
@@ -33,9 +33,9 @@
    <bottom>
       <AnchorPane prefHeight="72.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="item_item_name_label" layoutX="140.0" layoutY="1.0" text="Item name" />
-            <TextField fx:id="item_price_label" layoutX="306.0" layoutY="1.0" text="Price" />
-            <Button fx:id="item_add_item_button" layoutX="260.0" layoutY="36.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #5C80BC;" text="Add Item" textFill="WHITE" />
+            <TextField fx:id="new_item_name_text_field" layoutX="140.0" layoutY="1.0" text="Item name" />
+            <TextField fx:id="new_price_text_field" layoutX="306.0" layoutY="1.0" text="Price" />
+            <Button fx:id="add_item_button" layoutX="260.0" layoutY="36.0" mnemonicParsing="false" onAction="#addItemClicked" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #5C80BC;" text="Add Item" textFill="WHITE" />
          </children>
       </AnchorPane>
    </bottom>
