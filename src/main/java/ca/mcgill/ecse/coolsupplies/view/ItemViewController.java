@@ -1,8 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 //import javax.swing.table.TableColumn;
-import javafx.scene.control.TableColumn;
-
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOItem;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,12 +12,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
 
 public class ItemViewController {
 
@@ -38,7 +38,7 @@ public class ItemViewController {
   private TableColumn<TOItem, String> item_name_column;
 
   @FXML
-  private TableColumn<TOItem, String> item_price_column;  // TODO: Integer for price??
+  private TableColumn<TOItem, String> item_price_column;
 
   @FXML
   private TableColumn<TOItem, Void> item_options_column;
@@ -53,9 +53,33 @@ public class ItemViewController {
 
     item_name_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
     item_price_column.setCellValueFactory(data -> new SimpleStringProperty(""+data.getValue().getPrice()));
-    //item_options_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getShift()));
+    
+    addButtons();
+    
 
   }
+
+  @FXML
+  private void addButtons() {
+    item_options_column.setCellFactory(col -> new TableCell<>() {
+      private final Button updateButton = new Button("Update");
+      private final Button deleteButton = new Button("Delete");
+  
+      {
+          updateButton.setOnAction(event -> {
+              TOItem item = getTableView().getItems().get(getIndex());
+              
+          });
+  
+          deleteButton.setOnAction(event -> {
+              TOItem item = getTableView().getItems().get(getIndex());
+              getTableView().getItems().remove(item);
+          });
+      }
+    
+    });
+    
+}
 
   @FXML
   public void addItemClicked(ActionEvent event) {
@@ -89,7 +113,7 @@ public class ItemViewController {
     VBox dialogPane = new VBox();
 
     // create UI elements
-    Text text = new Text(message);
+    //Text text = new Text(message);
     Button okButton = new Button("OK");
     okButton.setOnAction(a -> dialog.close());
 
@@ -99,7 +123,7 @@ public class ItemViewController {
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
-    dialogPane.getChildren().addAll(text, okButton);
+    //dialogPane.getChildren().addAll(text, okButton);
     Scene dialogScene = new Scene(dialogPane, outerPadding + 5 * message.length(), outerPadding);
     dialog.setScene(dialogScene);
     dialog.setTitle(title);
