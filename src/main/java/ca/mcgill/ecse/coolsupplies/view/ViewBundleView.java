@@ -56,61 +56,123 @@ public class ViewBundleView {
         // }
 
         // Add listener for row double-clicks
-        bundlesTable.setRowFactory(tv -> {
-            TableRow<TOGradeBundle> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getClickCount() == 2) {
-                    TOGradeBundle clickedBundle = row.getItem();
-                    openBundleDetail(clickedBundle);
-                }
-            });
-            return row;
-        });
+        // bundlesTable.setRowFactory(tv -> {
+        //     TableRow<TOGradeBundle> row = new TableRow<>();
+        //     row.setOnMouseClicked(event -> {
+        //         if (!row.isEmpty() && event.getClickCount() == 2) {
+        //             TOGradeBundle clickedBundle = row.getItem();
+        //             openBundleDetail(clickedBundle);
+        //         }
+        //     });
+        //     return row;
+        // });
     }
 
     @FXML
     public void newBundle(ActionEvent event) {
-        try {
-            openNewBundlePage();
-            clearError();
-        } catch (Exception e) {
-            displayError("Failed to open the new bundle page: " + e.getMessage());
-        }
+        //Use Trevor's new method
+        
+        // try {
+        //     openNewBundlePage();
+        //     clearError();
+        // } catch (Exception e) {
+        //     displayError("Failed to open the new bundle page: " + e.getMessage());
+        // }
 
   }
 
-    private void openBundleDetail(TOGradeBundle bundle) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditBundle.fxml"));
-            Parent root = loader.load();
+    private void addActionButtonsToTable() {
+        columnActions.setCellFactory(param -> new TableCell<>() {
+        private final Button deleteButton = new Button("Delete");
+        private final Button updateButton = new Button("Update");
+        private final Button saveButton = new Button("Save");
+        private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default buttons
+        private final HBox saveFunction = new HBox(10, saveButton);
 
-            // Pass the bundle to the controller
-            EditBundleView controller = loader.getController();
-            controller.initData(bundle);
+        {
+            deleteButton.setPrefWidth(80);
+            deleteButton.setPrefHeight(30);
+            updateButton.setPrefWidth(80);
+            updateButton.setPrefHeight(30);
+            saveButton.setPrefWidth(80);
+            saveButton.setPrefHeight(30);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Edit Bundle");
-            stage.show();
+            // Configure delete button
+            deleteButton.setOnAction(event -> {
+                TOStudent student = getTableView().getItems().get(getIndex());
+                deleteStudent(student.getName());
+            });
 
-            clearError();
-        } catch (IOException e) {
-            displayError("Failed to open the bundle detail page: " + e.getMessage());
+            // Configure update button
+            updateButton.setOnAction(event -> {
+              TOStudent student = getTableView().getItems().get(getIndex());
+              enableEditMode(student, getIndex());
+          
+              // Replace "Update" button with "Save" button
+              // buttons.getChildren().clear();
+              // buttons.getChildren().addAll(saveButton, deleteButton);
+          
+              // Force refresh
+              // getTableView().refresh();
+              setGraphic(saveFunction);
+          });
+          
+
+            // Configure save button
+            saveButton.setOnAction(event -> {
+              TOStudent student = getTableView().getItems().get(getIndex());
+          
+              // Fetch edited values
+              String newName = columnName.getCellObservableValue(getIndex()).getValue();
+              String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
+          
+              updateStudent(student.getName(), newName, newGrade);
+          
+              // Restore "Update" button after saving
+              buttons.getChildren().clear();
+              buttons.getChildren().addAll(updateButton, deleteButton);
+          
+              // Force refresh
+              getTableView().refresh();
+              setGraphic(buttons);
+          });
+          
         }
+
+    private void openBundleDetail(TOGradeBundle bundle) {
+        //When 
+        
+        // try {
+        //     FXMLLoader loader = new FXMLLoader(getClass().getResource("EditBundle.fxml"));
+        //     Parent root = loader.load();
+
+        //     // Pass the bundle to the controller
+        //     EditBundleView controller = loader.getController();
+        //     controller.initData(bundle);
+
+        //     Stage stage = new Stage();
+        //     stage.setScene(new Scene(root));
+        //     stage.setTitle("Edit Bundle");
+        //     stage.show();
+
+        //     clearError();
+        // } catch (IOException e) {
+        //     displayError("Failed to open the bundle detail page: " + e.getMessage());
+        // }
     }
 
-    private void openNewBundlePage() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
-            Parent root = loader.load();
+    // private void openNewBundlePage() {
+    //     try {
+    //         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
+    //         Parent root = loader.load();
     
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add New Bundle");
-            stage.show();
-        } catch (IOException e) {
-            displayError("Failed to open the new bundle page: " + e.getMessage());
-        }
+    //         Stage stage = new Stage();
+    //         stage.setScene(new Scene(root));
+    //         stage.setTitle("Add New Bundle");
+    //         stage.show();
+    //     } catch (IOException e) {
+    //         displayError("Failed to open the new bundle page: " + e.getMessage());
+    //     }
 
 
         // try {
@@ -129,7 +191,7 @@ public class ViewBundleView {
         // } catch (IOException e) {
         //     throw new RuntimeException(e); // Let the calling method handle it
         // }
-    }
+    // }
 
     // private List<TOGradeBundle> getAllBundles() {
     //     return CoolSuppliesFeatureSet4Controller.getBundles();
