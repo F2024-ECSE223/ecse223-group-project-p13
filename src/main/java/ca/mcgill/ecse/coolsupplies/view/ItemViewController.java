@@ -77,8 +77,8 @@ public class ItemViewController {
   
       {
           updateButton.setOnAction(event -> {
-              TOItem item = getTableView().getItems().get(getIndex());
-              makePopupWindow("Update Item", "New name:");
+              TOItem oldItem = getTableView().getItems().get(getIndex());
+              makeUpdateWindow(oldItem);
           });
   
           deleteButton.setOnAction(event -> {
@@ -140,18 +140,48 @@ public class ItemViewController {
   
 
 
-  // Helper methods
-
-  // Error popup from tutorial
-  private  static void makePopupWindow(String title, String message) {
+  private void makeUpdateWindow(TOItem oldItem) {
     Stage dialog = new Stage();
     dialog.initModality(Modality.APPLICATION_MODAL);
     VBox dialogPane = new VBox();
 
     // create UI elements
-    Label text = new Label("test");
-    Button okButton = new Button("OK");
-    okButton.setOnAction(a -> dialog.close());
+    TextField newName = new TextField("New name");
+    TextField newPrice = new TextField("New price");
+    Button saveButton = new Button("Save");
+    Button cancelButton = new Button("Cancel");
+    Label errorUpdate = new Label("");
+    
+    newName.setOnMouseClicked(a -> newName.setText(""));
+    newPrice.setOnMouseClicked(a -> newPrice.setText(""));
+    saveButton.setOnAction(a -> {
+
+      //String updatedItem = CoolSuppliesFeatureSet3Controller.addItem(newName.getText(), Integer.parseInt(newPrice.getText()));
+
+    String newNameString = newName.getText();
+    String newPriceString = newPrice.getText();
+
+    if (newNameString == null || newNameString.trim().isEmpty()) {
+      errorUpdate.setText("Please input a valid item name");
+    } 
+    else if (newPriceString == null || newPriceString.trim().isEmpty()) {
+      errorUpdate.setText("Please input a valid item price");
+    }
+    String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newNameString, Integer.parseInt(newPriceString));
+    if (addMessage.isEmpty()) {
+      errorUpdate.setText(addMessage);
+      TOItem new_item = new TOItem(newNameString, Integer.parseInt(newPriceString));
+      itemList.add(new_item);
+      itemList.remove(oldItem);
+      oldItem.delete();
+      dialog.close();
+    }
+    else {
+      error.setText(addMessage);
+    }
+    
+    });
+    cancelButton.setOnAction(a -> dialog.close());
 
     // display the popup window
     int innerPadding = 10; // inner padding/spacing
@@ -159,18 +189,12 @@ public class ItemViewController {
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
-    dialogPane.getChildren().addAll(text, okButton);
-    Scene dialogScene = new Scene(dialogPane, outerPadding + 5 * message.length(), outerPadding);
+    dialogPane.getChildren().addAll(newName, newPrice, errorUpdate, saveButton, cancelButton);
+    Scene dialogScene = new Scene(dialogPane);
     dialog.setScene(dialogScene);
-    dialog.setTitle(title);
+    dialog.setTitle("Update Item");
     dialog.show();
   }
 
-  private static void showError(String message) {
-    makePopupWindow("Error", message);
-  }
 
-
-  
-  
 }
