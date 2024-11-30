@@ -152,40 +152,48 @@ public class ItemViewController {
     Button cancelButton = new Button("Cancel");
     Label errorUpdate = new Label("");
     
+    // actions
     newName.setOnMouseClicked(a -> newName.setText(""));
     newPrice.setOnMouseClicked(a -> newPrice.setText(""));
     saveButton.setOnAction(a -> {
 
-      //String updatedItem = CoolSuppliesFeatureSet3Controller.addItem(newName.getText(), Integer.parseInt(newPrice.getText()));
-
+    // textt from labels
     String newNameString = newName.getText();
     String newPriceString = newPrice.getText();
 
+    // add updated name as new, remove old
     if (newNameString == null || newNameString.trim().isEmpty()) {
       errorUpdate.setText("Please input a valid item name");
     } 
     else if (newPriceString == null || newPriceString.trim().isEmpty()) {
       errorUpdate.setText("Please input a valid item price");
     }
+
     String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newNameString, Integer.parseInt(newPriceString));
-    if (addMessage.isEmpty()) {
-      errorUpdate.setText(addMessage);
-      TOItem new_item = new TOItem(newNameString, Integer.parseInt(newPriceString));
-      itemList.add(new_item);
-      itemList.remove(oldItem);
-      oldItem.delete();
-      dialog.close();
-    }
-    else {
-      error.setText(addMessage);
+    try {
+      if (addMessage.isEmpty()) {
+        errorUpdate.setText(addMessage);
+        TOItem new_item = new TOItem(newNameString, Integer.parseInt(newPriceString));
+        itemList.add(new_item);
+        itemList.remove(oldItem);
+        oldItem.delete();
+        dialog.close();
+      }
+      else {
+        errorUpdate.setText(addMessage);
+      }
+    } catch (Exception e) {
+      errorUpdate.setText(""+e);
     }
     
+    
     });
+
     cancelButton.setOnAction(a -> dialog.close());
 
     // display the popup window
-    int innerPadding = 10; // inner padding/spacing
-    int outerPadding = 100; // outer padding
+    int innerPadding = 10;
+    int outerPadding = 100;
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
