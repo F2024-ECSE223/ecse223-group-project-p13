@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -31,33 +32,38 @@ public class AddBundleController {
     private Button nextButton;
     @FXML
     private void initialize(){
-        List<TOGrade> gradesInSystem = CoolSuppliesFeatureSet7Controller.getGrades();
-        List<String> gradeLevels = new ArrayList<>();
-        for(TOGrade grade : gradesInSystem){
-            gradeLevels.add(grade.getLevel());
-        }
-        gradeOptions.getItems().addAll(gradeLevels);
+        // List<TOGrade> gradesInSystem = CoolSuppliesFeatureSet7Controller.getGrades();
+        // List<String> gradeLevels = new ArrayList<>();
+        // for(TOGrade grade : gradesInSystem){
+        //     gradeLevels.add(grade.getLevel());
+        // }
+        // gradeOptions.getItems().addAll(gradeLevels);
     }
 
     @FXML
-    private void moveToNextPage(){  //move over to add items page from the next button
-
-    }
-    @FXML
-    private void createBundle(){
-        String bundleName = bundleNameText.getText();
-        String bundleDiscount= discountValue.getText();
-        String bundleGrade= gradeOptions.getValue();
+    private void moveToNextPage(ActionEvent event){  //move over to add items page from the next button
         try {
-            int discountInt = Integer.parseInt(bundleDiscount);
-            String tryAddBundle = CoolSuppliesFeatureSet4Controller.addBundle(bundleName, discountInt, bundleGrade);
+            CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a Bundle");
+            clearError();
+        } catch (Exception e) {
+            displayError("Failed to open the edit bundle page: " + e.getMessage());
         }
-        catch(NumberFormatException e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setContentText("Discount must be a number");
-        }
-
     }
+    // @FXML
+    // private void createBundle(){
+    //     String bundleName = bundleNameText.getText();
+    //     String bundleDiscount= discountValue.getText();
+    //     String bundleGrade= gradeOptions.getValue();
+    //     try {
+    //         int discountInt = Integer.parseInt(bundleDiscount);
+    //         String tryAddBundle = CoolSuppliesFeatureSet4Controller.addBundle(bundleName, discountInt, bundleGrade);
+    //     }
+    //     catch(NumberFormatException e) {
+    //         Alert alert = new Alert(AlertType.ERROR);
+    //         alert.setContentText("Discount must be a number");
+    //     }
+
+    // }
 
 
 }

@@ -65,9 +65,8 @@ public class ViewBundleView {
 
    @FXML
    public void newBundle(ActionEvent event) {
-      
        try {
-           CoolSuppliesFxmlView.newWindow("AddBundle.fxml", "Add Bundle");
+           CoolSuppliesFxmlView.newWindow("AddBundle.fxml", "Add a New Bundle");
            clearError();
        } catch (Exception e) {
            displayError("Failed to open the new bundle page: " + e.getMessage());
@@ -237,3 +236,4 @@ public class ViewBundleView {
        bundlesTable.setItems(bundleList);
    }
 }
+

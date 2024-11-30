@@ -35,7 +35,7 @@
             </font>
          </Label>
          <TextField layoutX="370.0" layoutY="179.0" prefHeight="26.0" prefWidth="287.0" />
-         <Button layoutX="370.0" layoutY="243.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="94.0" text="Next " />
+         <Button fx:id="nextButton" id="nextButton" onAction="#moveToNextPage" layoutX="370.0" layoutY="243.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="94.0" text="Next " />
       </children>
    </AnchorPane>
 </VBox>
