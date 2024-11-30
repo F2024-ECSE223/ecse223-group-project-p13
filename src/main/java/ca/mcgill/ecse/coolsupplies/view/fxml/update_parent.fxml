@@ -23,25 +23,25 @@
                         <Font name="Rockwell" size="26.0" />
                      </font>
                   </Label>
-                  <Label layoutX="250.0" layoutY="220.0" prefHeight="27.0" prefWidth="460.0" text="Enter New Password ">
+                  <Label layoutX="251.0" layoutY="304.0" prefHeight="27.0" prefWidth="460.0" text="Enter New Password ">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="250.0" layoutY="305.0" prefHeight="27.0" prefWidth="492.0" text="Enter Phone Number">
+                  <Label layoutX="249.0" layoutY="386.0" prefHeight="27.0" prefWidth="492.0" text="Enter Phone Number">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="252.0" layoutY="385.0" prefHeight="27.0" prefWidth="457.0" text="Enter Name">
+                  <Label layoutX="252.0" layoutY="473.0" prefHeight="27.0" prefWidth="457.0" text="Enter Name">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="phoneUpdateParent" layoutX="251.0" layoutY="333.0" prefHeight="26.0" prefWidth="406.0" />
-                  <TextField fx:id="nameUpdateParent" layoutX="251.0" layoutY="412.0" prefHeight="26.0" prefWidth="403.0" />
-                  <PasswordField fx:id="passwordUpdateParent" layoutX="250.0" layoutY="247.0" prefHeight="26.0" prefWidth="404.0" />
-                  <Button fx:id="buttonSaveUpdateParent" layoutX="409.0" layoutY="479.0" mnemonicParsing="false" onAction="#saveButtonClickedUpdateParent" text="SAVE">
+                  <TextField fx:id="phoneUpdateParent" layoutX="250.0" layoutY="414.0" prefHeight="26.0" prefWidth="406.0" />
+                  <TextField fx:id="nameUpdateParent" layoutX="251.0" layoutY="500.0" prefHeight="26.0" prefWidth="403.0" />
+                  <PasswordField fx:id="passwordUpdateParent" layoutX="251.0" layoutY="331.0" prefHeight="26.0" prefWidth="404.0" />
+                  <Button fx:id="buttonSaveUpdateParent" layoutX="409.0" layoutY="557.0" mnemonicParsing="false" onAction="#saveButtonClickedUpdateParent" text="SAVE">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
@@ -57,6 +57,12 @@
                      </font>
                   </Label>
                   <ComboBox id="emailUpdateParent" fx:id="emailUpdateParent" layoutX="250.0" layoutY="167.0" prefHeight="26.0" prefWidth="246.0" promptText="Choose your email" />
+                  <Label layoutX="252.0" layoutY="210.0" text="Enter Current Password">
+                     <font>
+                        <Font name="Rockwell" size="22.0" />
+                     </font>
+                  </Label>
+                  <PasswordField id="oldPasswordUpdateParent" fx:id="oldPasswordUpdateParent" layoutX="252.0" layoutY="248.0" prefHeight="26.0" prefWidth="402.0" />
                </children>
             </AnchorPane>
          </content>

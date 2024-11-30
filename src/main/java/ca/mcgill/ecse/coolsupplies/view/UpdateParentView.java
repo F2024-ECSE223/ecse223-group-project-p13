@@ -15,6 +15,10 @@ public class UpdateParentView {
 
     @FXML
     private ComboBox<String> emailUpdateParent;
+
+    @FXML
+    private PasswordField oldPasswordUpdateParent;
+
     @FXML
     private PasswordField passwordUpdateParent;
 
@@ -47,19 +51,26 @@ public class UpdateParentView {
     @FXML
     public void saveButtonClickedUpdateParent(javafx.event.ActionEvent event)
     {
+        String oldPassword = oldPasswordUpdateParent.getText();
         String email = emailUpdateParent.getValue();
         String name = nameUpdateParent.getText();
         String phoneNumber = phoneUpdateParent.getText();
         int phone = Integer.parseInt(phoneNumber);
         String password = passwordUpdateParent.getText();
 
-        String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name,phone);
-        errorMessageUpdateParent.setText(message);
+        if (oldPassword.equals(CoolSuppliesFeatureSet1Controller.getParent(email).getPassword())){
+            String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name,phone);
+            errorMessageUpdateParent.setText(message);
+        } else {
+            errorMessageUpdateParent.setText("This email is not yours.");
+        }
+        
         
         emailUpdateParent.getSelectionModel().clearSelection();;
         nameUpdateParent.setText("");
         phoneUpdateParent.setText("");
         passwordUpdateParent.setText("");
+        oldPasswordUpdateParent.setText("");
     }
 
 }
