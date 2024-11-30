@@ -26,7 +26,7 @@ public class ParentManagerView extends ManagerView {
       return;
     }
     else if (page.equals(ORDERS)) {
-      new OrderView(mainContent);
+      setMain("ViewOrdersParent.fxml");
       return;
     }
     else {

@@ -33,7 +33,7 @@ public class ViewBundleView {
     private TableColumn<TOGradeBundle, String> bundleGrade;
 
     @FXML
-    private Label errorLabel;
+    private Label errorLabel = new Label("null");
 
     private ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
 
@@ -71,7 +71,7 @@ public class ViewBundleView {
     @FXML
     public void newBundle(ActionEvent event) {
         try {
-            openNewBundlePage();
+            CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "bl");
             clearError();
         } catch (Exception e) {
             displayError("Failed to open the new bundle page: " + e.getMessage());
