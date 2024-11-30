@@ -60,15 +60,15 @@ public class ItemManagementView {
     // Initialize method
     @FXML
     public void initialize() {
-        // Initialize TableView columns
+        
         BundleItems.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
         BundlePrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(getItemPrice(cellData.getValue()))));
         BundleDiscount.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeBundleName()));
 
-        // Items TableView columns
+       
         columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         columnPrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
-        columnQuantity.setCellValueFactory(cellData -> new SimpleIntegerProperty(1).asObject());
+        
 
         // Initialize Spinner for Bundle Quantity
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
