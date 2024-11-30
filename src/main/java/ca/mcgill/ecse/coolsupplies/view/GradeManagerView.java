@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
+//import javafx.scene.image.Image;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableCell;
@@ -120,7 +120,7 @@ public class GradeManagerView {
     if (!error.equals("")) {
       errorLabel.setText(error);
       PauseTransition pause = new PauseTransition(Duration.seconds(4));
-      pause.setOnFinished(event2 -> errorLabel.setText(""));
+      pause.setOnFinished(wait2 -> errorLabel.setText(""));
       pause.play();
     } else {
       TOGrade newGrade = new TOGrade(grade);

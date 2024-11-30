@@ -56,6 +56,12 @@ public class AdminManagerView extends ManagerView {
       setMain("add-updategrade.fxml");
       return;
     }
+
+    else if (page.equals(ORDERS)) {
+      setMain("AdminViewIndividualOrder.fxml");
+    }
+
+
     else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");
