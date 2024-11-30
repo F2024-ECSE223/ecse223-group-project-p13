@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 
 public class UpdateParentView {
-
+ 
     @FXML
     private ComboBox<String> emailUpdateParent;
 
@@ -35,8 +35,22 @@ public class UpdateParentView {
     private Button buttonSaveUpdateParent;
 
     @FXML
+    private ComboBox<String> infoEmailUpdateParent;
+
+    @FXML
+    private Label infoNameUpdateParent;
+
+    @FXML
+    private Label infoPhoneUpdateParent;
+
+    @FXML
     public void initialize(){
         emailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
+        //java -0infoEmailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
+        String infoEmail = infoEmailUpdateParent.getValue();
+        String infoPhone = "" + (CoolSuppliesFeatureSet1Controller.getParent(infoEmail).getPhoneNumber());
+        infoNameUpdateParent.setText(CoolSuppliesFeatureSet1Controller.getParent(infoEmail).getName());
+        infoPhoneUpdateParent.setText(infoPhone);
     }
 
     private List<String> getParentEmails(){
