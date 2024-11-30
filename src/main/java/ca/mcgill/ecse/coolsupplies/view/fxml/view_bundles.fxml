@@ -31,7 +31,7 @@
                           <columns>
                             <TableColumn id="bundleName" fx:id="bundleName" prefWidth="187.5" text="Bundle Name" />
                             <TableColumn id="bundleGrade" fx:id="bundleGrade" prefWidth="190.0" text="Bundle Grade" />
-                              <TableColumn prefWidth="159.0" text="Edit" />
+                            <TableColumn id="editButton" fx:id="editButton" prefWidth="159.0" text="Edit" />
                           </columns>
                         </TableView>
                      </content>

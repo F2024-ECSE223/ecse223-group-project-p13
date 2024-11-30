@@ -16,29 +16,32 @@ import java.util.List;
 import java.lang.Integer;
 
 public class AddBundleController {
-    @FXML
-    private Label bundleName;
-    @FXML
-    private Label grade;
+    // @FXML
+    // private Label bundleName;
+    // @FXML
+    // private Label grade;
     @FXML
     private TextField bundleNameText;
     @FXML
     private ComboBox<String> gradeOptions;
-    @FXML
-    private Label discount;
+    // @FXML
+    // private Label discount;
     @FXML
     private TextField discountValue;
     @FXML
     private Button nextButton;
-    @FXML
-    private void initialize(){
+    
+    //Add error label here
+
+    // @FXML
+    // private void initialize(){
         // List<TOGrade> gradesInSystem = CoolSuppliesFeatureSet7Controller.getGrades();
         // List<String> gradeLevels = new ArrayList<>();
         // for(TOGrade grade : gradesInSystem){
         //     gradeLevels.add(grade.getLevel());
         // }
         // gradeOptions.getItems().addAll(gradeLevels);
-    }
+    // }
 
     @FXML
     private void moveToNextPage(ActionEvent event){  //move over to add items page from the next button
