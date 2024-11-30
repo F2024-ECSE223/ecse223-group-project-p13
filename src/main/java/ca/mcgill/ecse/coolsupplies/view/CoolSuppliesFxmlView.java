@@ -19,6 +19,7 @@ import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,6 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class CoolSuppliesFxmlView extends Application {
@@ -70,8 +72,13 @@ public class CoolSuppliesFxmlView extends Application {
 
     Scene scene = new Scene(root, 800, 600);
 
-    primaryStage.setMinHeight(600);
-    primaryStage.setMinWidth(800);
+    Screen screen = Screen.getPrimary();
+    Rectangle2D bounds = screen.getBounds();
+
+    primaryStage.setMinHeight(400);
+    primaryStage.setMinWidth(600);
+    primaryStage.setWidth(bounds.getWidth());
+    primaryStage.setHeight(bounds.getHeight());
     primaryStage.setTitle("CoolSupplies");
     primaryStage.setScene(scene);
     primaryStage.show();

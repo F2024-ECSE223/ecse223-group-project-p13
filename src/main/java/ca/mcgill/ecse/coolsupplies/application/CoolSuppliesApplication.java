@@ -13,6 +13,7 @@ public class CoolSuppliesApplication {
 
   private static CoolSupplies coolSupplies;
   public static Boolean isLight = true;
+  public static Boolean schoolYearStarted = false;
 
   public static void main(String[] args) {
     clearAppData();

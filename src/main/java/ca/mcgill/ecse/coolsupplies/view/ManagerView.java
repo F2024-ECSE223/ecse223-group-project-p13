@@ -7,6 +7,8 @@ import atlantafx.base.theme.PrimerLight;
 import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,6 +28,7 @@ public abstract class ManagerView {
   public BorderPane root;
   public Function<Void, Void> signOut;
   private ImageView imageView = new ImageView();
+  public StringProperty schoolYear = new SimpleStringProperty("Start School Year");
 
   public VBox createSidebar() {
     VBox sidebar = new VBox(10);
@@ -80,6 +83,16 @@ public abstract class ManagerView {
   }
 
   private Button createNavButton(String text) {
+    if (text.equals(AdminManagerView.YEAR)) {
+      AdminManagerView.schoolYearButton = new Button(schoolYear.get());
+      AdminManagerView.schoolYearButton.setMaxWidth(Double.MAX_VALUE);
+      AdminManagerView.schoolYearButton.setAlignment(Pos.CENTER_LEFT);
+      AdminManagerView.schoolYearButton.setPadding(new Insets(10));
+
+      AdminManagerView.schoolYearButton.setOnAction(e -> updateContent(text));
+      AdminManagerView.schoolYearButton.getStyleClass().add(Styles.ACCENT);
+      return AdminManagerView.schoolYearButton;
+    }
     Button button = new Button(text);
     button.setMaxWidth(Double.MAX_VALUE);
     button.setAlignment(Pos.CENTER_LEFT);
@@ -103,7 +116,7 @@ public abstract class ManagerView {
 
     Button signOut = new Button("Sign Out");
     signOut.setOnAction(e -> this.signOut.apply(null));
-    signOut.getStyleClass().add(Styles.ACCENT);
+    signOut.getStyleClass().add(Styles.DANGER);
 
     Button theme = new Button(CoolSuppliesApplication.isLight ? "Dark" : "Light");
     theme.setOnAction((e) -> {
