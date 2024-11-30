@@ -44,9 +44,9 @@ public class AddBundleController {
     private void moveToNextPage(ActionEvent event){  //move over to add items page from the next button
         try {
             CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a Bundle");
-            clearError();
+            // clearError();
         } catch (Exception e) {
-            displayError("Failed to open the edit bundle page: " + e.getMessage());
+            // displayError("Failed to open the edit bundle page: " + e.getMessage());
         }
     }
     // @FXML

@@ -118,7 +118,14 @@ public abstract class ManagerView {
     signOut.setOnAction(e -> this.signOut.apply(null));
     signOut.getStyleClass().add(Styles.DANGER);
 
-    Button theme = new Button(CoolSuppliesApplication.isLight ? "Dark" : "Light");
+    Button theme = new Button();
+    if (CoolSuppliesApplication.isLight) {
+      theme.setGraphic(CoolSuppliesFxmlView.getIcon("resources/moon.svg"));
+    }
+    else {
+      theme.setGraphic(CoolSuppliesFxmlView.getIcon("resources/sun.svg"));
+    }
+
     theme.setOnAction((e) -> {
       if (CoolSuppliesApplication.isLight) {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());

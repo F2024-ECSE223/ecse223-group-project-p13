@@ -2,11 +2,18 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import java.awt.Taskbar;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import atlantafx.base.theme.PrimerLight;
 import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
@@ -35,7 +42,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -105,10 +114,12 @@ public class CoolSuppliesFxmlView extends Application {
     Button admin = new Button("Admin");
     admin.setPrefSize(100, 80);
     admin.setOnAction(e -> updateTab("admin"));
+    admin.setGraphic(getIcon("resources/admin.svg"));
 
     Button parent = new Button("Parent");
     parent.setPrefSize(100, 80);
     parent.setOnAction(e -> updateTab("parent"));
+    parent.setGraphic(getIcon("resources/profile.svg"));
 
     buttons.getChildren().addAll(admin, parent);
 
@@ -142,6 +153,7 @@ public class CoolSuppliesFxmlView extends Application {
     header.getChildren().addAll(imageBox, title, date);
 
     Button register = new Button("Register");
+    register.getStyleClass().add(Styles.ACCENT);
     register.setOnAction((e) -> {
       updateTab("register");
     });
@@ -234,6 +246,35 @@ public class CoolSuppliesFxmlView extends Application {
         taskbar.setIconImage(image);
       }
     }
+  }
+
+  public static SVGPath getIcon(String path) {
+    try {
+      InputStream inputStream = CoolSuppliesFxmlView.class.getResourceAsStream(path);
+      
+      if (inputStream == null) {
+        throw new FileNotFoundException("Resource not found: " + inputStream);
+      }
+
+      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+      List<String> content = reader.lines()
+          .collect(Collectors.toList());
+
+      SVGPath svg = new SVGPath();
+      svg.setContent(String.join(" ",content));
+
+      if (!CoolSuppliesApplication.isLight) {
+        svg.setStroke(Color.WHITE);
+        svg.setFill(Color.WHITE);
+      }
+
+      return svg;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return null;
   }
 
   public static void handleErr(String err) {
