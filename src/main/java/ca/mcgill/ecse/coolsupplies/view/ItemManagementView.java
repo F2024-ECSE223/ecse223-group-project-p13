@@ -1,37 +1,38 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import java.util.Collections;
-import java.util.List;
-import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
-import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet4Controller;
-import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
-import ca.mcgill.ecse.coolsupplies.controller.TOGradeBundle;
-import ca.mcgill.ecse.coolsupplies.controller.TOItem;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.event.ActionEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.Callback;
+import java.util.ArrayList;
+import java.util.List;
+import ca.mcgill.ecse.coolsupplies.controller.*;
 
 public class ItemManagementView {
 
     @FXML
-    private TableView<TOGradeBundle> BundleTable;
+    private TableView<TOBundleItem> bundleTableView;
 
     @FXML
-    private TableView<TOItem> ItemTable;
+    private TableColumn<TOBundleItem, String> BundleItems;
+
+    @FXML
+    private TableColumn<TOBundleItem, String> BundlePrice;
+
+    @FXML
+    private TableColumn<TOBundleItem, String> BundleDiscount;
 
     @FXML
     private Spinner<Integer> BundleQuantity;
 
     @FXML
-    private TableColumn<TOGradeBundle, String> BundleItems;
-
-    @FXML
-    private TableColumn<TOGradeBundle, String> BundlePrice;
-
-    @FXML
-    private TableColumn<TOGradeBundle, Integer> BundleDiscount;
+    private TableView<TOItem> itemsTableView;
 
     @FXML
     private TableColumn<TOItem, String> columnName;
@@ -40,7 +41,7 @@ public class ItemManagementView {
     private TableColumn<TOItem, String> columnPrice;
 
     @FXML
-    private TableColumn<TOItem, Void> columnQuantity;
+    private TableColumn<TOItem, Integer> columnQuantity;
 
     @FXML
     private Button viewOrder;
@@ -48,89 +49,128 @@ public class ItemManagementView {
     @FXML
     private Label errorLabel;
 
-    private ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
-    private ObservableList<TOItem> itemList = FXCollections.observableArrayList();
+    // Variables to store passed data
+    private String studentName;
+    private String orderLevel;
 
-    private String selectedGrade;
-    private String selectedLevel;
+    // ObservableLists for TableViews
+    private ObservableList<TOBundleItem> bundleItemsList = FXCollections.observableArrayList();
+    private ObservableList<TOItem> itemsList = FXCollections.observableArrayList();
 
-    /**
-     * Set the grade and level of the student.
-     */
-    public void setStudentInfo(String grade, String level) {
-        this.selectedGrade = grade;
-        this.selectedLevel = level;
-        refreshBundleTable();
-        refreshItemTable();
-    }
-
+    // Initialize method
     @FXML
     public void initialize() {
-        // Configure table columns
-        BundleItems.setCellValueFactory(new PropertyValueFactory<>("name"));
-        BundlePrice.setCellValueFactory(new PropertyValueFactory<>("discount")); // Adjust if price exists
-        BundleDiscount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        // Initialize TableView columns
+        BundleItems.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
+        BundlePrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(getItemPrice(cellData.getValue()))));
+        BundleDiscount.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeBundleName()));
 
-        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        // Items TableView columns
+        columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        columnPrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
+        columnQuantity.setCellValueFactory(cellData -> new SimpleIntegerProperty(1).asObject());
 
-        // Add spinner factory for the quantity column
-        columnQuantity.setCellFactory(param -> new TableCell<>() {
-            private final Spinner<Integer> spinner = new Spinner<>(0, 100, 0);
+        // Initialize Spinner for Bundle Quantity
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
+        BundleQuantity.setValueFactory(valueFactory);
+    }
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(spinner);
-                }
+  
+    
+    private int getItemPrice(TOBundleItem bundleItem) {
+        // Implement logic to get the item price
+        // This is a placeholder
+        return 0;
+    }
+
+    // Method to set student name and order level (called from previous UI)
+    public void setStudentInfo(String studentName, String orderLevel) {
+        this.studentName = studentName;
+        this.orderLevel = orderLevel;
+
+        // Load data based on student info
+        loadData();
+    }
+
+    // Method to load data into TableViews
+    private void loadData() {
+        // Get student's grade level
+        String gradeLevel = getStudentGradeLevel(studentName);
+
+        if (gradeLevel == null) {
+            errorLabel.setText("Student not found.");
+            return;
+        }
+
+        // Load bundle items
+        loadBundleItems(gradeLevel);
+
+        // Load available items
+        loadAvailableItems();
+    }
+
+    private String getStudentGradeLevel(String studentName) {
+        TOStudent student = CoolSuppliesFeatureSet2Controller.getStudent(studentName);
+        return student != null ? student.getGradeLevel() : null;
+    }
+
+    private void loadBundleItems(String gradeLevel) {
+        // Get the bundle for the grade
+        TOGradeBundle bundle = CoolSuppliesFeatureSet4Controller.getBundleByGrade(gradeLevel);
+
+        if (bundle == null) {
+            errorLabel.setText("No bundle available for the grade.");
+            return;
+        }
+
+        // Get items in the bundle based on order level
+        List<TOBundleItem> bundleItems = getBundleItems(bundle.getName(), orderLevel);
+
+        // Populate the bundle TableView
+        bundleItemsList.setAll(bundleItems);
+        bundleTableView.setItems(bundleItemsList);
+    }
+
+    private List<TOBundleItem> getBundleItems(String bundleName, String orderLevel) {
+        // Implement logic to get bundle items based on order level
+        List<TOBundleItem> allBundleItems = CoolSuppliesFeatureSet7Controller.getBundleItems(bundleName);
+
+        List<TOBundleItem> filteredItems = new ArrayList<>();
+
+        for (TOBundleItem item : allBundleItems) {
+            if (purchaseLevelAllows(item.getLevel(), orderLevel)) {
+                filteredItems.add(item);
             }
-        });
+        }
 
-        // Initialize spinner for the bundle quantity
-        SpinnerValueFactory<Integer> bundleSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0);
-        BundleQuantity.setValueFactory(bundleSpinnerFactory);
+        return filteredItems;
     }
 
-    private void refreshBundleTable() {
-        // Get the bundle for the selected grade and level
-        List<TOGradeBundle> bundles = CoolSuppliesFeatureSet4Controller.getBundles();
-        TOGradeBundle matchingBundle = bundles.stream()
-                .filter(bundle -> bundle.getGradeLevel().equals(selectedGrade))
-                .findFirst()
-                .orElse(null);
+    private boolean purchaseLevelAllows(String itemLevel, String orderLevel) {
+        // Implement logic to compare itemLevel and orderLevel
+        // Assuming levels are "Mandatory", "Recommended", "Optional"
 
-        bundleList.setAll(matchingBundle != null ? Collections.singletonList(matchingBundle) : Collections.emptyList());
-        BundleTable.setItems(bundleList);
+        List<String> levels = List.of("Mandatory", "Recommended", "Optional");
+
+        int itemLevelIndex = levels.indexOf(itemLevel);
+        int orderLevelIndex = levels.indexOf(orderLevel);
+
+        return itemLevelIndex <= orderLevelIndex;
     }
 
-    private void refreshItemTable() {
-        // Get all items
-        List<TOItem> items = CoolSuppliesFeatureSet3Controller.getItems();
-        itemList.setAll(items);
-        ItemTable.setItems(itemList);
+    private void loadAvailableItems() {
+        // Load all available items from the controller
+        List<TOItem> items = CoolSuppliesFeatureSet7Controller.getItems();
+
+        itemsList.setAll(items);
+        itemsTableView.setItems(itemsList);
     }
 
+    // Event handler for "View Order" button
     @FXML
-    private void handleViewOrder() {
-        // Collect bundle quantity
-        int bundleQuantity = BundleQuantity.getValue();
-        if (bundleQuantity > 0 && !bundleList.isEmpty()) {
-            TOGradeBundle selectedBundle = bundleList.get(0);
-            String bundleName = selectedBundle.getName();
-            Iteration3Controller.addItem(bundleName, String.valueOf(bundleQuantity), "1"); // Order number hardcoded for simplicity
-        }
-
-        // Collect item quantities
-        for (TOItem item : itemList) {
-            int quantity = 0; // Replace with logic to get quantity from the quantity column
-            if (quantity > 0) {
-                Iteration3Controller.addItem(item.getName(), String.valueOf(quantity), "1");
-            }
-        }
-
-        errorLabel.setText("Order updated successfully!");
+    private void viewOrder(ActionEvent event) {
+        // Implement navigation to Order View
     }
+
+    // Other methods as needed
 }
