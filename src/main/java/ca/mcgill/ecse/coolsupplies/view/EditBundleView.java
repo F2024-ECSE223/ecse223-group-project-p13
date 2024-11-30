@@ -22,5 +22,6 @@ public class EditBundleView {
         // Initialize other UI components with bundle data
     }
 
+    //saveButton
     // Other methods for handling events, saving changes, etc.
 }
