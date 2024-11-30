@@ -55,6 +55,17 @@ public class DeleteParentView {
                     DeleteClickedDeleteParent(parent.getEmail());
                 });
             }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty){
+                    setGraphic(null);
+                } else {
+                    setGraphic(removeButtonRemoveParent);
+                }
+            }
         });
         // need a protected void UpdateItem () ?????
     }
@@ -64,6 +75,8 @@ public class DeleteParentView {
     {
         String message = CoolSuppliesFeatureSet1Controller.deleteParent(email);
         errorMessageRemoveParent.setText(message);
+
+        parentList.removeIf(parent -> parent.getEmail().equals(email));
 
     }
 

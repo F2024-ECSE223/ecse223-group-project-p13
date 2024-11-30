@@ -8,12 +8,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import atlantafx.base.theme.PrimerLight;
+import atlantafx.base.theme.Styles;
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,8 +35,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class CoolSuppliesFxmlView extends Application {
@@ -40,15 +48,17 @@ public class CoolSuppliesFxmlView extends Application {
 
   private StackPane mainContent;
   private BorderPane root;
-
   private ParentManagerView parentManager;
   private AdminManagerView adminManager;
 
-  public static Font title = new Font(26);
-  public static Font title2 = new Font(22);
+  /* Shared variables */
+  public static final Font title = new Font(26);
+  public static final Font title2 = new Font(22);
 
-  public static Image icon =
+  public static final Image icon =
       new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
+  public static final Image darkIcon =
+      new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon_dark.png"));
 
   @Override
   public void start(Stage primaryStage) {
@@ -62,8 +72,13 @@ public class CoolSuppliesFxmlView extends Application {
 
     Scene scene = new Scene(root, 800, 600);
 
-    primaryStage.setMinHeight(600);
-    primaryStage.setMinWidth(800);
+    Screen screen = Screen.getPrimary();
+    Rectangle2D bounds = screen.getBounds();
+
+    primaryStage.setMinHeight(400);
+    primaryStage.setMinWidth(600);
+    primaryStage.setWidth(bounds.getWidth());
+    primaryStage.setHeight(bounds.getHeight());
     primaryStage.setTitle("CoolSupplies");
     primaryStage.setScene(scene);
     primaryStage.show();
@@ -97,28 +112,34 @@ public class CoolSuppliesFxmlView extends Application {
 
     buttons.getChildren().addAll(admin, parent);
 
-    VBox header = new VBox(16);
+    VBox header = new VBox();
     header.setPadding(new Insets(0, 0, 16, 0));
     header.setAlignment(Pos.CENTER);
 
-    ImageView imageView = new ImageView(CoolSuppliesFxmlView.icon);
+    VBox imageBox = new VBox();
+    imageBox.setPadding(new Insets(0, 0, 32, 0));
+    imageBox.setAlignment(Pos.CENTER);
+
+    ImageView imageView = CoolSuppliesApplication.isLight ? new ImageView(CoolSuppliesFxmlView.icon) : new ImageView(CoolSuppliesFxmlView.darkIcon);
     imageView.setFitHeight(100);
     imageView.setFitWidth(100);
     imageView.setScaleX(3);
     imageView.setScaleY(3);
 
     imageView.setPreserveRatio(true);
+    imageBox.getChildren().add(imageView);
 
     Text title = new Text("Welcome to CoolSupplies!");
-    title.setFont(CoolSuppliesFxmlView.title);
+    title.getStyleClass().add(Styles.TITLE_1);
 
     LocalDate currentDate = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE MMMM dd, YYYY");
-    String formattedDate = "Today is " + currentDate.format(formatter);
+    String formattedDate = "Today is " + currentDate.format(formatter) + ".";
 
     Text date = new Text(formattedDate);
+    date.getStyleClass().add(Styles.TITLE_4);
 
-    header.getChildren().addAll(imageView, title, date);
+    header.getChildren().addAll(imageBox, title, date);
 
     Button register = new Button("Register");
     register.setOnAction((e) -> {
@@ -232,7 +253,7 @@ public class CoolSuppliesFxmlView extends Application {
 
         Stage stage = new Stage();
         stage.setTitle(title);
-        stage.setScene(new Scene(root, 600, 300));
+        stage.setScene(new Scene(root));
         stage.show();
     } catch (IOException e) {
         e.printStackTrace();
@@ -241,5 +262,5 @@ public class CoolSuppliesFxmlView extends Application {
         e.printStackTrace();
         System.out.println("Error showing new window: " + e.getLocalizedMessage());
     }
-}
+  }
 }

@@ -22,20 +22,20 @@
                <Font name="Rockwell" size="18.0" />
             </font>
          </Label>
-         <TextField layoutX="370.0" layoutY="36.0" prefHeight="26.0" prefWidth="287.0" />
+         <TextField fx:id ="bundleNameText" layoutX="370.0" layoutY="36.0" prefHeight="26.0" prefWidth="287.0" />
          <Label layoutX="240.0" layoutY="116.0" prefHeight="27.0" prefWidth="82.0" text="Grade">
             <font>
                <Font name="Rockwell" size="18.0" />
             </font>
          </Label>
-         <ComboBox layoutX="370.0" layoutY="104.0" prefHeight="26.0" prefWidth="287.0" promptText="Please select a grade" />
+         <ComboBox fx:id="gradeOptions" layoutX="370.0" layoutY="104.0" prefHeight="26.0" prefWidth="287.0" promptText="Please select a grade" />
          <Label layoutX="240.0" layoutY="181.0" text="Discount ">
             <font>
                <Font name="Rockwell" size="18.0" />
             </font>
          </Label>
-         <TextField layoutX="370.0" layoutY="179.0" prefHeight="26.0" prefWidth="287.0" />
-         <Button layoutX="370.0" layoutY="243.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="94.0" text="Next " />
+         <TextField fx:id="discountValue" layoutX="370.0" layoutY="179.0" prefHeight="26.0" prefWidth="287.0" />
+         <Button fx:id="nextButton" id="nextButton" onAction="#moveToNextPage" layoutX="370.0" layoutY="243.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="94.0" text="Next " />
       </children>
    </AnchorPane>
 </VBox>

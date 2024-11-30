@@ -1,8 +1,18 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import java.util.List;
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
+import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class AdminManagerView extends ManagerView {
@@ -14,7 +24,9 @@ public class AdminManagerView extends ManagerView {
   private static final String ITEMS = "Items";
   private static final String BUNDLES = "Bundles";
   private static final String ORDERS = "Orders";
-  private static final String YEAR = "Start School Year";
+  public static String YEAR = "School Year";
+
+  public static Button schoolYearButton;
 
   public AdminManagerView(BorderPane root, StackPane mainContent) {
     this.root = root;
@@ -23,7 +35,9 @@ public class AdminManagerView extends ManagerView {
 
   @Override
   public void updateContent(String page) {
-    mainContent.getChildren().clear();
+    if (!page.equals(YEAR)) {
+      mainContent.getChildren().clear();
+    }
 
     if (page.equals(ACCOUNT)) {
       setMain("Update_Admin_password.fxml");
@@ -41,10 +55,37 @@ public class AdminManagerView extends ManagerView {
       setMain("Item.fxml");
       return;
     }
-    else if (page.equals("Start School Year")){
-      
-      
-    
+    else if (page.equals(YEAR)){
+      String status = CoolSuppliesApplication.schoolYearStarted ? "ended" : "started";
+
+      List<TOOrder> orders = Iteration3Controller.viewAllOrders();
+
+      for (TOOrder order : orders) {
+        if (!CoolSuppliesApplication.schoolYearStarted) {
+          String result = Iteration3Controller.startSchoolYear(order.getNumber());
+          CoolSuppliesFxmlView.handleErr(result);
+        }
+        else {
+          // TODO: Do we have even have an end schoolYear controller method?
+        }
+      }
+
+      CoolSuppliesApplication.schoolYearStarted = !CoolSuppliesApplication.schoolYearStarted;
+
+      String action = CoolSuppliesApplication.schoolYearStarted ? "End" : "Start";
+      AdminManagerView.schoolYearButton.setText(action + " school year");
+
+      Dialog<String> dialog = new Dialog<>();
+
+      VBox content = new VBox(10);
+      content.setPadding(new Insets(16, 16, 16, 16));
+      Text message = new Text("School year " + status);
+
+      content.getChildren().add(message);
+
+      dialog.getDialogPane().setContent(content);
+      dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+      dialog.showAndWait();
     }
     else if (page.equals(BUNDLES)) {
       setMain("view_bundles.fxml");

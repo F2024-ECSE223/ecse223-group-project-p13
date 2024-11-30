@@ -33,10 +33,16 @@ public class RegisterParentView {
     private Label errorMessageRegisterParent;
 
     @FXML
-    public void saveButtonClickedRegisterParent (ActionEvent event)
+    public void saveButtonClickedRegisterParent (javafx.event.ActionEvent event)
     {
         String email = emailRegisterParent.getText();
         String phoneNumberString = phoneRegisterParent.getText();
+        
+        // NECESSARY ? THE PARENT ALWAYS INPUTS NUMBER IN DEMO
+        /*if(phoneNumberString.isEmpty()){
+            errorMessageRegisterParent.setText("The phone number must not be empty.");
+        }*/
+
         int phoneNumber = Integer.parseInt(phoneNumberString);
         String name = nameRegisterParent.getText();
         String password = passwordRegisterParent.getText();
@@ -44,6 +50,11 @@ public class RegisterParentView {
         String message = CoolSuppliesFeatureSet1Controller.addParent(email, password, name, phoneNumber);
         errorMessageRegisterParent.setText(message);
 
+        // clearing the input fields
+        emailRegisterParent.setText("");
+        phoneRegisterParent.setText("");
+        nameRegisterParent.setText("");
+        passwordRegisterParent.setText("");
         // NEED TO UPDATE THE LIST OF PARENTS ON OTHER PAGE (dans le code d affichage)
     }
 
