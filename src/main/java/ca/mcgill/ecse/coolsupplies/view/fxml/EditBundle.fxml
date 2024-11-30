@@ -57,8 +57,9 @@
                <children>
                   <TableView fx:id="itemsTable" layoutX="-4.0" prefHeight="313.0" prefWidth="700.0">
                     <columns>
-                      <TableColumn id="items" fx:id="items" prefWidth="356.2288932800293" text="Item" />
-                      <TableColumn id="quantity" fx:id="quantity" prefWidth="341.2710876464844" text="Quantity" />
+                      <TableColumn id="items" fx:id="items" prefWidth="249.57717514038086" text="Item" />
+                      <TableColumn id="quantity" fx:id="quantity" prefWidth="215.9228057861328" text="Quantity" />
+                        <TableColumn prefWidth="233.5" text="Purchase Level" />
                     </columns>
                   </TableView>
                </children>

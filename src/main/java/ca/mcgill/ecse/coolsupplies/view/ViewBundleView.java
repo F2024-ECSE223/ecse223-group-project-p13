@@ -1,6 +1,5 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.layout.HBox;
-
 
 public class ViewBundleView {
    public StackPane mainContent;
@@ -54,18 +52,15 @@ public class ViewBundleView {
    @FXML
    public void initialize() {
 
-
     //    Set up the table columns
        bundleName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
        bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
-
 
        //Add action items to table
        addActionButtonToTable();
 
        // Load initial data into the table
        refreshTable();
-
 
    }
 
@@ -82,14 +77,11 @@ public class ViewBundleView {
        //Add action button to table
        addActionButtonToTable();
 
-
    }
-
 
    private void addActionButtonToTable() {
     editButton.setCellFactory(param -> new TableCell<TOGradeBundle, Void>() {
         private final Button editButton = new Button("Edit");
-
         {
             editButton.setPrefWidth(80);
             editButton.setPrefHeight(30);
@@ -121,10 +113,6 @@ public class ViewBundleView {
 
 
 
-   // private List<TOGradeBundle> getAllBundles() {
-   //     return CoolSuppliesFeatureSet4Controller.getBundles();
-   // }
-
 
   // Method to display error messages
    private void displayError(String message) {
@@ -143,4 +131,3 @@ public class ViewBundleView {
        bundlesTable.setItems(bundleList);
    }
 }
-
