@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import javafx.scene.layout.HBox;
 
 public class ViewBundleView {
     public StackPane mainContent;
@@ -33,7 +34,7 @@ public class ViewBundleView {
     private TableColumn<TOGradeBundle, String> bundleGrade;
 
     @FXML
-    private Label errorLabel;
+    private Label errorLabel = new Label("null");
 
     private ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
 
@@ -41,168 +42,171 @@ public class ViewBundleView {
     public void initialize() {
 
         // Set up the table columns
-        bundleName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
+        bundleName.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        bundleGrade.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
 
         // Load initial data into the table
         refreshTable();
 
         // Load data into the table
         // try {
-        //     bundleList.addAll(getAllBundles());
-        //     bundlesTable.setItems(bundleList);
+        // bundleList.addAll(getAllBundles());
+        // bundlesTable.setItems(bundleList);
         // } catch (Exception e) {
-        //     displayError("Failed to load bundles: " + e.getMessage());
+        // displayError("Failed to load bundles: " + e.getMessage());
         // }
 
         // Add listener for row double-clicks
         // bundlesTable.setRowFactory(tv -> {
-        //     TableRow<TOGradeBundle> row = new TableRow<>();
-        //     row.setOnMouseClicked(event -> {
-        //         if (!row.isEmpty() && event.getClickCount() == 2) {
-        //             TOGradeBundle clickedBundle = row.getItem();
-        //             openBundleDetail(clickedBundle);
-        //         }
-        //     });
-        //     return row;
+        // TableRow<TOGradeBundle> row = new TableRow<>();
+        // row.setOnMouseClicked(event -> {
+        // if (!row.isEmpty() && event.getClickCount() == 2) {
+        // TOGradeBundle clickedBundle = row.getItem();
+        // openBundleDetail(clickedBundle);
+        // }
+        // });
+        // return row;
         // });
     }
 
     @FXML
     public void newBundle(ActionEvent event) {
-        //Use Trevor's new method
-        
-        // try {
-        //     openNewBundlePage();
-        //     clearError();
-        // } catch (Exception e) {
-        //     displayError("Failed to open the new bundle page: " + e.getMessage());
-        // }
-
-  }
-
-    private void addActionButtonsToTable() {
-        columnActions.setCellFactory(param -> new TableCell<>() {
-        private final Button deleteButton = new Button("Delete");
-        private final Button updateButton = new Button("Update");
-        private final Button saveButton = new Button("Save");
-        private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default buttons
-        private final HBox saveFunction = new HBox(10, saveButton);
-
-        {
-            deleteButton.setPrefWidth(80);
-            deleteButton.setPrefHeight(30);
-            updateButton.setPrefWidth(80);
-            updateButton.setPrefHeight(30);
-            saveButton.setPrefWidth(80);
-            saveButton.setPrefHeight(30);
-
-            // Configure delete button
-            deleteButton.setOnAction(event -> {
-                TOStudent student = getTableView().getItems().get(getIndex());
-                deleteStudent(student.getName());
-            });
-
-            // Configure update button
-            updateButton.setOnAction(event -> {
-              TOStudent student = getTableView().getItems().get(getIndex());
-              enableEditMode(student, getIndex());
-          
-              // Replace "Update" button with "Save" button
-              // buttons.getChildren().clear();
-              // buttons.getChildren().addAll(saveButton, deleteButton);
-          
-              // Force refresh
-              // getTableView().refresh();
-              setGraphic(saveFunction);
-          });
-          
-
-            // Configure save button
-            saveButton.setOnAction(event -> {
-              TOStudent student = getTableView().getItems().get(getIndex());
-          
-              // Fetch edited values
-              String newName = columnName.getCellObservableValue(getIndex()).getValue();
-              String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
-          
-              updateStudent(student.getName(), newName, newGrade);
-          
-              // Restore "Update" button after saving
-              buttons.getChildren().clear();
-              buttons.getChildren().addAll(updateButton, deleteButton);
-          
-              // Force refresh
-              getTableView().refresh();
-              setGraphic(buttons);
-          });
-          
+        try {
+            CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "bl");
+            clearError();
+        } catch (Exception e) {
+            displayError("Failed to open the new bundle page: " + e.getMessage());
         }
 
+    }
+
+    private void addActionButtonsToTable() {
+        // columnActions.setCellFactory(param -> new TableCell<>() {
+        //     private final Button deleteButton = new Button("Delete");
+        //     private final Button updateButton = new Button("Update");
+        //     private final Button saveButton = new Button("Save");
+        //     private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default
+        //                                                                            // buttons
+        //     private final HBox saveFunction = new HBox(10, saveButton);
+
+        //     {
+        //         deleteButton.setPrefWidth(80);
+        //         deleteButton.setPrefHeight(30);
+        //         updateButton.setPrefWidth(80);
+        //         updateButton.setPrefHeight(30);
+        //         saveButton.setPrefWidth(80);
+        //         saveButton.setPrefHeight(30);
+
+        //         // Configure delete button
+        //         deleteButton.setOnAction(event -> {
+        //             TOStudent student = (TOStudent) getTableView().getItems().get(getIndex());
+        //             // deleteStudent(student.getName());
+        //         });
+
+        //         // Configure update button
+        //         updateButton.setOnAction(event -> {
+        //             TOStudent student = (TOStudent) getTableView().getItems().get(getIndex());
+        //             // enableEditMode(student, getIndex());
+
+        //             // Replace "Update" button with "Save" button
+        //             // buttons.getChildren().clear();
+        //             // buttons.getChildren().addAll(saveButton, deleteButton);
+
+        //             // Force refresh
+        //             // getTableView().refresh();
+        //             setGraphic(saveFunction);
+        //         });
+
+
+        //         // Configure save button
+        //         saveButton.setOnAction(event -> {
+        //             TOStudent student = (TOStudent) getTableView().getItems().get(getIndex());
+
+        //             // Fetch edited values
+        //             // String newName = columnName.getCellObservableValue(getIndex()).getValue();
+        //             // String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
+
+        //             // updateStudent(student.getName(), newName, newGrade);
+
+        //             // Restore "Update" button after saving
+        //             buttons.getChildren().clear();
+        //             buttons.getChildren().addAll(updateButton, deleteButton);
+
+        //             // Force refresh
+        //             getTableView().refresh();
+        //             setGraphic(buttons);
+        //         });
+        //     }
+
+        // });
+    }
+
     private void openBundleDetail(TOGradeBundle bundle) {
-        //When 
-        
+        // When
+
         // try {
-        //     FXMLLoader loader = new FXMLLoader(getClass().getResource("EditBundle.fxml"));
-        //     Parent root = loader.load();
+        // FXMLLoader loader = new FXMLLoader(getClass().getResource("EditBundle.fxml"));
+        // Parent root = loader.load();
 
-        //     // Pass the bundle to the controller
-        //     EditBundleView controller = loader.getController();
-        //     controller.initData(bundle);
+        // // Pass the bundle to the controller
+        // EditBundleView controller = loader.getController();
+        // controller.initData(bundle);
 
-        //     Stage stage = new Stage();
-        //     stage.setScene(new Scene(root));
-        //     stage.setTitle("Edit Bundle");
-        //     stage.show();
+        // Stage stage = new Stage();
+        // stage.setScene(new Scene(root));
+        // stage.setTitle("Edit Bundle");
+        // stage.show();
 
-        //     clearError();
+        // clearError();
         // } catch (IOException e) {
-        //     displayError("Failed to open the bundle detail page: " + e.getMessage());
+        // displayError("Failed to open the bundle detail page: " + e.getMessage());
         // }
     }
 
     // private void openNewBundlePage() {
-    //     try {
-    //         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
-    //         Parent root = loader.load();
-    
-    //         Stage stage = new Stage();
-    //         stage.setScene(new Scene(root));
-    //         stage.setTitle("Add New Bundle");
-    //         stage.show();
-    //     } catch (IOException e) {
-    //         displayError("Failed to open the new bundle page: " + e.getMessage());
-    //     }
+    // try {
+    // FXMLLoader loader = new FXMLLoader(getClass().getResource("AddBundle.fxml"));
+    // Parent root = loader.load();
+
+    // Stage stage = new Stage();
+    // stage.setScene(new Scene(root));
+    // stage.setTitle("Add New Bundle");
+    // stage.show();
+    // } catch (IOException e) {
+    // displayError("Failed to open the new bundle page: " + e.getMessage());
+    // }
 
 
-        // try {
-        //     FXMLLoader loader = new FXMLLoader();
-        //     loader.setLocation(this.getClass().getResource("AddBundle.fxml"));
-        //     loader.setClassLoader(this.getClass().getClassLoader());
+    // try {
+    // FXMLLoader loader = new FXMLLoader();
+    // loader.setLocation(this.getClass().getResource("AddBundle.fxml"));
+    // loader.setClassLoader(this.getClass().getClassLoader());
 
-        //     var root = (Pane) loader.load();
+    // var root = (Pane) loader.load();
 
-        //     mainContent.getChildren().add(root);
+    // mainContent.getChildren().add(root);
 
-            // Stage stage = new Stage();
-            // stage.setScene(new Scene(root));
-            // stage.setTitle("Add New Bundle");
-            // stage.show();
-        // } catch (IOException e) {
-        //     throw new RuntimeException(e); // Let the calling method handle it
-        // }
+    // Stage stage = new Stage();
+    // stage.setScene(new Scene(root));
+    // stage.setTitle("Add New Bundle");
+    // stage.show();
+    // } catch (IOException e) {
+    // throw new RuntimeException(e); // Let the calling method handle it
+    // }
     // }
 
     // private List<TOGradeBundle> getAllBundles() {
-    //     return CoolSuppliesFeatureSet4Controller.getBundles();
+    // return CoolSuppliesFeatureSet4Controller.getBundles();
     // }
 
-   // Method to display error messages
+    // Method to display error messages
     private void displayError(String message) {
         errorLabel.setText(message);
     }
 
-    //Method to clear error messages
+    // Method to clear error messages
     private void clearError() {
         errorLabel.setText("");
     }

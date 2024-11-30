@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -41,11 +42,8 @@ public class AdminManagerView extends ManagerView {
       return;
     }
     else if (page.equals("Start School Year")){
-      StackPane content = new StackPane();
-      Text text = new Text("School year started successfully!");
-      text.setStyle("-fx-font-size: 24px;");
-      content.getChildren().add(text);
-      mainContent.getChildren().add(content);
+      
+      
     
     }
     else if (page.equals(BUNDLES)) {

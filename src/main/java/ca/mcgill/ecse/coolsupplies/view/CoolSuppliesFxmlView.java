@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -223,4 +224,22 @@ public class CoolSuppliesFxmlView extends Application {
       errAlert.show();
     }
   }
+
+  public static void newWindow(String fxml, String title) {
+    try {
+        FXMLLoader loader = new FXMLLoader(CoolSuppliesFxmlView.class.getResource("fxml/" + fxml));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root, 600, 300));
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Error loading FXML file: " + e.getLocalizedMessage());
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error showing new window: " + e.getLocalizedMessage());
+    }
+}
 }

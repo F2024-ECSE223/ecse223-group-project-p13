@@ -1,13 +1,17 @@
-package org.example.iteration4_ui;
+package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
+import ca.mcgill.ecse.coolsupplies.controller.TOGrade;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet4Controller;
 import java.util.ArrayList;
+import java.util.List;
 import java.lang.Integer;
 
 public class AddBundleController {
@@ -46,19 +50,12 @@ public class AddBundleController {
         String bundleGrade= gradeOptions.getValue();
         try {
             int discountInt = Integer.parseInt(bundleDiscount);
+            String tryAddBundle = CoolSuppliesFeatureSet4Controller.addBundle(bundleName, discountInt, bundleGrade);
         }
         catch(NumberFormatException e) {
-            Alert alert = new Alert();
-            alert.setError("Discount must be a number");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Discount must be a number");
         }
-
-        String tryAddBundle = CoolSuppliesFeatureSet4Controller.addBundle(bundleName, bundleDiscount, bundleGrade);
-
-        if(!tryAddBundle.isEmpty()){
-            Alert alert = new Alert();
-            alert.setError(tryAddBundle);
-        }
-
 
     }
 
