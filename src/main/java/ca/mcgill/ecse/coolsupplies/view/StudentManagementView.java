@@ -111,38 +111,29 @@ private List<String> getGradeLevels() {
 
             // Configure update button
             updateButton.setOnAction(event -> {
-              TOStudent student = getTableView().getItems().get(getIndex());
-              enableEditMode(student, getIndex());
-          
-              // Replace "Update" button with "Save" button
-              // buttons.getChildren().clear();
-              // buttons.getChildren().addAll(saveButton, deleteButton);
-          
-              // Force refresh
-              // getTableView().refresh();
-              setGraphic(saveFunction);
-          });
-          
+                TOStudent student = getTableView().getItems().get(getIndex());
+                enableEditMode(student, getIndex());
+
+                // Refresh the table to trigger updateItem
+                getTableView().refresh();
+            });
 
             // Configure save button
             saveButton.setOnAction(event -> {
-              TOStudent student = getTableView().getItems().get(getIndex());
-          
-              // Fetch edited values
-              String newName = columnName.getCellObservableValue(getIndex()).getValue();
-              String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
-          
-              updateStudent(student.getName(), newName, newGrade);
-          
-              // Restore "Update" button after saving
-              buttons.getChildren().clear();
-              buttons.getChildren().addAll(updateButton, deleteButton);
-          
-              // Force refresh
-              getTableView().refresh();
-              setGraphic(buttons);
-          });
-          
+                TOStudent student = getTableView().getItems().get(getIndex());
+
+                // Fetch edited values
+                String newName = columnName.getCellObservableValue(getIndex()).getValue();
+                String newGrade = columnGrade.getCellObservableValue(getIndex()).getValue();
+
+                updateStudent(student.getName(), newName, newGrade);
+
+                // Exit edit mode
+                editingRowIndex = -1;
+
+                // Refresh the table to update the graphics
+                getTableView().refresh();
+            });
         }
 
         @Override
@@ -151,15 +142,17 @@ private List<String> getGradeLevels() {
             if (empty) {
                 setGraphic(null);
             } else {
-                // Refresh buttons based on edit mode or default mode
-                setGraphic(buttons);
+                if (getIndex() == editingRowIndex) {
+                    // Show "Save" button when in edit mode
+                    setGraphic(saveFunction);
+                } else {
+                    // Show default buttons otherwise
+                    setGraphic(buttons);
+                }
             }
         }
     });
 }
-
-  
-
 
 
 

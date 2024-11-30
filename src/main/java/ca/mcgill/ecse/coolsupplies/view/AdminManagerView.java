@@ -39,6 +39,7 @@ public class AdminManagerView extends ManagerView {
 
     else if (page.equals(ITEMS)){
       setMain("Item.fxml");
+      return;
     }
     else if (page.equals("Start School Year")){
       
@@ -53,14 +54,12 @@ public class AdminManagerView extends ManagerView {
       setMain("add-updategrade.fxml");
       return;
     }
-    else if (page.equals(ITEMS)) {
-      setMain("Item.fxml");
-    return;
-    }
+
     else if (page.equals(ORDERS)) {
-      setMain("ViewOrdersAdmin.fxml");
-      return;
+      setMain("AdminViewIndividualOrder.fxml");
     }
+
+
     else {
       StackPane content = new StackPane();
       Text text = new Text("This is the " + page + " page");

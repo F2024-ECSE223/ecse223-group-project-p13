@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -9,18 +10,18 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" controller="ca.mcgill.ecse.coolsupplies.view.ItemViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ItemViewController">
    <center>
       <VBox prefHeight="246.0" prefWidth="212.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane prefHeight="298.0" prefWidth="600.0">
+            <ScrollPane prefHeight="276.0" prefWidth="600.0">
                <content>
-                  <TableView fx:id="item_table_view" prefHeight="299.0" prefWidth="586.0">
-                    <columns>
-                      <TableColumn fx:id="item_name_column" prefWidth="150.0" text="Item" />
-                        <TableColumn fx:id="item_price_column" prefWidth="75.0" text="Price" />
-                      <TableColumn fx:id="item_options_column" prefWidth="150.0" text="Options" />
-                    </columns>
+                  <TableView fx:id="item_table_view" prefHeight="275.0" prefWidth="586.0">
+                     <columns>
+                        <TableColumn fx:id="item_name_column" prefWidth="150.0" text="Item" />
+                        <TableColumn fx:id="item_price_column" prefWidth="75.0" text="Price ($)" />
+                        <TableColumn fx:id="item_options_column" prefWidth="150.0" text="Options" />
+                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
@@ -31,11 +32,12 @@
       </VBox>
    </center>
    <bottom>
-      <AnchorPane prefHeight="72.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="118.0" prefWidth="601.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="new_item_name_text_field" layoutX="140.0" layoutY="1.0" text="Item name" />
-            <TextField fx:id="new_price_text_field" layoutX="306.0" layoutY="1.0" text="Price" />
-            <Button fx:id="add_item_button" layoutX="260.0" layoutY="36.0" mnemonicParsing="false" onAction="#addItemClicked" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #5C80BC;" text="Add Item" textFill="WHITE" />
+            <TextField fx:id="new_item_name_text_field" layoutX="100.0" layoutY="1.0" onMouseClicked="#itemNameTextClick" text="Item name" />
+            <TextField fx:id="new_price_text_field" layoutX="340.0" layoutY="1.0" onMouseClicked="#priceTextClick" text="Price" />
+            <Button fx:id="add_item_button" layoutX="261.0" layoutY="78.0" mnemonicParsing="false" onAction="#addItemClicked" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #5C80BC;" text="Add Item" textFill="WHITE" />
+            <Label fx:id="error" alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="42.0" prefHeight="17.0" prefWidth="600.0" text="test" textFill="RED" />
          </children>
       </AnchorPane>
    </bottom>
