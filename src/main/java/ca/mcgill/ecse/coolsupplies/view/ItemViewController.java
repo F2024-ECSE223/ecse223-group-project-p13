@@ -1,8 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 //import javax.swing.table.TableColumn;
-import javafx.scene.control.TableColumn;
-
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOItem;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,12 +12,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
 
 public class ItemViewController {
 
@@ -27,6 +29,9 @@ public class ItemViewController {
 
   @FXML
   private TextField new_price_text_field;
+
+  @FXML
+  private Label error;
 
   @FXML
   private Button add_item_button;
@@ -38,7 +43,7 @@ public class ItemViewController {
   private TableColumn<TOItem, String> item_name_column;
 
   @FXML
-  private TableColumn<TOItem, String> item_price_column;  // TODO: Integer for price??
+  private TableColumn<TOItem, String> item_price_column;
 
   @FXML
   private TableColumn<TOItem, Void> item_options_column;
@@ -53,9 +58,48 @@ public class ItemViewController {
 
     item_name_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
     item_price_column.setCellValueFactory(data -> new SimpleStringProperty(""+data.getValue().getPrice()));
-    //item_options_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getShift()));
+    
+    addButtonsColumn();
+
+    itemList.addAll(CoolSuppliesFeatureSet3Controller.getItems());
+
+    item_table_view.setItems(itemList);
+    
 
   }
+
+  @FXML
+  private void addButtonsColumn() {
+    item_options_column.setCellFactory(col -> new TableCell<>() {
+      private final Button updateButton = new Button("Update");
+      private final Button deleteButton = new Button("Delete");
+      private final HBox buttons = new HBox(10, updateButton, deleteButton);
+  
+      {
+          updateButton.setOnAction(event -> {
+              TOItem oldItem = getTableView().getItems().get(getIndex());
+              makeUpdateWindow(oldItem);
+          });
+  
+          deleteButton.setOnAction(event -> {
+              TOItem item = getTableView().getItems().get(getIndex());
+              getTableView().getItems().remove(item);
+          });
+      }
+
+      @Override
+      protected void updateItem(Void item, boolean empty) {
+          super.updateItem(item, empty);
+          if (empty) {
+              setGraphic(null);
+          } else {
+              setGraphic(buttons);
+          }
+      }
+    
+    });
+    
+}
 
   @FXML
   public void addItemClicked(ActionEvent event) {
@@ -64,53 +108,112 @@ public class ItemViewController {
     String newPrice = new_price_text_field.getText();
 
     if (newName == null || newName.trim().isEmpty()) {
-      showError("Please input a valid item name");
+      error.setText("Please input a valid item name");
     } 
     else if (newPrice == null || newPrice.trim().isEmpty()) {
-      showError("Please input a valid item price");
+      error.setText("Please input a valid item price");
     }
     String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newName, Integer.parseInt(newPrice));
     if (addMessage.isEmpty()) {
       new_item_name_text_field.setText("");
       new_price_text_field.setText("");
+      error.setText(addMessage);
+      TOItem new_item = new TOItem(newName, Integer.parseInt(newPrice));
+      itemList.add(new_item);
     }
     else {
-      showError(addMessage);
+      error.setText(addMessage);
     }
   }
 
+  // Clear text when user clicks text field
+  @FXML
+  private void itemNameTextClick() {
+    new_item_name_text_field.setText("");
+  }
 
-  // Helper methods
+  // Clear text when user clicks text field
+  @FXML
+  private void priceTextClick() {
+    new_price_text_field.setText("");
+  }
+  
 
-  // Error popup from tutorial
-  private  static void makePopupWindow(String title, String message) {
+
+  private void makeUpdateWindow(TOItem oldItem) {
     Stage dialog = new Stage();
     dialog.initModality(Modality.APPLICATION_MODAL);
     VBox dialogPane = new VBox();
 
     // create UI elements
+<<<<<<< HEAD
     //Text text = new Text(message);
     Button okButton = new Button("OK");
     okButton.setOnAction(a -> dialog.close());
+=======
+    TextField newName = new TextField("New name");
+    TextField newPrice = new TextField("New price");
+    Button saveButton = new Button("Save");
+    Button cancelButton = new Button("Cancel");
+    Label errorUpdate = new Label("");
+    
+    // actions
+    newName.setOnMouseClicked(a -> newName.setText(""));
+    newPrice.setOnMouseClicked(a -> newPrice.setText(""));
+    saveButton.setOnAction(a -> {
+
+    // textt from labels
+    String newNameString = newName.getText();
+    String newPriceString = newPrice.getText();
+
+    // add updated name as new, remove old
+    if (newNameString == null || newNameString.trim().isEmpty()) {
+      errorUpdate.setText("Please input a valid item name");
+    } 
+    else if (newPriceString == null || newPriceString.trim().isEmpty()) {
+      errorUpdate.setText("Please input a valid item price");
+    }
+
+    String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newNameString, Integer.parseInt(newPriceString));
+    try {
+      if (addMessage.isEmpty()) {
+        errorUpdate.setText(addMessage);
+        TOItem new_item = new TOItem(newNameString, Integer.parseInt(newPriceString));
+        itemList.add(new_item);
+        itemList.remove(oldItem);
+        oldItem.delete();
+        dialog.close();
+      }
+      else {
+        errorUpdate.setText(addMessage);
+      }
+    } catch (Exception e) {
+      errorUpdate.setText(""+e);
+    }
+    
+    
+    });
+
+    cancelButton.setOnAction(a -> dialog.close());
+>>>>>>> 66a49bab8a6b8b324db4c2ffea87aafbd5833e03
 
     // display the popup window
-    int innerPadding = 10; // inner padding/spacing
-    int outerPadding = 100; // outer padding
+    int innerPadding = 10;
+    int outerPadding = 100;
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
+<<<<<<< HEAD
     //dialogPane.getChildren().addAll(text, okButton);
     Scene dialogScene = new Scene(dialogPane, outerPadding + 5 * message.length(), outerPadding);
+=======
+    dialogPane.getChildren().addAll(newName, newPrice, errorUpdate, saveButton, cancelButton);
+    Scene dialogScene = new Scene(dialogPane);
+>>>>>>> 66a49bab8a6b8b324db4c2ffea87aafbd5833e03
     dialog.setScene(dialogScene);
-    dialog.setTitle(title);
+    dialog.setTitle("Update Item");
     dialog.show();
   }
 
-  private static void showError(String message) {
-    makePopupWindow("Error", message);
-  }
 
-
-  
-  
 }
