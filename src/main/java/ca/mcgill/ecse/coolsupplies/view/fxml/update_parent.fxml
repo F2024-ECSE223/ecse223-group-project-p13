@@ -11,14 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.UpdateParentView">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.UpdateParentView">
    <children>
-      <ScrollPane hbarPolicy="NEVER" prefHeight="401.0" prefWidth="600.0">
+      <ScrollPane hbarPolicy="NEVER" prefHeight="574.0" prefWidth="932.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="401.0" prefWidth="599.0" >
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="572.0" prefWidth="934.0">
                <children>
-                  <SplitPane dividerPositions="0.48663101604278064" layoutY="41.0" prefHeight="358.0" prefWidth="600.0">
+                  <SplitPane dividerPositions="0.48663101604278064" layoutX="108.0" layoutY="63.0" prefHeight="410.0" prefWidth="718.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
@@ -57,10 +56,10 @@
                                     <Font name="Rockwell" size="14.0" />
                                  </font>
                               </Button>
-                              <Label alignment="CENTER" layoutX="23.0" layoutY="322.0" prefHeight="18.0" prefWidth="193.0" textFill="#df0f0f" />
+                              <Label fx:id="errorMessageUpdateParent" alignment="CENTER" layoutX="23.0" layoutY="322.0" prefHeight="18.0" prefWidth="193.0" textFill="#df0f0f" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="250.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="344.0">
                            <children>
                               <Label layoutX="12.0" layoutY="14.0" text="Enter Email">
                                  <font>
@@ -77,7 +76,7 @@
                                     <Font name="Rockwell" size="20.0" />
                                  </font>
                               </Label>
-                              <ComboBox id="infoEmailUpdateParent" fx:id="infoEmailUpdateParent" layoutX="12.0" layoutY="38.0" prefHeight="26.0" prefWidth="247.0" promptText="Choose your email" />
+                              <ComboBox fx:id="infoEmailUpdateParent" layoutX="12.0" layoutY="38.0" prefHeight="26.0" prefWidth="247.0" promptText="Choose your email" />
                               <Label fx:id="infoNameUpdateParent" layoutX="14.0" layoutY="113.0" prefHeight="18.0" prefWidth="243.0" textFill="#7babcf">
                                  <font>
                                     <Font name="Rockwell" size="20.0" />
@@ -92,7 +91,7 @@
                         </AnchorPane>
                     </items>
                   </SplitPane>
-                  <Label alignment="CENTER" layoutX="79.0" layoutY="9.0" prefHeight="32.0" prefWidth="442.0" text="Account Information">
+                  <Label alignment="CENTER" layoutX="244.0" layoutY="14.0" prefHeight="32.0" prefWidth="442.0" text="Account Information">
                      <font>
                         <Font name="Rockwell" size="26.0" />
                      </font>
