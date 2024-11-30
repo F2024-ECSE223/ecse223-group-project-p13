@@ -22,13 +22,11 @@ public class UpdateAdminView {
 
 
     @FXML
-    public void saveButtonClickedUpdateAdmin (ActionEvent event){
+    public void saveButtonClickedUpdateAdmin (javafx.event.ActionEvent event){
        String  newPassword = newPasswordUpdateAdmin.getText();
        String message = CoolSuppliesFeatureSet1Controller.updateAdmin(newPassword);
        errorMessage.setText(message);
+       newPasswordUpdateAdmin.setText(""); // clear user input
 
-
-       // ADD ERROR LABEL
     }
-
 }
