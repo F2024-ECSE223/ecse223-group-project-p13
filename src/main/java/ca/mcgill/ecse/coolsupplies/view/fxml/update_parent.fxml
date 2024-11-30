@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
@@ -10,52 +11,52 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.UpdateParentView">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="969.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.UpdateParentView">
    <children>
-      <ScrollPane hbarPolicy="NEVER" prefHeight="438.0" prefWidth="600.0" vbarPolicy="ALWAYS">
+      <ScrollPane hbarPolicy="NEVER" prefHeight="656.0" prefWidth="1119.0" vbarPolicy="NEVER">
          <content>
-            <AnchorPane prefHeight="608.0" prefWidth="600.0">
+            <AnchorPane prefHeight="661.0" prefWidth="974.0">
                <children>
-                  <Separator layoutY="52.0" prefHeight="3.0" prefWidth="600.0" />
-                  <Label layoutX="136.0" layoutY="14.0" prefHeight="32.0" prefWidth="450.0" text="Update Account Information ">
+                  <Separator layoutY="53.0" prefHeight="2.0" prefWidth="970.0" />
+                  <Label layoutX="250.0" layoutY="14.0" prefHeight="32.0" prefWidth="450.0" text="Update Account Information ">
                      <font>
                         <Font name="Rockwell" size="26.0" />
                      </font>
                   </Label>
-                  <Label layoutX="54.0" layoutY="234.0" prefHeight="27.0" prefWidth="460.0" text="Enter New Password ">
+                  <Label layoutX="250.0" layoutY="220.0" prefHeight="27.0" prefWidth="460.0" text="Enter New Password ">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="54.0" layoutY="319.0" prefHeight="27.0" prefWidth="492.0" text="Enter Phone Number">
+                  <Label layoutX="250.0" layoutY="305.0" prefHeight="27.0" prefWidth="492.0" text="Enter Phone Number">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="60.0" layoutY="399.0" prefHeight="27.0" prefWidth="457.0" text="Enter Name">
+                  <Label layoutX="252.0" layoutY="385.0" prefHeight="27.0" prefWidth="457.0" text="Enter Name">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="phoneUpdateParent" layoutX="55.0" layoutY="347.0" prefHeight="26.0" prefWidth="406.0" />
-                  <TextField fx:id="nameUpdateParent" layoutX="59.0" layoutY="426.0" prefHeight="26.0" prefWidth="403.0" />
-                  <PasswordField fx:id="passwordUpdateParent" layoutX="54.0" layoutY="261.0" prefHeight="26.0" prefWidth="404.0" />
-                  <Button fx:id="buttonSaveUpdateParent" layoutX="475.0" layoutY="477.0" mnemonicParsing="false" onAction="#saveButtonClickedUpdateParent" text="SAVE">
+                  <TextField fx:id="phoneUpdateParent" layoutX="251.0" layoutY="333.0" prefHeight="26.0" prefWidth="406.0" />
+                  <TextField fx:id="nameUpdateParent" layoutX="251.0" layoutY="412.0" prefHeight="26.0" prefWidth="403.0" />
+                  <PasswordField fx:id="passwordUpdateParent" layoutX="250.0" layoutY="247.0" prefHeight="26.0" prefWidth="404.0" />
+                  <Button fx:id="buttonSaveUpdateParent" layoutX="409.0" layoutY="479.0" mnemonicParsing="false" onAction="#saveButtonClickedUpdateParent" text="SAVE">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Button>
-                  <Label fx:id="errorMessageUpdateParent" layoutX="53.0" layoutY="86.0" prefHeight="27.0" prefWidth="14.0" textFill="#df0f0f">
+                  <Label fx:id="errorMessageUpdateParent" alignment="CENTER" layoutX="31.0" layoutY="86.0" prefHeight="27.0" prefWidth="887.0" textFill="#df0f0f">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="54.0" layoutY="142.0" text="Enter Email">
+                  <Label layoutX="250.0" layoutY="128.0" text="Enter Email">
                      <font>
                         <Font name="Rockwell" size="22.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="emailUpdateParent" layoutX="53.0" layoutY="169.0" prefHeight="26.0" prefWidth="406.0" />
+                  <ComboBox id="emailUpdateParent" fx:id="emailUpdateParent" layoutX="250.0" layoutY="167.0" prefHeight="26.0" prefWidth="246.0" promptText="Choose your email" />
                </children>
             </AnchorPane>
          </content>
