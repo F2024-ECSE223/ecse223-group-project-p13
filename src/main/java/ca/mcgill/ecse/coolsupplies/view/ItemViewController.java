@@ -118,11 +118,26 @@ public class ItemViewController {
       new_item_name_text_field.setText("");
       new_price_text_field.setText("");
       error.setText(addMessage);
+      TOItem new_item = new TOItem(newName, Integer.parseInt(newPrice));
+      itemList.add(new_item);
     }
     else {
       error.setText(addMessage);
     }
   }
+
+  // Clear text when user clicks text field
+  @FXML
+  private void itemNameTextClick() {
+    new_item_name_text_field.setText("");
+  }
+
+  // Clear text when user clicks text field
+  @FXML
+  private void priceTextClick() {
+    new_price_text_field.setText("");
+  }
+  
 
 
   // Helper methods
