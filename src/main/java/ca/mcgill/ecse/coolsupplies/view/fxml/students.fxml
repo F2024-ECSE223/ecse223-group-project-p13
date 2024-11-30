@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="652.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.StudentManagementView">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="652.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.StudentManagementView">
    <children>
-      <TableView fx:id="tableView" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="652.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="tableView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="649.0" VBox.vgrow="ALWAYS">
          <columns>
             <TableColumn id="columnName" fx:id="columnName" prefWidth="250.0" text="Name" />
-            <TableColumn id="columnGrade" fx:id="columnGrade" minWidth="-Infinity" prefWidth="250.0" text="Grade" />
-            <TableColumn id="columnAction" fx:id="columnActions" minWidth="-Infinity" prefWidth="150.39996337890625" text="Actions" />
+            <TableColumn id="columnGrade" fx:id="columnGrade" minWidth="-Infinity" prefWidth="204.00001525878906" text="Grade" />
+            <TableColumn id="columnAction" fx:id="columnActions" minWidth="-Infinity" prefWidth="196.800048828125" text="Actions" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_LEFT" prefHeight="146.0" prefWidth="642.0" spacing="10.0">
@@ -44,9 +44,9 @@
             <Insets left="10.0" />
          </VBox.margin>
       </HBox>
-      <AnchorPane minHeight="-Infinity" prefHeight="62.0" prefWidth="652.0">
+      <AnchorPane prefHeight="62.0" prefWidth="652.0">
          <children>
-            <Label fx:id="errorLabel" alignment="CENTER" layoutX="-1.0" layoutY="22.0" prefHeight="18.0" prefWidth="652.0" textFill="#fc0000" />
+            <Label fx:id="errorLabel" alignment="CENTER" layoutY="13.0" prefHeight="18.0" prefWidth="652.0" textFill="#fc0000" />
          </children>
       </AnchorPane>
    </children>

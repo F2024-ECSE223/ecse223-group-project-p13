@@ -89,7 +89,7 @@ public class ItemViewController {
     VBox dialogPane = new VBox();
 
     // create UI elements
-    Text text = new Text(message);
+    //Text text = new Text(message);
     Button okButton = new Button("OK");
     okButton.setOnAction(a -> dialog.close());
 
@@ -99,7 +99,7 @@ public class ItemViewController {
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
-    dialogPane.getChildren().addAll(text, okButton);
+    //dialogPane.getChildren().addAll(text, okButton);
     Scene dialogScene = new Scene(dialogPane, outerPadding + 5 * message.length(), outerPadding);
     dialog.setScene(dialogScene);
     dialog.setTitle(title);
