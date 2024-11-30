@@ -146,11 +146,6 @@ public class ItemViewController {
     VBox dialogPane = new VBox();
 
     // create UI elements
-<<<<<<< HEAD
-    //Text text = new Text(message);
-    Button okButton = new Button("OK");
-    okButton.setOnAction(a -> dialog.close());
-=======
     TextField newName = new TextField("New name");
     TextField newPrice = new TextField("New price");
     Button saveButton = new Button("Save");
@@ -195,7 +190,6 @@ public class ItemViewController {
     });
 
     cancelButton.setOnAction(a -> dialog.close());
->>>>>>> 66a49bab8a6b8b324db4c2ffea87aafbd5833e03
 
     // display the popup window
     int innerPadding = 10;
@@ -203,13 +197,8 @@ public class ItemViewController {
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
-<<<<<<< HEAD
-    //dialogPane.getChildren().addAll(text, okButton);
-    Scene dialogScene = new Scene(dialogPane, outerPadding + 5 * message.length(), outerPadding);
-=======
     dialogPane.getChildren().addAll(newName, newPrice, errorUpdate, saveButton, cancelButton);
     Scene dialogScene = new Scene(dialogPane);
->>>>>>> 66a49bab8a6b8b324db4c2ffea87aafbd5833e03
     dialog.setScene(dialogScene);
     dialog.setTitle("Update Item");
     dialog.show();
