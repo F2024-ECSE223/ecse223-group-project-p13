@@ -191,5 +191,69 @@ public class ItemViewController {
     dialog.show();
   }
 
+  /*
+   * @Author Dimitri Christopoulos
+   */
+  /*private void paymentWindow(TOOrder pendingOrder) {
+    Stage dialog = new Stage();
+    dialog.initModality(Modality.APPLICATION_MODAL);
+    VBox dialogPane = new VBox();
+
+    // create UI elements
+    Label totalCost = new Label("");
+    TextField authCode = new TextField("Authorization Code");
+    Button payButton = new Button("Pay");
+    Button cancelButton = new Button("Cancel");
+    Label errorUpdate = new Label("");
+    
+    // actions
+    authCode.setOnMouseClicked(a -> authCode.setText(""));
+    payButton.setOnAction(a -> {
+
+    // textt from labels
+    String inputAuthCodeString = authCode.getText();
+
+    try {
+        if (pendingOrder.getAuthCode().equals(inputAuthCodeString)) {
+          pendingOrder
+        }
+    } 
+    catch (Exception e) {
+    }
+
+    // add updated name as new, remove old
+    String addMessage = CoolSuppliesFeatureSet3Controller.updateItem(oldItem.getName(), newNameString, Integer.parseInt(newPriceString));
+    try {
+      if (addMessage.isEmpty()) {
+        errorUpdate.setText(addMessage);
+        newName.setText("New name");
+        newPrice.setText("New price");
+        dialog.close();
+      }
+      else {
+        errorUpdate.setText(addMessage);
+      }
+    } catch (Exception e) {
+      errorUpdate.setText(""+e);
+    }
+    
+    
+    });
+
+    cancelButton.setOnAction(a -> dialog.close());
+
+    // display the popup window
+    int innerPadding = 10;
+    int outerPadding = 100;
+    dialogPane.setSpacing(innerPadding);
+    dialogPane.setAlignment(Pos.CENTER);
+    dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
+    dialogPane.getChildren().addAll(newName, newPrice, errorUpdate, saveButton, cancelButton);
+    Scene dialogScene = new Scene(dialogPane);
+    dialog.setScene(dialogScene);
+    dialog.setTitle("Update Item");
+    dialog.show();
+  }*/
+
 
 }
