@@ -21,6 +21,9 @@ public class DeleteParentView {
     private TableColumn <TOParent, String> parentEmailRemoveParent;
 
     @FXML
+    private TableColumn <TOParent, String> nameRemoveParent;
+
+    @FXML
     private TableColumn <TOParent, Void> removeRemoveParent;
 
     @FXML
@@ -41,6 +44,7 @@ public class DeleteParentView {
         // need to initialize the grid
         // need to initialize the number of rows we need in our table (ie. nb of parents in the list)
         parentEmailRemoveParent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+        nameRemoveParent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
         addRemoveButton(); // need to update by adding the "remove" button
         updateTable(); // need to update the table with the list of parents
