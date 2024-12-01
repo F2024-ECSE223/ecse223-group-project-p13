@@ -164,7 +164,13 @@ public class ItemViewController {
         errorUpdate.setText(updateMessage);
         newName.setText("New name");
         newPrice.setText("New price");
+
+        itemList.remove(oldItem);
+        TOItem updatedItem = new TOItem(newNameString, Integer.parseInt(newPriceString));
+        itemList.add(updatedItem);
+        
         dialog.close();
+        
       }
       else {
         errorUpdate.setText(updateMessage);
