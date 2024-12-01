@@ -20,6 +20,13 @@ public class UpdateAdminView {
     @FXML
     private Label errorMessage;
 
+     /**
+   * This method implements teh svaing action when Save is pressed..
+   * 
+   * @author Lune Letailleur
+   * @param ActionEvent event which represents the ongoing event.
+   * @return void
+   **/
 
     @FXML
     public void saveButtonClickedUpdateAdmin (javafx.event.ActionEvent event){

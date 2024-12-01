@@ -51,12 +51,12 @@
                               <TextField fx:id="phoneUpdateParent" layoutX="21.0" layoutY="225.0" prefHeight="26.0" prefWidth="257.0" />
                               <TextField fx:id="nameUpdateParent" layoutX="22.0" layoutY="280.0" prefHeight="26.0" prefWidth="254.0" />
                               <ComboBox fx:id="emailUpdateParent" layoutX="19.0" layoutY="36.0" prefHeight="26.0" prefWidth="262.0" promptText="Choose your email" />
-                              <Button fx:id="buttonSaveUpdateParent" layoutX="222.0" layoutY="318.0" mnemonicParsing="false" onAction="#saveButtonClickedUpdateParent" text="SAVE">
+                              <Button fx:id="buttonSaveUpdateParent" layoutX="223.0" layoutY="369.0" mnemonicParsing="false" onAction="#saveButtonClickedUpdateParent" text="SAVE">
                                  <font>
                                     <Font name="Rockwell" size="14.0" />
                                  </font>
                               </Button>
-                              <Label fx:id="errorMessageUpdateParent" alignment="CENTER" layoutX="23.0" layoutY="322.0" prefHeight="18.0" prefWidth="193.0" textFill="#df0f0f" />
+                              <Label fx:id="errorMessageUpdateParent" alignment="CENTER" layoutX="23.0" layoutY="322.0" prefHeight="18.0" prefWidth="254.0" textFill="#df0f0f" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="344.0">
@@ -85,6 +85,16 @@
                               <Label fx:id="infoPhoneUpdateParent" layoutX="14.0" layoutY="178.0" prefHeight="24.0" prefWidth="258.0" textFill="#7babcf">
                                  <font>
                                     <Font name="Rockwell" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="14.0" layoutY="204.0" text="Password">
+                                 <font>
+                                    <Font name="Rockwell" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="infoPasswordUpdateParent" layoutX="19.0" layoutY="247.0" prefHeight="18.0" prefWidth="265.0">
+                                 <font>
+                                    <Font name="Rockwell" size="21.0" />
                                  </font>
                               </Label>
                            </children>

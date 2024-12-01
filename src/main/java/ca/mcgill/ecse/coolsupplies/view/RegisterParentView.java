@@ -32,6 +32,14 @@ public class RegisterParentView {
     @FXML
     private Label errorMessageRegisterParent;
 
+     /**
+   * This method implements the saving actions when Save is pressed.
+   * 
+   * @author Lune Letailleur
+   * @param ActionEvent event corresponding to teh event happening.
+   * @return void
+   **/
+
     @FXML
     public void saveButtonClickedRegisterParent (javafx.event.ActionEvent event)
     {
