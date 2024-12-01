@@ -84,6 +84,7 @@ public class ItemViewController {
           deleteButton.setOnAction(event -> {
               TOItem item = getTableView().getItems().get(getIndex());
               getTableView().getItems().remove(item);
+              CoolSuppliesFeatureSet3Controller.deleteItem(item.getName());
           });
       }
 
@@ -157,16 +158,12 @@ public class ItemViewController {
     String newPriceString = newPrice.getText();
 
     // add updated name as new, remove old
-    String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newNameString, Integer.parseInt(newPriceString));
+    String addMessage = CoolSuppliesFeatureSet3Controller.updateItem(oldItem.getName(), newNameString, Integer.parseInt(newPriceString));
     try {
       if (addMessage.isEmpty()) {
         errorUpdate.setText(addMessage);
         newName.setText("New name");
         newPrice.setText("New price");
-        TOItem new_item = new TOItem(newNameString, Integer.parseInt(newPriceString));
-        itemList.add(new_item);
-        itemList.remove(oldItem);
-        oldItem.delete();
         dialog.close();
       }
       else {
