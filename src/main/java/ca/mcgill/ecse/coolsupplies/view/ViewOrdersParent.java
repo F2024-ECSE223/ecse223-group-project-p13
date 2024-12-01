@@ -13,6 +13,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import ca.mcgill.ecse.coolsupplies.view.*;
+import javafx.scene.control.Label;
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
@@ -30,6 +31,9 @@ public class ViewOrdersParent {
     private TableColumn<String, Void> actionColumn;
     @FXML
     private Button addOrder;
+
+    @FXML
+    private Label errorLabel;
 
     TOParent myParent = UpdateParentView.getSelectedParent();
 
@@ -54,19 +58,28 @@ public class ViewOrdersParent {
 
         actionColumn.setCellFactory(col -> new TableCell<>()) {
             final Button payButton = new Button("Pay");
-            final Button penaltyButton = new Button("Pay");
             final Button cancelButton = new Button("Cancel");
 
             payButton.setOnAction(event -> {
-                // open pay stage
+                TOOrder myOrder = getTableView().getItems().get(getIndex());
+                String myStatus = myOrder.getStatus();
+                if(myStatus.equals("Started")){
+                    //CoolSuppliesFxmlView.newWindow("");
+                }
+                else if (myStatus.equals("Penalized")){
+                    //CoolSuppliesFxmlView.newWindow("");
+                }
+                else{
+                    errorLabel.setText("Cannot pay for this order.");
+                }
+
             });
 
-            penaltyButton.setOnAction(event -> {
-                //open penalty stage
-            });
 
             cancelButton.setOnAction(event -> {
-                //cancel order method called here
+                TOOrder myOrder = getTableView().getItems().get(getIndex());
+                String attemptCancel = Iteration3Controller.cancelOrder(myOrder);
+                errorLabel.setText(attemptCancel);
             });
         }
    }
