@@ -90,11 +90,26 @@ public class ViewBundleView {
             editButton.setOnAction(event -> {
                 TOGradeBundle bundle = getTableView().getItems().get(getIndex());
                 try {
-                    // Pass the bundle to the edit window or controller
-                    CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a Bundle");
+                    // Load the FXML file
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
+                    Parent root = loader.load();
+
+                    // Get the controller instance
+                    EditBundleView controller = loader.getController();
+
+                    // Pass the selected bundle to the controller
+                    controller.initData(bundle);
+
+                    // Create a new stage and show the scene
+                    Stage stage = new Stage();
+                    stage.setTitle("Edit a Bundle");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+
                     clearError();
                 } catch (Exception e) {
                     displayError("Failed to open the edit bundle page: " + e.getMessage());
+                    e.printStackTrace();
                 }
             });
         }
@@ -109,6 +124,38 @@ public class ViewBundleView {
             }
         }
     });
+
+
+
+    // editButton.setCellFactory(param -> new TableCell<TOGradeBundle, Void>() {
+    //     private final Button editButton = new Button("Edit");
+    //     {
+    //         editButton.setPrefWidth(80);
+    //         editButton.setPrefHeight(30);
+
+    //         // Configure edit button
+    //         editButton.setOnAction(event -> {
+    //             TOGradeBundle bundle = getTableView().getItems().get(getIndex());
+    //             try {
+    //                 // Pass the bundle to the edit window or controller
+    //                 CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a Bundle");
+    //                 clearError();
+    //             } catch (Exception e) {
+    //                 displayError("Failed to open the edit bundle page: " + e.getMessage());
+    //             }
+    //         });
+    //     }
+
+    //     @Override
+    //     protected void updateItem(Void item, boolean empty) {
+    //         super.updateItem(item, empty);
+    //         if (empty) {
+    //             setGraphic(null);
+    //         } else {
+    //             setGraphic(editButton);
+    //         }
+    //     }
+    // });
 }
 
 
@@ -131,3 +178,4 @@ public class ViewBundleView {
        bundlesTable.setItems(bundleList);
    }
 }
+
