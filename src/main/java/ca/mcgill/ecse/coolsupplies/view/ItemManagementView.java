@@ -60,15 +60,15 @@ public class ItemManagementView {
     // Initialize method
     @FXML
     public void initialize() {
-        // Initialize TableView columns
+        
         BundleItems.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
         BundlePrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(getItemPrice(cellData.getValue()))));
         BundleDiscount.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeBundleName()));
 
-        // Items TableView columns
+       
         columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         columnPrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
-        columnQuantity.setCellValueFactory(cellData -> new SimpleIntegerProperty(1).asObject());
+        
 
         // Initialize Spinner for Bundle Quantity
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
@@ -115,8 +115,9 @@ public class ItemManagementView {
     }
 
     private void loadBundleItems(String gradeLevel) {
+        /* 
         // Get the bundle for the grade
-        TOGradeBundle bundle = CoolSuppliesFeatureSet4Controller.getBundleByGrade(gradeLevel);
+        // TOGradeBundle bundle = CoolSuppliesFeatureSet4Controller.getBundleByGrade(gradeLevel); TODO: @claradupuis getBundleByGrade(string) doesn't exist
 
         if (bundle == null) {
             errorLabel.setText("No bundle available for the grade.");
@@ -129,19 +130,20 @@ public class ItemManagementView {
         // Populate the bundle TableView
         bundleItemsList.setAll(bundleItems);
         bundleTableView.setItems(bundleItemsList);
+        */
     }
 
     private List<TOBundleItem> getBundleItems(String bundleName, String orderLevel) {
         // Implement logic to get bundle items based on order level
-        List<TOBundleItem> allBundleItems = CoolSuppliesFeatureSet7Controller.getBundleItems(bundleName);
+        // List<TOBundleItem> allBundleItems = CoolSuppliesFeatureSet7Controller.getBundleItems(bundleName); TODO: @claradupuis getBundleItems(string) doesn't exist
 
         List<TOBundleItem> filteredItems = new ArrayList<>();
 
-        for (TOBundleItem item : allBundleItems) {
-            if (purchaseLevelAllows(item.getLevel(), orderLevel)) {
-                filteredItems.add(item);
-            }
-        }
+        // for (TOBundleItem item : allBundleItems) {
+        //     if (purchaseLevelAllows(item.getLevel(), orderLevel)) {
+        //         filteredItems.add(item);
+        //     }
+        // }
 
         return filteredItems;
     }
@@ -159,11 +161,13 @@ public class ItemManagementView {
     }
 
     private void loadAvailableItems() {
+        /* 
         // Load all available items from the controller
-        List<TOItem> items = CoolSuppliesFeatureSet7Controller.getItems();
+        List<TOItem> items = CoolSuppliesFeatureSet7Controller.getItems(); TODO: @claradupuis getItems() doesn't exist in controller7
 
         itemsList.setAll(items);
         itemsTableView.setItems(itemsList);
+        */
     }
 
     // Event handler for "View Order" button

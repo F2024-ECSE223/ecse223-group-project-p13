@@ -12,7 +12,8 @@ import java.awt.event.ActionEvent;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 
 public class UpdateParentView {
-
+    private TOParent selectedParent = null;
+ 
     @FXML
     private ComboBox<String> emailUpdateParent;
 
@@ -35,8 +36,29 @@ public class UpdateParentView {
     private Button buttonSaveUpdateParent;
 
     @FXML
+    private ComboBox<String> infoEmailUpdateParent;
+
+    @FXML
+    private Label infoNameUpdateParent;
+
+    @FXML
+    private Label infoPhoneUpdateParent;
+
+    @FXML
     public void initialize(){
         emailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
+        infoEmailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
+
+        infoEmailUpdateParent.setOnAction((e) ->  {
+            String email = infoEmailUpdateParent.getSelectionModel().getSelectedItem();
+
+            this.selectedParent = CoolSuppliesFeatureSet1Controller.getParent(email);
+
+            if (this.selectedParent != null) {
+                infoNameUpdateParent.setText(this.selectedParent.getName());
+                infoPhoneUpdateParent.setText(Integer.toString(this.selectedParent.getPhoneNumber()));
+            }
+        });
     }
 
     private List<String> getParentEmails(){

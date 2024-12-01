@@ -1,20 +1,18 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import java.io.IOException;
-import java.text.NumberFormat.Style;
 import java.util.function.Function;
 import atlantafx.base.theme.PrimerDark;
 import atlantafx.base.theme.PrimerLight;
 import atlantafx.base.theme.Styles;
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import javafx.application.Application;
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableStringValue;
-import javafx.fxml.FXML;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -29,8 +27,8 @@ public abstract class ManagerView {
   public StackPane mainContent;
   public BorderPane root;
   public Function<Void, Void> signOut;
-
-  private Boolean isLight = true;
+  private ImageView imageView = new ImageView();
+  public StringProperty schoolYear = new SimpleStringProperty("Start School Year");
 
   public VBox createSidebar() {
     VBox sidebar = new VBox(10);
@@ -38,7 +36,7 @@ public abstract class ManagerView {
     sidebar.setAlignment(Pos.TOP_CENTER);
     this.createMenubar();
 
-    HBox header = createHeader();
+    VBox header = createHeader();
 
     VBox navigation = new VBox(10);
 
@@ -57,25 +55,44 @@ public abstract class ManagerView {
     this.signOut = signOut;
   }
 
- private HBox createHeader() {
-    HBox header = new HBox(10);
+ private VBox createHeader() {
+    VBox header = new VBox(10);
     header.setPadding(new Insets(15));
-    header.setAlignment(Pos.CENTER_LEFT);
+    header.setAlignment(Pos.CENTER);
 
     Text title = new Text("CoolSupplies");
-    ImageView imageView = new ImageView();
-    Image icon = new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon.png"));
-    imageView.setImage(icon);
-    imageView.setFitHeight(60);
-    imageView.setFitWidth(60);
+    title.getStyleClass().add(Styles.TITLE_2);
+
+    Text subtitle = new Text("by TechnoDupes");
+    subtitle.getStyleClass().add(Styles.TEXT_SUBTLE);
+
+    if (CoolSuppliesApplication.isLight) {
+      imageView.setImage(CoolSuppliesFxmlView.icon);
+    }
+    else {
+      imageView.setImage(CoolSuppliesFxmlView.darkIcon);
+    }
+
+    imageView.setFitHeight(150);
+    imageView.setFitWidth(150);
     imageView.setPreserveRatio(true);
 
-    header.getChildren().addAll(imageView, title);
+    header.getChildren().addAll(imageView, title, subtitle);
 
     return header;
   }
 
   private Button createNavButton(String text) {
+    if (text.equals(AdminManagerView.YEAR)) {
+      AdminManagerView.schoolYearButton = new Button(schoolYear.get());
+      AdminManagerView.schoolYearButton.setMaxWidth(Double.MAX_VALUE);
+      AdminManagerView.schoolYearButton.setAlignment(Pos.CENTER_LEFT);
+      AdminManagerView.schoolYearButton.setPadding(new Insets(10));
+
+      AdminManagerView.schoolYearButton.setOnAction(e -> updateContent(text));
+      AdminManagerView.schoolYearButton.getStyleClass().add(Styles.ACCENT);
+      return AdminManagerView.schoolYearButton;
+    }
     Button button = new Button(text);
     button.setMaxWidth(Double.MAX_VALUE);
     button.setAlignment(Pos.CENTER_LEFT);
@@ -99,18 +116,28 @@ public abstract class ManagerView {
 
     Button signOut = new Button("Sign Out");
     signOut.setOnAction(e -> this.signOut.apply(null));
-    signOut.getStyleClass().add(Styles.ACCENT);
+    signOut.getStyleClass().add(Styles.DANGER);
 
-    Button theme = new Button(isLight ? "Dark" : "Light");
+    Button theme = new Button();
+    if (CoolSuppliesApplication.isLight) {
+      theme.setGraphic(CoolSuppliesFxmlView.getIcon("resources/moon.svg"));
+    }
+    else {
+      theme.setGraphic(CoolSuppliesFxmlView.getIcon("resources/sun.svg"));
+    }
+
     theme.setOnAction((e) -> {
-      if (isLight) {
+      if (CoolSuppliesApplication.isLight) {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+        this.imageView.setImage(CoolSuppliesFxmlView.darkIcon);
       } 
       else {
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+        this.imageView.setImage(CoolSuppliesFxmlView.icon);
       }
-      this.isLight = !this.isLight;
+      CoolSuppliesApplication.isLight = !CoolSuppliesApplication.isLight;
       this.createMenubar();
+      System.out.println("NOTICE: Updated theme");
     });
 
     Text version = new Text("v1.0.0");
