@@ -13,11 +13,12 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="652.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.StudentManagementView">
    <children>
-      <TableView fx:id="tableView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="649.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="tableView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="652.0" VBox.vgrow="ALWAYS">
          <columns>
-            <TableColumn id="columnName" fx:id="columnName" prefWidth="250.0" text="Name" />
-            <TableColumn id="columnGrade" fx:id="columnGrade" minWidth="-Infinity" prefWidth="204.00001525878906" text="Grade" />
-            <TableColumn id="columnAction" fx:id="columnActions" minWidth="-Infinity" prefWidth="196.800048828125" text="Actions" />
+            <TableColumn id="columnName" fx:id="columnName" prefWidth="157.59998166561127" text="Name" />
+            <TableColumn id="columnGrade" fx:id="columnGrade" minWidth="-Infinity" prefWidth="176.800048828125" text="Grade" />
+            <TableColumn fx:id="parent" prefWidth="139.20001220703125" text="Parent" />
+            <TableColumn id="columnAction" fx:id="columnActions" minWidth="-Infinity" prefWidth="176.00003051757812" text="Actions" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_LEFT" prefHeight="146.0" prefWidth="642.0" spacing="10.0">
