@@ -21,33 +21,28 @@ import javafx.scene.layout.HBox;
 public class ViewBundleView {
    public StackPane mainContent;
 
-
    @FXML
    private Button newBundles;
-
 
    @FXML
    private TableView<TOGradeBundle> bundlesTable;
 
-
    @FXML
    private TableColumn<TOGradeBundle, String> bundleName;
-
 
    @FXML
    private TableColumn<TOGradeBundle, String> bundleGrade;
 
    @FXML
+   private TableColumn<TOGradeBundle, String> discount;
+
+   @FXML
    private TableColumn<TOGradeBundle, Void> editButton;
-   //Check if this is right...
 
    @FXML
    private Label errorLabel = new Label("null");
 
-
    private ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
-//    private int editingRowIndex = -1;
-
 
    @FXML
    public void initialize() {
@@ -55,6 +50,9 @@ public class ViewBundleView {
     //    Set up the table columns
        bundleName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
        bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
+       discount.setCellValueFactory(cellData -> 
+     new SimpleStringProperty(String.valueOf(cellData.getValue().getDiscount()))
+    );
 
        //Add action items to table
        addActionButtonToTable();
@@ -63,7 +61,6 @@ public class ViewBundleView {
        refreshTable();
 
    }
-
 
    @FXML
    public void newBundle(ActionEvent event) {

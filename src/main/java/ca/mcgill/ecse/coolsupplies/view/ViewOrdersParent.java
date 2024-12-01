@@ -14,10 +14,20 @@ import javafx.scene.control.cell.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import ca.mcgill.ecse.coolsupplies.view.*;
 import javafx.scene.control.Label;
+<<<<<<< HEAD
 import javafx.scene.control.ComboBox;
 import java.util.List;
 import java.util.ArrayList;
 
+=======
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.stage.Modality;
+>>>>>>> b4b66f37c7b588019020ce6b58b0bddfa7e29b8a
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
@@ -39,6 +49,7 @@ public class ViewOrdersParent {
     @FXML
     private Label errorLabel;
 
+<<<<<<< HEAD
     @FXML 
     private ComboBox<String> parents;
 
@@ -47,6 +58,15 @@ public class ViewOrdersParent {
     private ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
     private ObservableList<TOOrder> parentOrders =  FXCollections.observableArrayList();
 
+=======
+    @FXML
+    private ObservableList<TOOrder> ordersInSystem;
+
+    @FXML
+    private ObservableList<TOOrder> parentOrders;
+
+    TOParent myParent = UpdateParentView.getSelectedParent();
+>>>>>>> b4b66f37c7b588019020ce6b58b0bddfa7e29b8a
 
     @FXML
     private void initialize() {
@@ -76,10 +96,10 @@ public class ViewOrdersParent {
                 TOOrder myOrder = ordersTable.getSelectionModel().getSelectedItem();
                 String myStatus = myOrder.getStatus();
                 if(myStatus.equals("Started")){
-                    //CoolSuppliesFxmlView.newWindow("");
+                    paymentWindow(myOrder);
                 }
                 else if (myStatus.equals("Penalized")){
-                    //CoolSuppliesFxmlView.newWindow("");
+                    latePaymentWindow(myOrder);
                 }
                 else{
                     errorLabel.setText("Cannot pay for this order.");
@@ -95,6 +115,127 @@ public class ViewOrdersParent {
             });
         });
    }
+<<<<<<< HEAD
+=======
+
+   /*
+   * @author Dimitri Christopoulos
+   */
+  private void paymentWindow(TOOrder pendingOrder) {
+    Stage dialog = new Stage();
+    dialog.initModality(Modality.APPLICATION_MODAL);
+    VBox dialogPane = new VBox();
+
+    // create UI elements
+    Label totalCost = new Label(""+pendingOrder.getPrice());
+    TextField authCode = new TextField("Authorization Code");
+    Button payButton = new Button("Pay");
+    Button cancelButton = new Button("Cancel");
+    Label errorUpdate = new Label("");
+    
+    // actions
+    authCode.setOnMouseClicked(a -> authCode.setText(""));
+    payButton.setOnAction(a -> {
+
+      // textt from labels
+      String inputAuthCodeString = authCode.getText();
+
+      try {
+        String payMessage = Iteration3Controller.payForOrder(pendingOrder.getNumber(), inputAuthCodeString);
+          // Success
+          if (payMessage.isEmpty()) {
+            errorUpdate.setText(payMessage);
+            parentOrders.remove(pendingOrder);
+            dialog.close();
+          }
+          // Error
+          else {
+            errorUpdate.setText(payMessage);
+          }
+      } 
+      catch (Exception e) {
+        errorUpdate.setText(""+e);
+      }
+
+    });
+
+    cancelButton.setOnAction(a -> dialog.close());
+
+    // display the popup window
+    int innerPadding = 10;
+    int outerPadding = 100;
+    dialogPane.setSpacing(innerPadding);
+    dialogPane.setAlignment(Pos.CENTER);
+    dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
+    dialogPane.getChildren().addAll(totalCost, authCode, errorUpdate, payButton, cancelButton);
+    Scene dialogScene = new Scene(dialogPane);
+    dialog.setScene(dialogScene);
+    dialog.setTitle("Pay Order");
+    dialog.show();
+  }
+
+  /*
+   * @author Dimitri Christopoulos
+   */
+  private void latePaymentWindow(TOOrder latePendingOrder) {
+    Stage dialog = new Stage();
+    dialog.initModality(Modality.APPLICATION_MODAL);
+    VBox dialogPane = new VBox();
+
+    // create UI elements
+    Label totalCost = new Label(""+latePendingOrder.getPrice());
+    TextField authCode = new TextField("Authorization Code");
+    TextField lateAuthCode = new TextField("Late Authorization Code");
+    Button payButton = new Button("Pay");
+    Button cancelButton = new Button("Cancel");
+    Label errorUpdate = new Label("");
+    
+    // actions
+    authCode.setOnMouseClicked(a -> authCode.setText(""));
+    payButton.setOnAction(a -> {
+
+      // textt from labels
+      String inputAuthCodeString = authCode.getText();
+      String inputLateAuthCodeString = lateAuthCode.getText();
+
+      try {
+          String payPenaltyMessage = Iteration3Controller.payPenaltyForOrder(latePendingOrder.getNumber(), inputLateAuthCodeString, inputAuthCodeString);
+          if (payPenaltyMessage.isEmpty()) {
+            errorUpdate.setText(payPenaltyMessage);
+            parentOrders.remove(latePendingOrder);
+          }
+          else {
+            errorUpdate.setText(payPenaltyMessage);
+          }
+      } 
+      catch (Exception e) {
+        errorUpdate.setText(""+e);
+      }
+
+    });
+
+    cancelButton.setOnAction(a -> dialog.close());
+
+    // display the popup window
+    int innerPadding = 10;
+    int outerPadding = 100;
+    dialogPane.setSpacing(innerPadding);
+    dialogPane.setAlignment(Pos.CENTER);
+    dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
+    dialogPane.getChildren().addAll(totalCost, authCode, errorUpdate, payButton, cancelButton);
+    Scene dialogScene = new Scene(dialogPane);
+    dialog.setScene(dialogScene);
+    dialog.setTitle("Pay Order");
+    dialog.show();
+  }
+
+
+
+//    private void addOrder(){
+//        CoolSuppliesFxmlView.newWindow("");
+//    }
+
+>>>>>>> b4b66f37c7b588019020ce6b58b0bddfa7e29b8a
 
    private void fetchOrders(String email){
         for(TOOrder order : ordersInSystem){

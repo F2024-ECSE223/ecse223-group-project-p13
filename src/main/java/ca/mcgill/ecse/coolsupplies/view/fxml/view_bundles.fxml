@@ -29,9 +29,10 @@
                      <content>
                         <TableView fx:id="bundlesTable" prefHeight="262.0" prefWidth="540.0">
                           <columns>
-                            <TableColumn id="bundleName" fx:id="bundleName" prefWidth="187.5" text="Bundle Name" />
-                            <TableColumn id="bundleGrade" fx:id="bundleGrade" prefWidth="190.0" text="Bundle Grade" />
-                            <TableColumn id="editButton" fx:id="editButton" prefWidth="159.0" text="Edit" />
+                            <TableColumn id="bundleName" fx:id="bundleName" prefWidth="126.5" text="Bundle Name" />
+                            <TableColumn id="bundleGrade" fx:id="bundleGrade" prefWidth="144.0" text="Bundle Grade" />
+                            <TableColumn id="discount" fx:id="discount" prefWidth="141.0" text="Discount" />
+                            <TableColumn id="editButton" fx:id="editButton" prefWidth="127.5" text="Edit" />
                           </columns>
                         </TableView>
                      </content>
