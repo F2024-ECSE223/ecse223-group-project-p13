@@ -158,16 +158,16 @@ public class ItemViewController {
     String newPriceString = newPrice.getText();
 
     // add updated name as new, remove old
-    String addMessage = CoolSuppliesFeatureSet3Controller.updateItem(oldItem.getName(), newNameString, Integer.parseInt(newPriceString));
+    String updateMessage = CoolSuppliesFeatureSet3Controller.updateItem(oldItem.getName(), newNameString, Integer.parseInt(newPriceString));
     try {
-      if (addMessage.isEmpty()) {
-        errorUpdate.setText(addMessage);
+      if (updateMessage.isEmpty()) {
+        errorUpdate.setText(updateMessage);
         newName.setText("New name");
         newPrice.setText("New price");
         dialog.close();
       }
       else {
-        errorUpdate.setText(addMessage);
+        errorUpdate.setText(updateMessage);
       }
     } catch (Exception e) {
       errorUpdate.setText(""+e);
