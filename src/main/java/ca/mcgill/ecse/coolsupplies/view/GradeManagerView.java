@@ -19,7 +19,6 @@ import javafx.scene.layout.HBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.TextInputDialog;
 
 
 public class GradeManagerView {

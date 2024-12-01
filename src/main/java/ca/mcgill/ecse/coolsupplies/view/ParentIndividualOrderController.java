@@ -18,7 +18,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AdminIndividualOrderController {
+public class ParentIndividualOrderController {
   @FXML
   private TableView<TOOrder> first_row;
   @FXML
@@ -48,12 +48,12 @@ public class AdminIndividualOrderController {
   private TableColumn<TOOrderItem, String> name_col;
   private ObservableList<TOOrderItem> individualItemList = FXCollections.observableArrayList();
   @FXML
-  private TableColumn<TOOrderItem, String> price_col;
-  @FXML
   private TableColumn<TOOrderItem, String> bundleName_col;
   private ObservableList<TOOrderItem> bundleItemList = FXCollections.observableArrayList();
   @FXML
   private TableColumn<TOOrderItem, Void> viewBundleContent_col;
+  @FXML
+  private TableColumn<TOOrderItem, Void> viewItemContent_col;
   @FXML
   private TableColumn<TOOrderItem, String> discount_col;
   @FXML
@@ -79,8 +79,6 @@ public class AdminIndividualOrderController {
     order_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNumber()));
     
     name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-    price_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
-    //price_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrice()));
     bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeBundle()));
     discount_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDiscount()));
     bundlePrice_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
@@ -89,6 +87,52 @@ public class AdminIndividualOrderController {
     total_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
 
     viewBundleContent_col.setCellFactory(new Callback<>() {
+      @Override
+      public TableCell<TOOrderItem, Void> call(final TableColumn<TOOrderItem, Void> param) {
+        final TableCell<TOOrderItem, Void> cell = new TableCell<>() {
+          private final Button viewButton = new Button("View");
+    
+          {
+            viewButton.setOnAction(menuDisplay -> {
+              TOOrderItem orderitem = getTableView().getItems().get(getIndex());
+              Stage display = new Stage();
+              // display.initModality(Modality.APPLICATION_MODAL);
+              // display.setTitle("Bundle Content");
+
+              // TableView<TOOrderItem> content_table = new TableView<>();
+              // ObservableList<TOOrderItem> content = FXCollections.observableArrayList();
+
+              // TableColumn<TOOrderItem, String> itemNameCol = new TableColumn<>("Item Name");
+              // TableColumn<TOOrderItem, String> itemPriceCol = new TableColumn<>("Price");
+              // TableColumn<TOOrderItem, String> itemQuantityCol = new TableColumn<>("Quantity");
+              // itemNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+              // itemPriceCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrice()));
+              // itemQuantityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getQuantity()));
+
+              // content_table.getColumns().addAll(itemNameCol, itemPriceCol, itemQuantityCol);
+              // content_table.setItems(content);
+
+              // Vbox vbox = new Vbox(new Label("Bundle Content"),display);
+              // display.setScene(new Scene(vbox));
+              // display.showAndWait();
+            });
+          }
+    
+          @Override
+          public void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+              setGraphic(null);
+            } else {
+              setGraphic(viewButton);
+            }
+          }
+        };
+        return cell;
+      }
+    });
+
+    viewItemContent_col.setCellFactory(new Callback<>() {
       @Override
       public TableCell<TOOrderItem, Void> call(final TableColumn<TOOrderItem, Void> param) {
         final TableCell<TOOrderItem, Void> cell = new TableCell<>() {
