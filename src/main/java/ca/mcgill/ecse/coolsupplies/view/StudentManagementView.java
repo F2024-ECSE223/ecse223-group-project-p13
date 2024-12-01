@@ -2,10 +2,13 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOGrade;
-import ca.mcgill.ecse.coolsupplies.controller.TOItem;
+import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import ca.mcgill.ecse.coolsupplies.controller.TOStudent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,9 +21,7 @@ import javafx.stage.Modality;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.TextFieldTableCell;
+
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -46,19 +47,28 @@ public class StudentManagementView {
   @FXML 
   private TableColumn<TOStudent, Void> columnActions;
   
+  @FXML
+    private TableColumn<TOStudent, String> parent;
    @FXML
+
   private Label errorLabel;
 
   private ObservableList<TOStudent> studentList = FXCollections.observableArrayList();
-  private int editingRowIndex = -1;
+  
 
   @FXML
   public void initialize(){
      gradeInput.setItems(FXCollections.observableArrayList(getGradeLevels()));
 
+
+
     // Configure table columns
     columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     columnGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
+    parent.setCellValueFactory(cellData -> {
+        String parentName = getParentOfStudent(cellData.getValue().getName());
+        return new SimpleStringProperty(parentName.isEmpty() ? "" : parentName);
+    });
 
     // Add action buttons to the table
     addActionButtonsToTable();
@@ -122,31 +132,7 @@ private List<String> getGradeLevels() {
                 makeUpdateWindow(student);
             });
 
-            // Configure save button
-            saveButton.setOnAction(event -> {
-                TOStudent TOstudent = getTableView().getItems().get(getIndex());
-            
-                newGradeInput.setItems(FXCollections.observableArrayList(getGradeLevels()));
-
-                String NewName = newNameInput.getText();
-                String NewGrade = newGradeInput.getValue();
-                String result = CoolSuppliesFeatureSet2Controller.updateStudent(TOstudent.getName(), NewName, NewGrade);
-                if (result.isEmpty()){
-                    errorLabel.setText("");
-                    refreshTable();
-                    nameInput.clear();
-                    gradeInput.getSelectionModel().clearSelection();
-                } else {
-                    errorLabel.setText(result);
-                }
-            
-
-                // Exit edit mode
-                editingRowIndex = -1;
-
-                // Refresh the table to update the graphics
-                getTableView().refresh();
-            });
+        
         }
 
         @Override
@@ -168,13 +154,17 @@ private void makeUpdateWindow(TOStudent oldStudent) {
     VBox dialogPane = new VBox();
 
     // create UI elements
-    TextField newName = new TextField("New name");
+    
+    TextField newName = new TextField(oldStudent.getName());
     ComboBox<String> newGrade = new ComboBox<>();
     Button saveButton = new Button("Save");
     Button cancelButton = new Button("Cancel");
     Label errorUpdate = new Label("");
     
     newGrade.setItems(FXCollections.observableArrayList(getGradeLevels()));
+
+    newGrade.getSelectionModel().select(getGradeLevels().indexOf(oldStudent.getGradeLevel()));
+    
     // actions
     newName.setOnMouseClicked(a -> newName.setText(""));
     
@@ -241,4 +231,28 @@ private void makeUpdateWindow(TOStudent oldStudent) {
       studentList.setAll(CoolSuppliesFeatureSet2Controller.getStudents());
       tableView.setItems(studentList);
   }
+
+
+  private String getParentOfStudent(String studentName){
+
+    List<TOParent> parents = CoolSuppliesFeatureSet1Controller.getParents();
+
+    for (TOParent parent : parents){
+        TOStudent associatedStudent = CoolSuppliesFeatureSet6Controller.getStudentOfParent(studentName, parent.getEmail());
+        if (associatedStudent != null){
+            return parent.getEmail();
+        }
+    }
+    return "";
+
+
+    }
+
+
+    
+
+
+  
 }
+
+
