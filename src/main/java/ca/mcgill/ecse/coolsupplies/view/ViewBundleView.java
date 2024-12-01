@@ -33,9 +33,11 @@ public class ViewBundleView {
    @FXML
    private TableColumn<TOGradeBundle, String> bundleName;
 
-
    @FXML
    private TableColumn<TOGradeBundle, String> bundleGrade;
+
+   @FXML
+   private TableColumn<TOGradeBundle, String> discount;
 
    @FXML
    private TableColumn<TOGradeBundle, Void> editButton;
@@ -55,6 +57,7 @@ public class ViewBundleView {
     //    Set up the table columns
        bundleName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
        bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
+       bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()getDiscount()));
 
        //Add action items to table
        addActionButtonToTable();
