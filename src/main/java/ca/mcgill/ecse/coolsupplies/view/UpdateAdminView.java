@@ -25,7 +25,11 @@ public class UpdateAdminView {
     public void saveButtonClickedUpdateAdmin (javafx.event.ActionEvent event){
        String  newPassword = newPasswordUpdateAdmin.getText();
        String message = CoolSuppliesFeatureSet1Controller.updateAdmin(newPassword);
-       errorMessage.setText(message);
+       if (message.isEmpty()){
+        errorMessage.setText("Password was updated!");
+       } else {
+        errorMessage.setText(message);
+       }
        newPasswordUpdateAdmin.setText(""); // clear user input
 
     }
