@@ -84,6 +84,7 @@ public class ItemViewController {
           deleteButton.setOnAction(event -> {
               TOItem item = getTableView().getItems().get(getIndex());
               getTableView().getItems().remove(item);
+              CoolSuppliesFeatureSet3Controller.deleteItem(item.getName());
           });
       }
 
