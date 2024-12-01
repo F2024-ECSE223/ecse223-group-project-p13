@@ -14,20 +14,10 @@ import javafx.scene.control.cell.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import ca.mcgill.ecse.coolsupplies.view.*;
 import javafx.scene.control.Label;
-<<<<<<< HEAD
 import javafx.scene.control.ComboBox;
 import java.util.List;
 import java.util.ArrayList;
 
-=======
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.stage.Modality;
->>>>>>> b4b66f37c7b588019020ce6b58b0bddfa7e29b8a
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
@@ -49,7 +39,6 @@ public class ViewOrdersParent {
     @FXML
     private Label errorLabel;
 
-<<<<<<< HEAD
     @FXML 
     private ComboBox<String> parents;
 
@@ -58,15 +47,6 @@ public class ViewOrdersParent {
     private ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
     private ObservableList<TOOrder> parentOrders =  FXCollections.observableArrayList();
 
-=======
-    @FXML
-    private ObservableList<TOOrder> ordersInSystem;
-
-    @FXML
-    private ObservableList<TOOrder> parentOrders;
-
-    TOParent myParent = UpdateParentView.getSelectedParent();
->>>>>>> b4b66f37c7b588019020ce6b58b0bddfa7e29b8a
 
     @FXML
     private void initialize() {
@@ -115,8 +95,6 @@ public class ViewOrdersParent {
             });
         });
    }
-<<<<<<< HEAD
-=======
 
    /*
    * @author Dimitri Christopoulos
@@ -235,7 +213,6 @@ public class ViewOrdersParent {
 //        CoolSuppliesFxmlView.newWindow("");
 //    }
 
->>>>>>> b4b66f37c7b588019020ce6b58b0bddfa7e29b8a
 
    private void fetchOrders(String email){
         for(TOOrder order : ordersInSystem){
