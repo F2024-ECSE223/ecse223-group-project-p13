@@ -8,6 +8,7 @@ import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 
 import java.awt.event.ActionEvent;
 import java.util.Objects;
+import atlantafx.base.theme.Styles;
 
 public class UpdateAdminView {
 
@@ -19,6 +20,15 @@ public class UpdateAdminView {
 
     @FXML
     private Label errorMessage;
+
+    /**
+     * @author Trevor Piltch
+     * @brief Add the green style to the button
+     */
+    @FXML
+    public void initialize() {
+      this.buttonSaveUpdateAdmin.getStyleClass().add(Styles.SUCCESS);
+    }
 
      /**
    * This method implements teh svaing action when Save is pressed..
