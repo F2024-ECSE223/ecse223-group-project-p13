@@ -14,19 +14,23 @@ import javafx.scene.control.cell.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import ca.mcgill.ecse.coolsupplies.view.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
+import java.util.List;
+import java.util.ArrayList;
+
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
     @FXML
-    private TableView<String> ordersTable;
+    private TableView<TOOrder> ordersTable;
     @FXML
-    private TableColumn<String, String> orderNo;
+    private TableColumn<TOOrder, String> orderNo;
     @FXML
-    private TableColumn<String, String> orderStudent;
+    private TableColumn<TOOrder, String> orderStudent;
     @FXML
-    private TableColumn<String, String> dateOrdered;
+    private TableColumn<TOOrder, String> dateOrdered;
     @FXML
-    private TableColumn<String, String> orderStatus;
+    private TableColumn<TOOrder, String> orderStatus;
     @FXML
     private TableColumn<String, Void> actionColumn;
     @FXML
@@ -35,7 +39,14 @@ public class ViewOrdersParent {
     @FXML
     private Label errorLabel;
 
-    TOParent myParent = UpdateParentView.getSelectedParent();
+    @FXML 
+    private ComboBox<String> parents;
+
+    private  List<TOParent> parentsInSystem= new ArrayList<>();
+    private  List<String> parentEmails = new ArrayList<>();
+    private ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
+    private ObservableList<TOOrder> parentOrders =  FXCollections.observableArrayList();
+
 
     @FXML
     private void initialize() {
@@ -44,24 +55,25 @@ public class ViewOrdersParent {
         dateOrdered.setCellValueFactory(new PropertyValueFactory<>("date"));
         orderStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
-        ObservableList<TOOrder> parentOrders = FXCollections.observableArrayList();
-
-
-
-
-        for (TOOrder order : ordersInSystem) {
-            //if (order.getParentEmail().isEquals(parentEmail))
-                parentOrders.add(order);
+        parentsInSystem = CoolSuppliesFeatureSet1Controller.getParents();
+    
+        for(TOParent parent : parentsInSystem){
+            parentEmails.add(parent.getEmail());
         }
-        //ordersTable.setItems(parentOrders);
+        parents.getItems().addAll(parentEmails);
 
-        actionColumn.setCellFactory(col -> new TableCell<>()) {
-            final Button payButton = new Button("Pay");
+        parents.setOnAction(event -> {
+            String selectedEmail = parents.getValue();
+            fetchOrders(selectedEmail);
+        });
+
+
+        actionColumn.setCellFactory(col -> new TableCell<>() {
+            Button payButton = new Button("Pay");
             final Button cancelButton = new Button("Cancel");
 
-            payButton.setOnAction(event -> {
-                TOOrder myOrder = getTableView().getItems().get(getIndex());
+            payButton.setOnAction((e) -> {
+                TOOrder myOrder = ordersTable.getSelectionModel().getSelectedItem();
                 String myStatus = myOrder.getStatus();
                 if(myStatus.equals("Started")){
                     //CoolSuppliesFxmlView.newWindow("");
@@ -81,12 +93,16 @@ public class ViewOrdersParent {
                 String attemptCancel = Iteration3Controller.cancelOrder(myOrder);
                 errorLabel.setText(attemptCancel);
             });
-        }
+        });
    }
-//    private void addOrder(){
-//        CoolSuppliesFxmlView.newWindow("");
-//    }
 
-
+   private void fetchOrders(String email){
+        for(TOOrder order : ordersInSystem){
+            if(order.getParentEmail().equals(email)){
+                parentOrders.add(order);
+            }
+        }
+        ordersTable.setAll(parentOrders);
+   }
 
 }
