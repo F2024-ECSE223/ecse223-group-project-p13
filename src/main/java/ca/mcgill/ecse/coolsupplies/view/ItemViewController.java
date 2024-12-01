@@ -200,7 +200,7 @@ public class ItemViewController {
     VBox dialogPane = new VBox();
 
     // create UI elements
-    Label totalCost = new Label("");
+    Label totalCost = new Label(""+pendingOrder.getPrice());
     TextField authCode = new TextField("Authorization Code");
     Button payButton = new Button("Pay");
     Button cancelButton = new Button("Cancel");
@@ -210,34 +210,26 @@ public class ItemViewController {
     authCode.setOnMouseClicked(a -> authCode.setText(""));
     payButton.setOnAction(a -> {
 
-    // textt from labels
-    String inputAuthCodeString = authCode.getText();
+      // textt from labels
+      String inputAuthCodeString = authCode.getText();
 
-    try {
-        if (pendingOrder.getAuthCode().equals(inputAuthCodeString)) {
-          pendingOrder
-        }
-    } 
-    catch (Exception e) {
-    }
+      try {
+        String payMessage = Iteration3Controller.payForOrder(pendingOrder.getNumber(), inputAuthCodeString);
+          // Success
+          if (payMessage.isEmpty()) {
+            errorUpdate.setText(payMessage);
+            parentOrders.remove(pendingOrder);
+            dialog.close();
+          }
+          // Error
+          else {
+            errorUpdate.setText(payMessage);
+          }
+      } 
+      catch (Exception e) {
+        errorUpdate.setText(""+e);
+      }
 
-    // add updated name as new, remove old
-    String addMessage = CoolSuppliesFeatureSet3Controller.updateItem(oldItem.getName(), newNameString, Integer.parseInt(newPriceString));
-    try {
-      if (addMessage.isEmpty()) {
-        errorUpdate.setText(addMessage);
-        newName.setText("New name");
-        newPrice.setText("New price");
-        dialog.close();
-      }
-      else {
-        errorUpdate.setText(addMessage);
-      }
-    } catch (Exception e) {
-      errorUpdate.setText(""+e);
-    }
-    
-    
     });
 
     cancelButton.setOnAction(a -> dialog.close());
@@ -248,10 +240,62 @@ public class ItemViewController {
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
-    dialogPane.getChildren().addAll(newName, newPrice, errorUpdate, saveButton, cancelButton);
+    dialogPane.getChildren().addAll(totalCost, authCode, errorUpdate, payButton, cancelButton);
     Scene dialogScene = new Scene(dialogPane);
     dialog.setScene(dialogScene);
-    dialog.setTitle("Update Item");
+    dialog.setTitle("Pay Order");
+    dialog.show();
+  }
+
+  private void latePaymentWindow(TOOrder latePendingOrder) {
+    Stage dialog = new Stage();
+    dialog.initModality(Modality.APPLICATION_MODAL);
+    VBox dialogPane = new VBox();
+
+    // create UI elements
+    Label totalCost = new Label(""+latePendingOrder.getPrice());
+    TextField authCode = new TextField("Authorization Code");
+    TextField lateAuthCode = new TextField("Late Authorization Code");
+    Button payButton = new Button("Pay");
+    Button cancelButton = new Button("Cancel");
+    Label errorUpdate = new Label("");
+    
+    // actions
+    authCode.setOnMouseClicked(a -> authCode.setText(""));
+    payButton.setOnAction(a -> {
+
+      // textt from labels
+      String inputAuthCodeString = authCode.getText();
+      String inputLateAuthCodeString = lateAuthCode.getText();
+
+      try {
+          String payPenaltyMessage = Iteration3Controller.payPenaltyForOrder(latePendingOrder.getNumber(), inputLateAuthCodeString, inputAuthCodeString);
+          if (payPenaltyMessage.isEmpty()) {
+            errorUpdate.setText(payPenaltyMessage);
+            parentOrders.remove(latePendingOrder);
+          }
+          else {
+            errorUpdate.setText(payPenaltyMessage);
+          }
+      } 
+      catch (Exception e) {
+        errorUpdate.setText(""+e);
+      }
+
+    });
+
+    cancelButton.setOnAction(a -> dialog.close());
+
+    // display the popup window
+    int innerPadding = 10;
+    int outerPadding = 100;
+    dialogPane.setSpacing(innerPadding);
+    dialogPane.setAlignment(Pos.CENTER);
+    dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
+    dialogPane.getChildren().addAll(totalCost, authCode, errorUpdate, payButton, cancelButton);
+    Scene dialogScene = new Scene(dialogPane);
+    dialog.setScene(dialogScene);
+    dialog.setTitle("Pay Order");
     dialog.show();
   }*/
 
