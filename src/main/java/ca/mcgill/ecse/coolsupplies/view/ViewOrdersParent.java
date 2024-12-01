@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
+import ca.mcgill.ecse.coolsupplies.view.*;
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
@@ -30,6 +31,8 @@ public class ViewOrdersParent {
     @FXML
     private Button addOrder;
 
+    TOParent myParent = UpdateParentView.getSelectedParent();
+
     @FXML
     private void initialize() {
         orderNo.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -39,6 +42,9 @@ public class ViewOrdersParent {
 
         ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
         ObservableList<TOOrder> parentOrders = FXCollections.observableArrayList();
+
+
+
 
         for (TOOrder order : ordersInSystem) {
             //if (order.getParentEmail().isEquals(parentEmail))
@@ -63,7 +69,10 @@ public class ViewOrdersParent {
                 //cancel order method called here
             });
         }
-    }
+   }
+//    private void addOrder(){
+//        CoolSuppliesFxmlView.newWindow("");
+//    }
 
 
 

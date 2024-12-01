@@ -44,23 +44,49 @@ public class ViewOrdersAdmin {
         orderStatus.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
         ordersTable.setItems(ordersInSystem);
+        addingButtons();
         refresh();
     }
 
     @FXML
     private void addingButtons(){
-//        buttonColumn.setCellFactory(col -> new TableCell<>()){
-//            final Button cancelButton = new Button("Cancel");
-//            final Button editOrder = new Button("Edit");
-//            final Button pickUp = new Button("Pick Up");
-//            {
-//                cancelButton.setOnAction(event -> {
-//                    TOOrder myItem = getTableView().getItems().get(getIndex)
-//                });
-//            }
-//        }
+        buttonColumn.setCellFactory(col -> new TableCell<>()){
+            final Button cancelButton = new Button("Cancel");
+            final Button editOrder = new Button("Edit");
+            final Button pickUp = new Button("Pick Up");
+            {
+                cancelButton.setOnAction(event -> {
+                    TOOrder myOrder = getTableView().getItems().get(getIndex());
+                    String attemptCancel = Iteration3Controller.cancelOrder(myOrder);
+                    errorLabel.setText(attemptCancel);
+
+                });
+
+                editOrder.setOnAction(event -> {
+                    TOOrder myOrder = getTableView().getItems().get(getIndex());
+                    String myStatus = myOrder.getStatus();
+                    if(!myStatus.equals("Started")){
+                        errorLabel.setText("You cannot edit this order.");
+                    }
+                    else{
+                        CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a bundle");
+                    }
+
+                });
+
+                pickUp.setOnAction(event -> {
+                    TOOrder myOrder = getTableView().getItems().get(getIndex());
+                    String myStatus = myOrder.getStatus();
+                    if(!myStatus.equals("Paid")){
+                        errorLabel.setText("You cannot pick up this order.");
+                    }
+                });
+            }
+        }
 
     }
+
+
 
     private void refresh(){
         ordersInSystem.setAll(Iteration3Controller.viewAllOrders());
