@@ -50,7 +50,9 @@ public class ViewBundleView {
     //    Set up the table columns
        bundleName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
        bundleGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
-       discount.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDiscount()));
+       discount.setCellValueFactory(cellData -> 
+     new SimpleStringProperty(String.valueOf(cellData.getValue().getDiscount()))
+    );
 
        //Add action items to table
        addActionButtonToTable();
