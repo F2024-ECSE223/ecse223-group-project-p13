@@ -14,7 +14,7 @@
    <top>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="167.0" prefWidth="602.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView layoutX="20.0" layoutY="48.0" prefHeight="83.0" prefWidth="427.0">
+            <TableView fx:id= "TableViewBundles" layoutX="20.0" layoutY="48.0" prefHeight="83.0" prefWidth="427.0">
               <columns>
                 <TableColumn fx:id="BundleItems" prefWidth="196.0" text="Items" />
                 <TableColumn fx:id="BundlePrice" prefWidth="107.19992065429688" text="Price" />
@@ -41,7 +41,7 @@
          <children>
             <AnchorPane minWidth="-Infinity" prefHeight="35.0" prefWidth="600.0">
                <children>
-                  <TableView maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="238.0" prefWidth="600.0">
+                  <TableView fx:id="TableViewItems" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="238.0" prefWidth="600.0">
                     <columns>
                       <TableColumn fx:id="columnName" prefWidth="311.20001220703125" text="Name" />
                       <TableColumn fx:id="columnPrice" prefWidth="172.0" text="Price" />
