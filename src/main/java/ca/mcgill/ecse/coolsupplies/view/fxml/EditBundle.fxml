@@ -41,7 +41,7 @@
                   <Font name="Rockwell" size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="211.0" layoutY="169.0" prefHeight="26.0" prefWidth="300.0" />
+            <TextField fx:id="discountValue" layoutX="211.0" layoutY="169.0" prefHeight="26.0" prefWidth="300.0" />
             <Button id="saveButton" fx:id="saveButton" layoutX="556.0" layoutY="149.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="106.0" text="Save Changes " />
             <Label id="custom" fx:id="custom" layoutX="36.0" layoutY="13.0" prefHeight="37.0" prefWidth="648.0" text="Custom Label With Bundle Name, Grade and Discount" textFill="#023c40">
                <font>
@@ -57,9 +57,9 @@
                <children>
                   <TableView fx:id="itemsTable" layoutX="-4.0" prefHeight="313.0" prefWidth="700.0">
                     <columns>
-                      <TableColumn id="items" fx:id="items" prefWidth="249.57717514038086" text="Item" />
-                      <TableColumn id="quantity" fx:id="quantity" prefWidth="215.9228057861328" text="Quantity" />
-                      <TableColumn id="purchaseLevel" fx:id="purchaseLevel" prefWidth="233.5" text="Purchase Level" />
+                      <TableColumn fx:id="itemNameColumn" prefWidth="249.57717514038086" text="Item" />
+                      <TableColumn fx:id="quantityColumn" prefWidth="215.9228057861328" text="Quantity" />
+                      <TableColumn fx:id="purchaseLevelColumn" prefWidth="233.5" text="Purchase Level" />
                     </columns>
                   </TableView>
                </children>

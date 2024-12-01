@@ -107,16 +107,11 @@ public class ItemViewController {
     String newName = new_item_name_text_field.getText();
     String newPrice = new_price_text_field.getText();
 
-    if (newName == null || newName.trim().isEmpty()) {
-      error.setText("Please input a valid item name");
-    } 
-    else if (newPrice == null || newPrice.trim().isEmpty()) {
-      error.setText("Please input a valid item price");
-    }
+    
     String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newName, Integer.parseInt(newPrice));
     if (addMessage.isEmpty()) {
-      new_item_name_text_field.setText("");
-      new_price_text_field.setText("");
+      new_item_name_text_field.setText("Item name");
+      new_price_text_field.setText("Price");
       error.setText(addMessage);
       TOItem new_item = new TOItem(newName, Integer.parseInt(newPrice));
       itemList.add(new_item);
@@ -162,17 +157,12 @@ public class ItemViewController {
     String newPriceString = newPrice.getText();
 
     // add updated name as new, remove old
-    if (newNameString == null || newNameString.trim().isEmpty()) {
-      errorUpdate.setText("Please input a valid item name");
-    } 
-    else if (newPriceString == null || newPriceString.trim().isEmpty()) {
-      errorUpdate.setText("Please input a valid item price");
-    }
-
     String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newNameString, Integer.parseInt(newPriceString));
     try {
       if (addMessage.isEmpty()) {
         errorUpdate.setText(addMessage);
+        newName.setText("New name");
+        newPrice.setText("New price");
         TOItem new_item = new TOItem(newNameString, Integer.parseInt(newPriceString));
         itemList.add(new_item);
         itemList.remove(oldItem);
