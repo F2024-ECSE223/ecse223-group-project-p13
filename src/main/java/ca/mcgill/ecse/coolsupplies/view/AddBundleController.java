@@ -61,33 +61,31 @@ public class AddBundleController {
     @FXML
     private void moveToNextPage(ActionEvent event) {
         try {
-           // Pass data to the next page if needed
-           FXMLLoader loader = new FXMLLoader(getClass().getResource("EditBundle.fxml"));
-           Parent root = loader.load();
-
-           // Get the controller of the next page
-           EditBundleView controller = loader.getController();
-
-           // Create a TOGradeBundle or similar object to pass data
-           // For now, you might need to create a temporary bundle or adjust your workflow
-
-           // Close the current window
-           Stage currentStage = (Stage) nextButton.getScene().getWindow();
-           currentStage.close();
-
-           // Show the next window
-           Stage stage = new Stage();
-           stage.setTitle("Edit a Bundle");
-           stage.setScene(new Scene(root));
-           stage.show();
-
-           clearError();
-       } catch (Exception e) {
-           displayError("Failed to open the edit bundle page: " + e.getMessage());
-           e.printStackTrace();
-       }
-
-        //Find a way to close other window when clicking next
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
+            Parent root = loader.load();
+    
+            // Get the controller of the next page
+            EditBundleView controller = loader.getController();
+    
+            // Pass the newly created bundle to the controller
+            controller.initData(newBundle);
+    
+            // Show the next window
+            Stage stage = new Stage();
+            stage.setTitle("Edit a Bundle");
+            stage.setScene(new Scene(root));
+            stage.show();
+    
+            // Close the current window
+            Stage currentStage = (Stage) nextButton.getScene().getWindow();
+            currentStage.close();
+    
+            clearError();
+        } catch (Exception e) {
+            displayError("Failed to open the edit bundle page: " + e.getMessage());
+            e.printStackTrace();
+        }
+    
     }
 
     private void displayError(String message) {

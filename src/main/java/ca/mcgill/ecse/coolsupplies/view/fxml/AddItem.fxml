@@ -58,7 +58,6 @@
    <bottom>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="137.0" prefWidth="602.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="viewOrder" layoutX="502.0" layoutY="89.0" mnemonicParsing="false" text="View order" />
             <Label fx:id="errorLabel" layoutX="26.0" layoutY="92.0" prefHeight="18.0" prefWidth="433.0" />
          </children>
       </AnchorPane>

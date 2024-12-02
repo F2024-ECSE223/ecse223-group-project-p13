@@ -309,6 +309,15 @@ public class EditBundleView {
             }
         }
 
+        int nbItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName()).size();
+        if(nbItems < 2) {
+            String x = CoolSuppliesFeatureSet4Controller.updateBundle(bundle.getName(), bundle.getName(), 0, bundle.getGradeLevel() );
+            if(!x.isEmpty()) {
+                showAlert(x);
+            }
+        }
+       
+
         
 
         // Show success message
