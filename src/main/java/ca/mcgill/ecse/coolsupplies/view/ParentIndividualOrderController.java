@@ -56,6 +56,7 @@ public class ParentIndividualOrderController {
   private TableColumn<TOBundleItem, String> bundleLevel_col;
   @FXML
   private TableColumn<TOOrder, String> total_col;
+  @FXML
   private Button editOrder;
   private boolean bundleWasSet = false;
 
@@ -103,5 +104,9 @@ public class ParentIndividualOrderController {
     second_row.setItems(dateList);
     item_table.setItems(individualItemList);
     bundle_table.setItems(bundleItemList);
+
+    editOrder.setOnAction(e -> {
+      CoolSuppliesFxmlView.newWindow("AddItem.fxml", "Edit Order");
+    });
   }
 }
