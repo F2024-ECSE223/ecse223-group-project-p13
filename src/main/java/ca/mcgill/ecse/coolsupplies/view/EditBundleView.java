@@ -17,7 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class EditBundleView {
 
     @FXML
-    private Label custom; // Label to display bundle name, grade, and discount
+    private Label custom; 
 
     @FXML
     private TextField bundleNameText;
@@ -54,6 +54,14 @@ public class EditBundleView {
 
     private Set<String> existingItemNames;
 
+    /**
+    * @author Nil Akkurt
+    * 
+    * Initializes the EditBundleView. Sets up the grade options, initializes table columns, 
+    * and styles the delete and save buttons.
+    * 
+    * @return void
+    */
     @FXML
     public void initialize() {
         // Initialize the grade options
@@ -70,6 +78,14 @@ public class EditBundleView {
         saveButton.getStyleClass().add(Styles.SUCCESS);
     }
 
+    /**
+    * @author Nil Akkurt
+    * 
+    * Initializes the view with data from the given bundle.
+    * 
+    * @param bundle The grade bundle to be edited, containing initial data for the UI components.
+    * @return void
+    */
     public void initData(TOGradeBundle bundle) {
         this.bundle = bundle;
         // Set initial data in the UI components
@@ -82,6 +98,14 @@ public class EditBundleView {
         loadItems();
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Loads all available items and prepares the items table with quantities and purchase levels 
+    * for the current bundle.
+    * 
+    * @return void
+    */
     private void loadItems() {
         // Fetch all items from your controller
         List<TOItem> allItems = getAllItems();
@@ -107,6 +131,14 @@ public class EditBundleView {
         itemsTable.setItems(itemEntries);
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Retrieves the quantity of the specified item in the bundle.
+    * 
+    * @param item The item for which the quantity is retrieved.
+    * @return The quantity of the specified item in the bundle.
+    */
     private int getQuantityForItem(TOItem item) {
         for (TOBundleItem bundleItem : bundleItems) {
             if (bundleItem.getItemName().equals(item.getName())) {
@@ -116,6 +148,14 @@ public class EditBundleView {
         return 0;
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Retrieves the purchase level of the specified item in the bundle.
+    * 
+    * @param item The item for which the purchase level is retrieved.
+    * @return The purchase level of the specified item in the bundle.
+    */
     private String getPurchaseLevelForItem(TOItem item) {
         for (TOBundleItem bundleItem : bundleItems) {
             if (bundleItem.getItemName().equals(item.getName())) {
@@ -125,6 +165,13 @@ public class EditBundleView {
         return "Optional"; // Default value
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Sets up the quantity column in the items table with editable spinners for modifying quantities.
+    * 
+    * @return void
+    */
     private void setupQuantityColumn() {
         quantityColumn.setCellFactory(column -> new TableCell<ItemEntry, Integer>() {
             private final Spinner<Integer> spinner = new Spinner<>(0, Integer.MAX_VALUE, 0);
@@ -153,6 +200,14 @@ public class EditBundleView {
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Sets up the purchase level column in the items table with editable combo boxes for selecting 
+    * purchase levels.
+    * 
+    * @return void
+    */
     private void setupPurchaseLevelColumn() {
         purchaseLevelColumn.setCellFactory(column -> new TableCell<ItemEntry, String>() {
             private final ComboBox<String> comboBox = new ComboBox<>();
@@ -181,10 +236,24 @@ public class EditBundleView {
         purchaseLevelColumn.setCellValueFactory(cellData -> cellData.getValue().purchaseLevelProperty());
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Retrieves all available items using the controller.
+    * 
+    * @return A list of all available items.
+    */
     private List<TOItem> getAllItems() {
         return CoolSuppliesFeatureSet3Controller.getItems();
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Retrieves all available grade levels using the controller.
+    * 
+    * @return A list of grade levels.
+    */
     private List<String> getGradeLevels() {
         List<TOGrade> grades = CoolSuppliesFeatureSet7Controller.getGrades();
         List<String> gradeLevels = new ArrayList<>();
@@ -242,6 +311,13 @@ public class EditBundleView {
         }
     }
 
+    /**
+    * @author Nil Akkurt
+    * 
+    * Saves changes made to the bundle, including updating its details and items, and validating inputs.
+    * 
+    * @return void
+    */
     @FXML
     private void saveChanges() {
         // Gather updated data
@@ -340,6 +416,13 @@ public class EditBundleView {
     
     }
 
+    /**
+    * @author Nil Akkurt
+    * 
+    * Deletes the currently loaded bundle after user confirmation. Displays success or failure messages.
+    * 
+    * @return void
+    */
     @FXML
     private void deleteBundle() {
         // Confirm deletion
