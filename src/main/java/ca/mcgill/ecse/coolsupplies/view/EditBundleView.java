@@ -309,23 +309,36 @@ public class EditBundleView {
             }
         }
 
-        int nbItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName()).size();
-        if(nbItems < 2) {
-            String x = CoolSuppliesFeatureSet4Controller.updateBundle(bundle.getName(), bundle.getName(), 0, bundle.getGradeLevel() );
-            if(!x.isEmpty()) {
-                showAlert(x);
+        List<TOGradeBundle> allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
+
+    // Iterate over each bundle
+    for (TOGradeBundle bundle : allBundles) {
+        // Get the number of items in the bundle
+        List<TOBundleItem> bundleItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName()); 
+        int nbItems = 0;
+
+        for(TOBundleItem item : bundleItems){
+            nbItems += item.getQuantity();
+        }
+        // If the bundle has fewer than 2 items and discount is not zero
+        if (nbItems < 2 && bundle.getDiscount() != 0) {
+            // Set the discount to zero
+            String result = CoolSuppliesFeatureSet4Controller.updateBundle(bundle.getName(), bundle.getName(), 0, bundle.getGradeLevel());
+            if (!result.isEmpty()) {
+                // Handle any error messages
+                showAlert("Error updating bundle discount: " + result);
             }
         }
+    }
+  // Show success message
+  showAlert("Bundle updated successfully.");
+  // Close the window after saving
+  saveButton.getScene().getWindow().hide();
+
+
+}
        
-
-        
-
-        // Show success message
-        showAlert("Bundle updated successfully.");
-        // Close the window after saving
-        saveButton.getScene().getWindow().hide();
-
-    } catch (Exception e) {
+ catch (Exception e) {
         // Handle exceptions
         showAlert("Failed to update bundle: " + e.getMessage());
     }
