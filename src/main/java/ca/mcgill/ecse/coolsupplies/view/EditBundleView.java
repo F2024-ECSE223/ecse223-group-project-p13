@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -66,6 +66,8 @@ public class EditBundleView {
         // Set up custom cell factories
         setupQuantityColumn();
         setupPurchaseLevelColumn();
+        deleteButton.getStyleClass().add(Styles.DANGER);
+        saveButton.getStyleClass().add(Styles.SUCCESS);
     }
 
     public void initData(TOGradeBundle bundle) {

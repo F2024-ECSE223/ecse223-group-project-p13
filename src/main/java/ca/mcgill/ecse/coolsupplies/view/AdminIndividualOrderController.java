@@ -81,7 +81,7 @@ public class AdminIndividualOrderController {
     name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     price_col.setCellValueFactory(cellData -> {
       double price = Double.parseDouble(cellData.getValue().getPrice());
-      String formattedPrice = new DecimalFormat("#.00").format(price);
+      String formattedPrice = new DecimalFormat("#0.00").format(price);
       return new SimpleStringProperty("$" + formattedPrice);
     });
 
