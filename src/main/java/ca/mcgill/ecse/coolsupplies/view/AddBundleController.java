@@ -86,34 +86,6 @@ public class AddBundleController {
             e.printStackTrace();
         }
     
-        //     try {
-    //        // Pass data to the next page if needed
-    //        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
-    //        Parent root = loader.load();
-
-    //        // Get the controller of the next page
-    //        EditBundleView controller = loader.getController();
-
-    //        // Create a TOGradeBundle or similar object to pass data
-    //        // For now, you might need to create a temporary bundle or adjust your workflow
-
-    //        // Close the current window
-    //        Stage currentStage = (Stage) nextButton.getScene().getWindow();
-    //        currentStage.close();
-
-    //        // Show the next window
-    //        Stage stage = new Stage();
-    //        stage.setTitle("Edit a Bundle");
-    //        stage.setScene(new Scene(root));
-    //        stage.show();
-
-    //        clearError();
-    //    } catch (Exception e) {
-    //        displayError("Failed to open the edit bundle page: " + e.getMessage());
-    //        e.printStackTrace();
-    //    }
-
-    //     //Find a way to close other window when clicking next
     }
 
     private void displayError(String message) {
