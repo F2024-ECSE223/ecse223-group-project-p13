@@ -52,6 +52,8 @@ import javafx.stage.Stage;
 
 public class CoolSuppliesFxmlView extends Application {
   public static final EventType<Event> REFRESH_EVENT = new EventType<>("REFRESH");
+  public static final EventType<Event> START_SCHOOL_YEAR_EVENT =
+      new EventType<>("START_SCHOOL_YEAR");
   private static CoolSuppliesFxmlView instance;
   private List<Node> refreshableNodes = new ArrayList<>();
 
