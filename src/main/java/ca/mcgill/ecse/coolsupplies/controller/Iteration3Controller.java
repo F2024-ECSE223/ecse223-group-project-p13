@@ -535,11 +535,11 @@ public class Iteration3Controller {
           if (purchaseLevel.compareTo(bundleItem.getLevel()) >= 0) {
             Item itemInBundle = bundleItem.getItem();
             priceOfBundleItem = itemInBundle.getPrice();
+            numberOfIterations += 1;
           }
 
           priceOfBundle += (quantityInBundle * priceOfBundleItem);
 
-          numberOfIterations += 1;
         }
 
         if (numberOfIterations > 1) {
