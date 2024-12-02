@@ -29,12 +29,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class NewOrderView {
-  private StringProperty parentEmail = new SimpleStringProperty("");
   private String selectedStudent = "";
   private String orderLevel = "";
   private StringProperty errMsg = new SimpleStringProperty("");
 
-  public void createAddOrder() {
+  public void createAddOrder(String parentEmail) {
     Stage dialog = new Stage();
     dialog.setTitle("New Order");
 
@@ -56,7 +55,7 @@ public class NewOrderView {
       }
     });
 
-    selection.getChildren().addAll(selectParent(), selectStudent(), datePicker);
+    selection.getChildren().addAll(selectStudent(parentEmail), datePicker);
 
     TextField orderID = new TextField("");
     orderID.setPromptText("Order number");
@@ -69,7 +68,7 @@ public class NewOrderView {
       try {
         int orderNum = Integer.parseInt(orderID.getText());
         String result =CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
-        java.sql.Date.valueOf(datePicker.getValue()), orderLevel, parentEmail.get(),
+        java.sql.Date.valueOf(datePicker.getValue()), orderLevel, parentEmail,
         selectedStudent);
       
           if (result == null || result.isEmpty()){
@@ -96,44 +95,7 @@ public class NewOrderView {
   }
 
   // MARK: Helper methods
-
-  private HBox selectParent() {
-    HBox header = new HBox();
-
-    ObservableList<TOParent> parents =
-        FXCollections.observableList(CoolSuppliesFeatureSet1Controller.getParents());
-    ComboBox<TOParent> box = new ComboBox<>(parents);
-    box.setPromptText("Parent");
-    box.setCellFactory(lv -> new ListCell<TOParent>() {
-      @Override
-      protected void updateItem(TOParent parent, boolean empty) {
-        super.updateItem(parent, empty);
-        setText(empty ? null : parent.getEmail());
-      }
-    });
-
-    box.setButtonCell(new ListCell<TOParent>() {
-      @Override
-      protected void updateItem(TOParent parent, boolean empty) {
-        super.updateItem(parent, empty);
-        setText(empty ? null : parent.getEmail());
-      }
-    });
-
-    box.setOnAction((e) -> {
-      TOParent selected = box.getSelectionModel().getSelectedItem();
-
-      if (selected != null) {
-        this.parentEmail.set(selected.getEmail());
-      }
-    });
-
-    header.getChildren().addAll(box);
-
-    return header;
-  }
-
-  private ComboBox<TOStudent> selectStudent() {
+  private ComboBox<TOStudent> selectStudent(String parentEmail) {
     ComboBox<TOStudent> studentBox = new ComboBox<>();
     studentBox.setPromptText("Student");
     studentBox.setCellFactory(lv -> new ListCell<TOStudent>() {
@@ -160,13 +122,9 @@ public class NewOrderView {
       }
     });
 
-    parentEmail.addListener((observable, oldValue, newValue) -> {
-      if (newValue != null && !newValue.isEmpty()) {
-        ObservableList<TOStudent> students = FXCollections.observableArrayList(
-            CoolSuppliesFeatureSet6Controller.getStudentsOfParent(newValue));
+      ObservableList<TOStudent> students = FXCollections.observableArrayList(
+            CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail));
         studentBox.setItems(students);
-      }
-    });
 
     return studentBox;
   }

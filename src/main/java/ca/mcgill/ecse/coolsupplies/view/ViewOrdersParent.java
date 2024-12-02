@@ -79,40 +79,38 @@ public class ViewOrdersParent {
         });
 
         actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button payButton = new Button("Pay");
-            private final Button cancelButton = new Button("Cancel");
-            private final Button viewButton = new Button("View");
-            private final HBox buttons = new HBox(10, viewButton, payButton, cancelButton);
-
-          {
-            payButton.setOnAction(event -> {
-              TOOrder myOrder = getTableView().getItems().get(getIndex());
-
-              String myStatus = myOrder.getStatus();
-              if (myStatus.equals("Started")) {
-                paymentWindow(myOrder);
-              } else if (myStatus.equals("Penalized")) {
-                latePaymentWindow(myOrder);
-              } else {
-                errorLabel.setText("Cannot pay for this order.");
-              }
-            });
-
-            cancelButton.setOnAction(event -> {
-                TOOrder myOrder = getTableView().getItems().get(getIndex());
-                String attemptCancel = Iteration3Controller.cancelOrder(myOrder.getNumber());
-                errorLabel.setText(attemptCancel);
-            });
-
-            viewButton.setOnAction(event -> {
-              ViewOrdersParent.order = getTableView().getItems().get(getIndex());
-              CoolSuppliesFxmlView.newWindow("ParentViewIndividualOrder.fxml", "Order");
-            });
-          }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
               super.updateItem(item, empty);
+              Button payButton = new Button("Pay");
+              Button cancelButton = new Button("Cancel");
+              Button viewButton = new Button("View");
+              HBox buttons = new HBox(10, viewButton, payButton, cancelButton);
+
+              payButton.setOnAction(event -> {
+                TOOrder myOrder = getTableView().getItems().get(getIndex());
+  
+                String myStatus = myOrder.getStatus();
+                if (myStatus.equals("Started")) {
+                  paymentWindow(myOrder);
+                } else if (myStatus.equals("Penalized")) {
+                  latePaymentWindow(myOrder);
+                } else {
+                  errorLabel.setText("Cannot pay for this order.");
+                }
+              });
+  
+              cancelButton.setOnAction(event -> {
+                  TOOrder myOrder = getTableView().getItems().get(getIndex());
+                  String attemptCancel = Iteration3Controller.cancelOrder(myOrder.getNumber());
+                  errorLabel.setText(attemptCancel);
+                fetchOrders(parents.getSelectionModel().getSelectedItem());
+              });
+  
+              viewButton.setOnAction(event -> {
+                ViewOrdersParent.order = getTableView().getItems().get(getIndex());
+                CoolSuppliesFxmlView.newWindow("ParentViewIndividualOrder.fxml", "Order");
+              });
 
               if (empty) {
                 setGraphic(null);
@@ -264,7 +262,7 @@ public class ViewOrdersParent {
   }
 
   private void addNewOrder() {
-    new NewOrderView().createAddOrder();
+    new NewOrderView().createAddOrder(parents.getSelectionModel().getSelectedItem());
   }
 
   public static TOOrder getOrder() {
