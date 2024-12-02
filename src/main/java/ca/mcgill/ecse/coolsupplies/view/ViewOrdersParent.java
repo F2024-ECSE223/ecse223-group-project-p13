@@ -5,6 +5,7 @@ import java.util.List;
 
 import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
@@ -16,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
@@ -128,7 +130,7 @@ public class ViewOrdersParent {
           });
    }
 
-   /*
+   /**
    * @author Dimitri Christopoulos
    */
   private void paymentWindow(TOOrder pendingOrder) {
@@ -262,7 +264,36 @@ public class ViewOrdersParent {
   }
 
   private void addNewOrder() {
-    new NewOrderView().createAddOrder(parents.getSelectionModel().getSelectedItem());
+    Stage dialog = new Stage();
+    dialog.setTitle("New Order");
+
+    NewOrderView view = new NewOrderView();
+
+    view.add.setOnAction(e -> {
+      try {
+        int orderNum = Integer.parseInt(view.orderID.getText());
+        String result =CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
+        java.sql.Date.valueOf(view.datePicker.getValue()), view.orderLevel, parents.getSelectionModel().getSelectedItem(),
+        view.selectedStudent);
+      
+          if (result == null || result.isEmpty()){
+            fetchOrders(parents.getSelectionModel().getSelectedItem());
+            dialog.hide();
+          }
+          else {
+            view.errMsgText.setText(result);
+          }
+      } catch (NumberFormatException err) {
+        view.errMsgText.setText("Please enter a number");
+      }
+    });
+
+    VBox content = view.createAddOrder(parents.getSelectionModel().getSelectedItem());
+
+    dialog.setScene(new Scene(content));
+
+    dialog.show();
+
   }
 
   public static TOOrder getOrder() {

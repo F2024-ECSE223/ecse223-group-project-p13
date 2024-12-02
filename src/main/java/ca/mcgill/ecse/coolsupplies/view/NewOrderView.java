@@ -1,11 +1,8 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import atlantafx.base.theme.Styles;
-import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
-import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import ca.mcgill.ecse.coolsupplies.controller.TOStudent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -13,7 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -25,28 +21,27 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class NewOrderView {
-  private String selectedStudent = "";
-  private String orderLevel = "";
-  private StringProperty errMsg = new SimpleStringProperty("");
+  public String selectedStudent = "";
+  public String orderLevel = "";
+  public StringProperty errMsg = new SimpleStringProperty("");
 
-  public void createAddOrder(String parentEmail) {
-    Stage dialog = new Stage();
-    dialog.setTitle("New Order");
+  public Button add = new Button("Add");
+  public DatePicker datePicker = new DatePicker();
+  public TextField orderID = new TextField("");
+  public Label errMsgText = new Label("");
 
+  public VBox createAddOrder(String parentEmail) {
     VBox content = new VBox(16);
     content.setPadding(new Insets(16, 16, 16, 16));
 
     HBox selection = new HBox(16);
     selection.setAlignment(Pos.CENTER_LEFT);
 
-    Label errMsgText = new Label("");
     errMsgText.getStyleClass().add(Styles.DANGER);
 
-    DatePicker datePicker = new DatePicker();
     datePicker.setPrefWidth(150);
     datePicker.setValue(LocalDate.now());
     datePicker.valueProperty().addListener((obserable, oldValue, newValue) -> {
@@ -57,41 +52,13 @@ public class NewOrderView {
 
     selection.getChildren().addAll(selectStudent(parentEmail), datePicker);
 
-    TextField orderID = new TextField("");
     orderID.setPromptText("Order number");
 
-
-    Button add = new Button("Add");
     add.getStyleClass().add(Styles.SUCCESS);
-
-    add.setOnAction((e) -> {
-      try {
-        int orderNum = Integer.parseInt(orderID.getText());
-        String result =CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
-        java.sql.Date.valueOf(datePicker.getValue()), orderLevel, parentEmail,
-        selectedStudent);
-      
-          if (result == null || result.isEmpty()){
-            dialog.hide();
-          }
-          else {
-            errMsgText.setText(result);
-          }
-       
-       
-        
-        
-      } catch (NumberFormatException err) {
-        errMsgText.setText("Please enter a number");
-      }
-    });
-
 
     content.getChildren().addAll(errMsgText, selection, createOrderLevel(), orderID, add);
 
-    dialog.setScene(new Scene(content));
-
-    dialog.show();
+    return content;
   }
 
   // MARK: Helper methods
