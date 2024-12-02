@@ -1,11 +1,10 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import atlantafx.base.theme.PrimerLight;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
-import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
-import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import ca.mcgill.ecse.coolsupplies.controller.TOStudent;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,105 +13,77 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-public class OrderView {
-  private StackPane mainContent;
-  private ObservableList<TOOrder> orders;
+public class NewOrderView {
   private StringProperty parentEmail = new SimpleStringProperty("");
   private String selectedStudent = "";
   private String orderLevel = "";
+  private StringProperty errMsg = new SimpleStringProperty("");
 
-  public OrderView(StackPane mainContent) {
-    this.mainContent = mainContent;
-    VBox view = new VBox();
-    view.setPadding(new Insets(16, 16, 16, 16));
+  public void createAddOrder() {
+    Stage dialog = new Stage();
+    dialog.setTitle("New Order");
 
-    ListView<TOOrder> orderList = createOrderList();
-
-    VBox newOrder = createAddOrder();
-
-    Text title = new Text("Order History");
-    title.setFont(CoolSuppliesFxmlView.title2);
-
-    Text title2 = new Text("Add Order");
-    title2.setFont(CoolSuppliesFxmlView.title2);
-
-    view.getChildren().addAll(title, orderList, title2, newOrder);
-    mainContent.getChildren().add(view);
-  }
-
-  private VBox createAddOrder() {
     VBox content = new VBox(16);
+    content.setPadding(new Insets(16, 16, 16, 16));
 
     HBox selection = new HBox(16);
     selection.setAlignment(Pos.CENTER_LEFT);
-    Text label1 = new Text("Parent: ");
-    Text label2 = new Text("Student: ");
 
-    selection.getChildren().addAll(label1, selectParent(), label2, selectStudent(), createOrderLevel());
+    Label errMsgText = new Label("");
+    errMsgText.getStyleClass().add(Styles.DANGER);
+
+    DatePicker datePicker = new DatePicker();
+    datePicker.setPrefWidth(150);
+    datePicker.setValue(LocalDate.now());
+    datePicker.valueProperty().addListener((obserable, oldValue, newValue) -> {
+      if (newValue == null) {
+        datePicker.setValue(LocalDate.now());
+      }
+    });
+
+    selection.getChildren().addAll(selectParent(), selectStudent(), datePicker);
 
     TextField orderID = new TextField("");
     orderID.setPromptText("Order number");
 
-    content.getChildren().addAll(selection, orderID);
 
-    return content;
-  }
+    Button add = new Button("Add");
+    add.getStyleClass().add(Styles.SUCCESS);
 
-  private ListView<TOOrder> createOrderList() {
-    orders = FXCollections.observableList(Iteration3Controller.viewAllOrders());
+    add.setOnAction((e) -> {
+      try {
+        int orderNum = Integer.parseInt(orderID.getText());
+       errMsgText.setText(CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
+            java.sql.Date.valueOf(datePicker.getValue()), orderLevel, parentEmail.get(),
+            selectedStudent));
 
-    ListView<TOOrder> listView = new ListView<>(orders);
-
-    listView.setCellFactory(l -> new ListCell<TOOrder>() {
-      @Override
-      protected void updateItem(TOOrder order, boolean empty) {
-        super.updateItem(order, empty);
-
-        if (empty || order == null) {
-          setText(null);
-        } else {
-          HBox cell = new HBox(16);
-          cell.setAlignment(Pos.CENTER_LEFT);
-
-          Button cancelOrder = new Button("Cancel");
-          cancelOrder.getStyleClass().addAll(Styles.DANGER);
-          cancelOrder.setOnAction(e -> {
-            // TODO: Add cancel workflow
-          });
-
-          Button updateOrder = new Button("Update");
-          updateOrder.setOnAction(e -> {
-            // TODO: Add update workflow
-          });
-
-          Text label = new Text(order.getNumber());
-
-          Region spacer = new Region();
-          HBox.setHgrow(spacer, Priority.ALWAYS);
-
-          cell.getChildren().addAll(label, spacer, cancelOrder, updateOrder);
-
-          setGraphic(cell);
-        }
+        dialog.hide();
+      } catch (NumberFormatException err) {
+        errMsgText.setText("Please enter a number");
       }
     });
 
 
-    return listView;
+    content.getChildren().addAll(errMsgText, selection, createOrderLevel(), orderID, add);
+
+    dialog.setScene(new Scene(content));
+
+    dialog.show();
   }
 
   // MARK: Helper methods
@@ -123,6 +94,7 @@ public class OrderView {
     ObservableList<TOParent> parents =
         FXCollections.observableList(CoolSuppliesFeatureSet1Controller.getParents());
     ComboBox<TOParent> box = new ComboBox<>(parents);
+    box.setPromptText("Parent");
     box.setCellFactory(lv -> new ListCell<TOParent>() {
       @Override
       protected void updateItem(TOParent parent, boolean empty) {
@@ -154,6 +126,7 @@ public class OrderView {
 
   private ComboBox<TOStudent> selectStudent() {
     ComboBox<TOStudent> studentBox = new ComboBox<>();
+    studentBox.setPromptText("Student");
     studentBox.setCellFactory(lv -> new ListCell<TOStudent>() {
       @Override 
       protected void updateItem(TOStudent student, boolean empty) {
@@ -205,13 +178,13 @@ public class OrderView {
 
     RadioButton optional = new RadioButton("Optional");
     optional.setToggleGroup(group);
-    optional.setUserData("optional");
+    optional.setUserData("Optional");
 
     hbox.getChildren().addAll(mandatory, recommended, optional);
 
     group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
-        this.orderLevel = newValue.toString();
+        this.orderLevel = newValue.getUserData().toString();
       }
     });
 

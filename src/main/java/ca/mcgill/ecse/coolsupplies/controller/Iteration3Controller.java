@@ -466,7 +466,7 @@ public class Iteration3Controller {
     }
 
     String studentName = particularOrder.getStudent().getName();
-    String parentName = particularOrder.getParent().getName();
+    String parentName = particularOrder.getParent().getEmail();
     String date = particularOrder.getDate().toString();
     String OrderNumber = Integer.toString(particularOrder.getNumber());
     String authorizationCode = particularOrder.getAuthorizationCode();

@@ -79,7 +79,7 @@ public class CoolSuppliesFxmlView extends Application {
 
     splashScreen();
 
-    Scene scene = new Scene(root, 800, 600);
+    Scene scene = new Scene(root);
 
     Screen screen = Screen.getPrimary();
     Rectangle2D bounds = screen.getBounds();
