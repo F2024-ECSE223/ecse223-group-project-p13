@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
@@ -74,6 +75,7 @@ public class AddBundleController {
        } catch (Exception e) {
            displayError("Failed to open the edit bundle page: " + e.getMessage());
            e.printStackTrace();
+       }
 
         //Find a way to close other window when clicking next
     }
