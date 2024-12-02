@@ -85,14 +85,6 @@ public class ViewBundleView {
         displayError("Failed to open the new bundle page: " + e.getMessage());
         e.printStackTrace();
     }
-    
-    // try {
-    //     Stage stage = CoolSuppliesFxmlView.newWindowStage("AddBundle.fxml", "Add a New Bundle");
-    //     // Do not close the main window
-    //     clearError();
-    // } catch (Exception e) {
-    //     displayError("Failed to open the new bundle page: " + e.getMessage());
-    // }
 
    }
 
@@ -131,7 +123,7 @@ public class ViewBundleView {
         displayError("Failed to open the edit bundle page: " + e.getMessage());
         e.printStackTrace();
     }
-});
+    });
         }
 
         @Override
@@ -152,12 +144,10 @@ public class ViewBundleView {
        errorLabel.setText(message);
    }
 
-
    //Method to clear error messages
    private void clearError() {
        errorLabel.setText("");
    }
-
 
    public void refreshTable() {
        // Get all bundles

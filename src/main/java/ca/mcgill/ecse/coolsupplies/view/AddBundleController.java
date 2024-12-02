@@ -103,7 +103,6 @@ public class AddBundleController {
         errorLabel.setText("");
     }
 
-
     private boolean addBundle() {
         String bundleName = bundleNameText.getText();
         String discount = discountValue.getText();
