@@ -1,23 +1,33 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.fxml.FXML;
-
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.*;
 import ca.mcgill.ecse.coolsupplies.controller.*;
+import ca.mcgill.ecse.coolsupplies.model.Order;
 import ca.mcgill.ecse.coolsupplies.view.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import java.util.List;
+import atlantafx.base.theme.Styles;
 import java.util.ArrayList;
-
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Modality;
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
@@ -32,7 +42,7 @@ public class ViewOrdersParent {
     @FXML
     private TableColumn<TOOrder, String> orderStatus;
     @FXML
-    private TableColumn<String, Void> actionColumn;
+    private TableColumn<TOOrder, Void> actionColumn;
     @FXML
     private Button addOrder;
 
@@ -60,40 +70,58 @@ public class ViewOrdersParent {
         for(TOParent parent : parentsInSystem){
             parentEmails.add(parent.getEmail());
         }
-        parents.getItems().addAll(parentEmails);
+
+        parents.setItems(FXCollections.observableArrayList(parentEmails));
 
         parents.setOnAction(event -> {
             String selectedEmail = parents.getValue();
             fetchOrders(selectedEmail);
         });
 
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button payButton = new Button("Pay");
+            private final Button cancelButton = new Button("Cancel");
+            private final HBox buttons = new HBox(10, payButton, cancelButton);
 
-        actionColumn.setCellFactory(col -> new TableCell<>() {
-            Button payButton = new Button("Pay");
-            final Button cancelButton = new Button("Cancel");
+          {
+            payButton.setOnAction(event -> {
+              TOOrder myOrder = getTableView().getItems().get(getIndex());
 
-            payButton.setOnAction((e) -> {
-                TOOrder myOrder = ordersTable.getSelectionModel().getSelectedItem();
-                String myStatus = myOrder.getStatus();
-                if(myStatus.equals("Started")){
-                    paymentWindow(myOrder);
-                }
-                else if (myStatus.equals("Penalized")){
-                    latePaymentWindow(myOrder);
-                }
-                else{
-                    errorLabel.setText("Cannot pay for this order.");
-                }
-
+              String myStatus = myOrder.getStatus();
+              if (myStatus.equals("Started")) {
+                paymentWindow(myOrder);
+              } else if (myStatus.equals("Penalized")) {
+                latePaymentWindow(myOrder);
+              } else {
+                errorLabel.setText("Cannot pay for this order.");
+              }
             });
-
 
             cancelButton.setOnAction(event -> {
                 TOOrder myOrder = getTableView().getItems().get(getIndex());
-                String attemptCancel = Iteration3Controller.cancelOrder(myOrder);
+                String attemptCancel = Iteration3Controller.cancelOrder(myOrder.getNumber());
                 errorLabel.setText(attemptCancel);
             });
+          }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+              super.updateItem(item, empty);
+
+              if (empty) {
+                setGraphic(null);
+              }
+              else {
+                setGraphic(buttons);
+              }
+            }
         });
+
+
+          addOrder.getStyleClass().add(Styles.SUCCESS);
+          addOrder.setOnAction((e) -> {
+            addNewOrder();
+          });
    }
 
    /*
@@ -176,6 +204,7 @@ public class ViewOrdersParent {
       String inputAuthCodeString = authCode.getText();
       String inputLateAuthCodeString = lateAuthCode.getText();
 
+
       try {
           String payPenaltyMessage = Iteration3Controller.payPenaltyForOrder(latePendingOrder.getNumber(), inputLateAuthCodeString, inputAuthCodeString);
           if (payPenaltyMessage.isEmpty()) {
@@ -207,20 +236,20 @@ public class ViewOrdersParent {
     dialog.show();
   }
 
+  public void fetchOrders(String email) {
+    ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
+    parentOrders.clear();
 
+    for (TOOrder order : ordersInSystem) {
+      if (order.getParentEmail().equals(email)) {
+        parentOrders.add(order);
+      }
+    }
 
-//    private void addOrder(){
-//        CoolSuppliesFxmlView.newWindow("");
-//    }
+    ordersTable.setItems(parentOrders);
+  }
 
-
-   private void fetchOrders(String email){
-        for(TOOrder order : ordersInSystem){
-            if(order.getParentEmail().equals(email)){
-                parentOrders.add(order);
-            }
-        }
-        ordersTable.setAll(parentOrders);
-   }
-
+  private void addNewOrder() {
+    new NewOrderView().createAddOrder();
+  }
 }
