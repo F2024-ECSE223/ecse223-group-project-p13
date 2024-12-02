@@ -118,12 +118,12 @@ public class CoolSuppliesFeatureSet4Controller {
       return "The grade does not exist.";
     }
 
-    if (gradeToUpdate.hasBundle()) {
+    if (gradeToUpdate.hasBundle() && !gradeToUpdate.getBundle().equals(bundleToUpdate)) {
       return "A bundle already exists for the grade.";
     }
 
     for (GradeBundle bundle : bundles) {
-      if (newName.equals(bundle.getName())) {
+      if (newName.equals(bundle.getName()) && !bundle.equals(bundleToUpdate)) {
         return "The name must be unique.";
       }
     }
