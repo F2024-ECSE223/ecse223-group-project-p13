@@ -56,10 +56,17 @@ public class StudentManagementView {
   private ObservableList<TOStudent> studentList = FXCollections.observableArrayList();
   
 
+  
+    /**this method initializes the view by setting the columns and adds the buttons to the table 
+     * @author Clara Dupuis
+     * @param none
+     * @return void
+     */
+    
   @FXML
   public void initialize(){
-      addButton.getStyleClass().add(Styles.SUCCESS);
-     gradeInput.setItems(FXCollections.observableArrayList(getGradeLevels()));
+    addButton.getStyleClass().add(Styles.SUCCESS);
+    gradeInput.setItems(FXCollections.observableArrayList(getGradeLevels()));
 
 
 
@@ -78,6 +85,12 @@ public class StudentManagementView {
     refreshTable();
 }
 
+/**
+ * This method gets a list of all of the grades in the student
+ * @author Clara Dupuis
+ * @return List of strings representing the grades
+ */
+
 private List<String> getGradeLevels() {
     List<String> gradeLevels = new ArrayList<>();
     for (TOGrade grade : CoolSuppliesFeatureSet7Controller.getGrades()) {
@@ -86,7 +99,12 @@ private List<String> getGradeLevels() {
     return gradeLevels;
 }
 
-
+/**
+ * This methods adds a student with the name and grade level inputted by the userto the list of students when the add button is pressed 
+ * @author Clara Dupuis
+ * @param AddStudent an OnAction event of the add button 
+ * @retrun void
+ */
   @FXML
   private void AddStudent(ActionEvent AddStudent){
       String name = nameInput.getText();
@@ -102,7 +120,13 @@ private List<String> getGradeLevels() {
       }
   }
 
-    
+ 
+  /**
+   * This methods adds the update and delete buttons to the table
+   * @author Clara Dupuis
+   * @parameters: none
+   * @returns: void
+   */
   private void addActionButtonsToTable() {
     columnActions.setCellFactory(param -> new TableCell<>() {
         private final Button deleteButton = new Button("Remove");
@@ -143,6 +167,12 @@ private List<String> getGradeLevels() {
       
     });
 }
+
+/**
+ * This method created a window that pops up when the update button is pressed 
+ * @author Clara Dupuis
+ * @param oldStudent
+ */
 
 private void makeUpdateWindow(TOStudent oldStudent) {
     Stage dialog = new Stage();

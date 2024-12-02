@@ -1,23 +1,14 @@
-
 package ca.mcgill.ecse.coolsupplies.view;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import java.util.List;
-import javafx.event.ActionEvent;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableView;
-public class ViewOrdersAdmin {
-    @FXML
-    private ScrollPane ordersScroll;
+import javafx.scene.layout.HBox;
 
-    @FXML
+public class ViewOrdersAdmin {
+      @FXML
     private TableView<TOOrder> ordersTable;
 
     @FXML
@@ -25,89 +16,70 @@ public class ViewOrdersAdmin {
     @FXML
     private TableColumn<TOOrder, String> orderParent;
     @FXML
+    private TableColumn<TOOrder, String> orderStudent;
+    @FXML
     private TableColumn<TOOrder, String> dateOrdered;
     @FXML
     private TableColumn<TOOrder, String> orderStatus;
     @FXML
-    private TableColumn<String, Void> buttonColumn;
+    private TableColumn<TOOrder, Void> actionColumn;
 
     @FXML
     private Label errorLabel;
 
-    @FXML
-    private ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList();
+    private static TOOrder selectedOrder = null;
 
     @FXML
     private void initialize(){
-        orderNo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNumber()));
-        orderParent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getParentEmail()));
-        dateOrdered.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
-        orderStatus.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
+        orderNo.setCellValueFactory(new PropertyValueFactory<>("number"));
+        orderParent.setCellValueFactory(new PropertyValueFactory<>("parentEmail"));
+        dateOrdered.setCellValueFactory(new PropertyValueFactory<>("date"));
+        orderStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        orderStudent.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        
+        fetchOrders();
 
-        ordersTable.setItems(ordersInSystem);
-        addingButtons();
-        refresh();
-    }
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button cancelButton = new Button("Cancel");
+            private final Button viewButton = new Button("View");
+            private final HBox buttons = new HBox(10, viewButton, cancelButton);
+            
+            viewButton.getStyleClass().add(Styles.DANGER);
 
-    @FXML
-    private void addingButtons(){
-        buttonColumn.setCellFactory(col -> new TableCell<>(){
-            final Button cancelButton = new Button("Cancel");
-            final Button editOrder = new Button("Edit");
-            final Button pickUp = new Button("Pick Up");
-            {
-                // cancelButton.setOnAction(event -> {
-                //     TOOrder myOrder = getTableView().getItems().get(getIndex());
-                //     String attemptCancel = Iteration3Controller.cancelOrder(myOrder);
-                //     errorLabel.setText(attemptCancel);
+          {
+            cancelButton.setOnAction(event -> {
+                TOOrder myOrder = getTableView().getItems().get(getIndex());
+                String attemptCancel = Iteration3Controller.cancelOrder(myOrder.getNumber());
+                errorLabel.setText(attemptCancel);
+            });
 
-                // });
+            viewButton.setOnAction(event -> {
+                ViewOrdersAdmin.selectedOrder = getTableView().getItems().get(getIndex());
+                
+                CoolSuppliesFxmlView.newWindow("AdminViewIndividualOrder.fxml", "Order");
+                });
+          }
 
-                // editOrder.setOnAction(event -> {
-                //     TOOrder myOrder = getTableView().getItems().get(getIndex());
-                //     String myStatus = myOrder.getStatus();
-                //     if(!myStatus.equals("Started")){
-                //         errorLabel.setText("You cannot edit this order.");
-                //     }
-                //     else{
-                //         CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a bundle");
-                //     }
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+              super.updateItem(item, empty);
 
-                // });
-
-                // pickUp.setOnAction(event -> {
-                //     TOOrder myOrder = getTableView().getItems().get(getIndex());
-                //     String myStatus = myOrder.getStatus();
-                //     if(!myStatus.equals("Paid")){
-                //         errorLabel.setText("You cannot pick up this order.");
-                //     }
-                // });
+              if (empty) {
+                setGraphic(null);
+              }
+              else {
+                setGraphic(buttons);
+              }
             }
         });
-
     }
 
-
-
-    private void refresh(){
-        ordersInSystem.setAll(Iteration3Controller.viewAllOrders());
-        ordersTable.setItems(ordersInSystem);
-    }
-    @FXML
-    private void viewOrder(ActionEvent event) {
-        try{
-            CoolSuppliesFxmlView.newWindow("viewindividualorder.fxml", "View an individual order");
-            clearError();
-        }
-        catch(Exception e){
-            setErrorMessage("Cannot open order details:" + e.getMessage());
-        }
+    private void fetchOrders() {
+        ordersTable
+                .setItems(FXCollections.observableArrayList(Iteration3Controller.viewAllOrders()));
     }
 
-    private void clearError() {errorLabel.setText("");
+    public static TOOrder getOrder() {
+        return selectedOrder;
     }
-    private void setErrorMessage(String message) {
-        errorLabel.setText(message);
-    }
-
 }
