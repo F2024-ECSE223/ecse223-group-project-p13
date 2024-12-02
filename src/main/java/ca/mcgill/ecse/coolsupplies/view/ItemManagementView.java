@@ -1,15 +1,14 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -25,7 +24,6 @@ public class ItemManagementView {
     @FXML private TableColumn<ItemEntry, String> columnPrice;
     @FXML private TableColumn<ItemEntry, Integer> columnQuantity;
     @FXML private RadioButton optionalButton;
-   // @FXML private ToggleGroup levelToggleGroup;
     @FXML private RadioButton recommendedButton;
     @FXML private RadioButton mandatoryButton;
     @FXML private ComboBox<String> gradeInput;
@@ -38,7 +36,6 @@ public class ItemManagementView {
     private ObservableList<BundleItemEntry> bundleItemEntries;
 
     private TOGradeBundle bundle;
-    private List<TOBundleItem> bundleItems;
 
     private String studentGrade;
     private String orderLevel;
@@ -71,8 +68,8 @@ public class ItemManagementView {
 
         // Initialize the studentComboBox with the parent's students
         List<String> studentNames = toParentStudents.stream()
-                                      .map(TOStudent::getName)
-                                      .collect(Collectors.toList());
+                                  .map(TOStudent::getName)
+                                  .collect(Collectors.toList());
         gradeInput.setItems(FXCollections.observableArrayList(studentNames));
 
         // Set the current student in the ComboBox
@@ -111,55 +108,59 @@ public class ItemManagementView {
             optionalButton.setSelected(true);
         }
 
-        // Add a listener to respond to changes
-        levelToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-        if (newToggle != null) {
-            RadioButton selectedButton = (RadioButton) newToggle;
-            String newOrderLevel = selectedButton.getText();
-            handleOrderLevelChange(newOrderLevel);
-        }
-
         // Add listeners for student and level changes
+        setupTablesAndSpinners();
         addListeners();
 
         // Update the bundle and proceed with the rest of the initialization
         updateBundle();
 
         // Proceed with setting up tables and spinners
-        setupTablesAndSpinners();
+        
 
         // Initialize quantities based on existing order items
         initializeQuantities();
-        });
-    }
 
-    private void addListeners() {
-        // Listener for student changes
-        gradeInput.valueProperty().addListener((obs, oldStudent, newStudent) -> {
-            if (newStudent != null && !newStudent.equals(oldStudent)) {
-                // Update the order's student in the backend
-                String result = Iteration3Controller.updateOrder(orderLevel, newStudent, orderNumber);
-                if (!result.isEmpty()) {
-                    errorLabel.setText(result);
-                    // Revert to old student
-                    gradeInput.setValue(oldStudent);
-                } else {
-                    errorLabel.setText("");
-                    // Update studentGrade and bundle
-                    TOStudent newStudentObj = toParentStudents.stream()
-                                              .filter(s -> s.getName().equals(newStudent))
-                                              .findFirst()
-                                              .orElse(null);
-                    if (newStudentObj != null) {
-                        studentGrade = newStudentObj.getGradeLevel();
-                        updateBundle();
-                    }
-                }
+        // Add a listener to respond to changes in the levelToggleGroup
+        levelToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                RadioButton selectedButton = (RadioButton) newToggle;
+                String newOrderLevel = selectedButton.getText();
+                handleOrderLevelChange(newOrderLevel);
             }
         });
+    
+}
 
-        
-    }
+
+   
+
+private void addListeners() {
+    // Listener for student changes
+    gradeInput.valueProperty().addListener((obs, oldStudent, newStudent) -> {
+        if (newStudent != null && !newStudent.equals(oldStudent)) {
+            // Update the order's student in the backend
+            String result = Iteration3Controller.updateOrder(orderLevel, newStudent, orderNumber);
+            if (!result.isEmpty()) {
+                errorLabel.setText(result);
+                // Revert to old student
+                gradeInput.setValue(oldStudent);
+            } else {
+                errorLabel.setText("");
+                // Update studentGrade and bundle
+                TOStudent newStudentObj = toParentStudents.stream()
+                                          .filter(s -> s.getName().equals(newStudent))
+                                          .findFirst()
+                                          .orElse(null);
+                if (newStudentObj != null) {
+                    studentGrade = newStudentObj.getGradeLevel();
+                    updateBundle();
+                }
+            }
+        }
+    });
+}
+
 
     private void updateBundle() {
         // Fetch the bundle for the current grade
