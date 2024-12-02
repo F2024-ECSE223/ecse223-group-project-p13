@@ -144,7 +144,12 @@ public class ViewBundleView {
     // Iterate over each bundle
     for (TOGradeBundle bundle : allBundles) {
         // Get the number of items in the bundle
-        int nbItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName()).size();
+        List<TOBundleItem> bundleItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName()); 
+        int nbItems = 0;
+
+        for(TOBundleItem item : bundleItems){
+            nbItems += item.getQuantity();
+        }
         // If the bundle has fewer than 2 items and discount is not zero
         if (nbItems < 2 && bundle.getDiscount() != 0) {
             // Set the discount to zero
