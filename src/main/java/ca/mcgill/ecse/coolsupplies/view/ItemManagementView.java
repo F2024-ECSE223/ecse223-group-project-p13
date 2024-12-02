@@ -25,12 +25,14 @@ public class ItemManagementView {
     @FXML private TableColumn<ItemEntry, String> columnPrice;
     @FXML private TableColumn<ItemEntry, Integer> columnQuantity;
     @FXML private RadioButton optionalButton;
-    @FXML private ToggleGroup levelToggleGroup;
+   // @FXML private ToggleGroup levelToggleGroup;
     @FXML private RadioButton recommendedButton;
     @FXML private RadioButton mandatoryButton;
     @FXML private ComboBox<String> gradeInput;
 
     @FXML private Label errorLabel;
+
+    private ToggleGroup levelToggleGroup;
 
     private ObservableList<ItemEntry> itemEntries;
     private ObservableList<BundleItemEntry> bundleItemEntries;
@@ -109,6 +111,14 @@ public class ItemManagementView {
             optionalButton.setSelected(true);
         }
 
+        // Add a listener to respond to changes
+        levelToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+        if (newToggle != null) {
+            RadioButton selectedButton = (RadioButton) newToggle;
+            String newOrderLevel = selectedButton.getText();
+            handleOrderLevelChange(newOrderLevel);
+        }
+
         // Add listeners for student and level changes
         addListeners();
 
@@ -120,6 +130,7 @@ public class ItemManagementView {
 
         // Initialize quantities based on existing order items
         initializeQuantities();
+        });
     }
 
     private void addListeners() {
@@ -147,31 +158,7 @@ public class ItemManagementView {
             }
         });
 
-        // Listener for order level changes
-        levelToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle != null) {
-                RadioButton selectedButton = (RadioButton) newToggle;
-                String newOrderLevel = selectedButton.getText();
-                if (!newOrderLevel.equals(orderLevel)) {
-                    String oldOrderLevel = orderLevel;
-                    orderLevel = newOrderLevel;
-                    // Update the order's level in the backend
-                    String result = Iteration3Controller.updateOrder(orderLevel, gradeInput.getValue(), orderNumber);
-                    if (!result.isEmpty()) {
-                        errorLabel.setText(result);
-                        // Revert to old level
-                        orderLevel = oldOrderLevel;
-                        if (oldToggle != null) {
-                            levelToggleGroup.selectToggle(oldToggle);
-                        }
-                    } else {
-                        errorLabel.setText("");
-                        // Update the bundle and reload data
-                        loadBundleItems();
-                    }
-                }
-            }
-        });
+        
     }
 
     private void updateBundle() {
@@ -483,6 +470,33 @@ public class ItemManagementView {
 
         public SimpleIntegerProperty quantityProperty() {
             return quantity;
+        }
+    }
+
+    private void handleOrderLevelChange(String newOrderLevel) {
+        // Save the old order level in case of rollback
+        String oldOrderLevel = orderLevel;
+        orderLevel = newOrderLevel;
+    
+        // Update the order level in the backend
+        String result = Iteration3Controller.updateOrder(orderLevel, gradeInput.getValue(), orderNumber);
+    
+        if (!result.isEmpty()) {
+            // If there is an error, revert to the old order level and display the error
+            errorLabel.setText(result);
+            orderLevel = oldOrderLevel;
+    
+            // Reset the selected toggle to the previous one
+            levelToggleGroup.getToggles().stream()
+                    .filter(toggle -> ((RadioButton) toggle).getText().equalsIgnoreCase(oldOrderLevel))
+                    .findFirst()
+                    .ifPresent(levelToggleGroup::selectToggle);
+        } else {
+            // Clear any previous error messages
+            errorLabel.setText("");
+    
+            // Reload data based on the new order level
+            loadBundleItems();
         }
     }
 }
