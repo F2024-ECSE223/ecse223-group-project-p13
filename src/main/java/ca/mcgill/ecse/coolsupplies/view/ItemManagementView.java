@@ -1,12 +1,10 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,6 +24,11 @@ public class ItemManagementView {
     @FXML private TableColumn<ItemEntry, String> columnName;
     @FXML private TableColumn<ItemEntry, String> columnPrice;
     @FXML private TableColumn<ItemEntry, Integer> columnQuantity;
+    @FXML private RadioButton optionalButton;
+    @FXML private ToggleGroup levelToggleGroup;
+    @FXML private RadioButton recommendedButton;
+    @FXML private RadioButton mandatoryButton;
+    @FXML private ComboBox<String> gradeInput;
 
     @FXML private Label errorLabel;
 
@@ -34,11 +37,12 @@ public class ItemManagementView {
 
     private TOGradeBundle bundle;
     private List<TOBundleItem> bundleItems;
-    private Set<String> existingItemNames;
 
     private String studentGrade;
     private String orderLevel;
     private String orderNumber;
+
+    private List<TOStudent> toParentStudents;
 
     // Method to set parameters from the previous UI
     public void setOrderParameters(String studentGrade, String orderLevel, String orderNumber) {
@@ -49,32 +53,158 @@ public class ItemManagementView {
 
     @FXML
     public void initialize() {
-        // Ensure order parameters are set
+        // Get the current order
         TOOrder order = ViewOrdersParent.getOrder();
 
-        setOrderParameters(CoolSuppliesFeatureSet2Controller.getStudents().stream().filter(s -> s.getName() == order.getStudentName()).collect(Collectors.toList()).get(0).getGradeLevel(), order.getLevel(), order.getNumber());
-        
+        // Get the parent's email from the order
+        String parentEmail = order.getParentEmail();
+
+        // Get the students associated with the parent using CoolSuppliesFeatureSet6Controller
+        toParentStudents = CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail);
+
+        if (toParentStudents.isEmpty()) {
+            errorLabel.setText("No students found for the parent.");
+            return;
+        }
+
+        // Initialize the studentComboBox with the parent's students
+        List<String> studentNames = toParentStudents.stream()
+                                      .map(TOStudent::getName)
+                                      .collect(Collectors.toList());
+        gradeInput.setItems(FXCollections.observableArrayList(studentNames));
+
+        // Set the current student in the ComboBox
+        gradeInput.setValue(order.getStudentName());
+
+        // Initialize order parameters
+        TOStudent student = toParentStudents.stream()
+                                .filter(s -> s.getName().equals(order.getStudentName()))
+                                .findFirst()
+                                .orElse(null);
+
+        if (student == null) {
+            errorLabel.setText("Student not found.");
+            return;
+        }
+
+        setOrderParameters(student.getGradeLevel(), order.getLevel(), order.getNumber());
+
         if (studentGrade == null || orderLevel == null || orderNumber == null) {
             errorLabel.setText("Order parameters are not set.");
             return;
         }
 
-        List<TOGradeBundle> allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
-for (TOGradeBundle b : allBundles) {
-    System.out.println("Bundle found: Name=" + b.getName() + ", Grade=" + b.getGradeLevel());
-    if (b.getGradeLevel().equals(studentGrade)) {
-        bundle = b;
-        break;
-    }
-}
+        // Set up the RadioButtons
+        levelToggleGroup = new ToggleGroup();
+        mandatoryButton.setToggleGroup(levelToggleGroup);
+        recommendedButton.setToggleGroup(levelToggleGroup);
+        optionalButton.setToggleGroup(levelToggleGroup);
 
-if (bundle == null) {
-    System.out.println("No bundle found for grade: " + studentGrade);
-    errorLabel.setText("No bundle for grade " + studentGrade);
-    return;
-} else {
-    System.out.println("Selected bundle: " + bundle.getName() + ", Discount=" + bundle.getDiscount());
-}
+        // Select the current level
+        if ("Mandatory".equalsIgnoreCase(orderLevel)) {
+            mandatoryButton.setSelected(true);
+        } else if ("Recommended".equalsIgnoreCase(orderLevel)) {
+            recommendedButton.setSelected(true);
+        } else if ("Optional".equalsIgnoreCase(orderLevel)) {
+            optionalButton.setSelected(true);
+        }
+
+        // Add listeners for student and level changes
+        addListeners();
+
+        // Update the bundle and proceed with the rest of the initialization
+        updateBundle();
+
+        // Proceed with setting up tables and spinners
+        setupTablesAndSpinners();
+
+        // Initialize quantities based on existing order items
+        initializeQuantities();
+    }
+
+    private void addListeners() {
+        // Listener for student changes
+        gradeInput.valueProperty().addListener((obs, oldStudent, newStudent) -> {
+            if (newStudent != null && !newStudent.equals(oldStudent)) {
+                // Update the order's student in the backend
+                String result = Iteration3Controller.updateOrder(orderLevel, newStudent, orderNumber);
+                if (!result.isEmpty()) {
+                    errorLabel.setText(result);
+                    // Revert to old student
+                    gradeInput.setValue(oldStudent);
+                } else {
+                    errorLabel.setText("");
+                    // Update studentGrade and bundle
+                    TOStudent newStudentObj = toParentStudents.stream()
+                                              .filter(s -> s.getName().equals(newStudent))
+                                              .findFirst()
+                                              .orElse(null);
+                    if (newStudentObj != null) {
+                        studentGrade = newStudentObj.getGradeLevel();
+                        updateBundle();
+                    }
+                }
+            }
+        });
+
+        // Listener for order level changes
+        levelToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                RadioButton selectedButton = (RadioButton) newToggle;
+                String newOrderLevel = selectedButton.getText();
+                if (!newOrderLevel.equals(orderLevel)) {
+                    String oldOrderLevel = orderLevel;
+                    orderLevel = newOrderLevel;
+                    // Update the order's level in the backend
+                    String result = Iteration3Controller.updateOrder(orderLevel, gradeInput.getValue(), orderNumber);
+                    if (!result.isEmpty()) {
+                        errorLabel.setText(result);
+                        // Revert to old level
+                        orderLevel = oldOrderLevel;
+                        if (oldToggle != null) {
+                            levelToggleGroup.selectToggle(oldToggle);
+                        }
+                    } else {
+                        errorLabel.setText("");
+                        // Update the bundle and reload data
+                        loadBundleItems();
+                    }
+                }
+            }
+        });
+    }
+
+    private void updateBundle() {
+        // Fetch the bundle for the current grade
+        List<TOGradeBundle> allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
+        bundle = null;
+        for (TOGradeBundle b : allBundles) {
+            if (b.getGradeLevel().equals(studentGrade)) {
+                bundle = b;
+                break;
+            }
+        }
+
+        if (bundle == null) {
+            errorLabel.setText("No bundle for grade " + studentGrade);
+            bundleItemEntries = FXCollections.observableArrayList();
+            TableViewBundles.setItems(bundleItemEntries);
+            return;
+        } else {
+            errorLabel.setText("");
+        }
+
+        // Reload bundle items
+        loadBundleItems();
+
+        // Reset bundle quantity spinner
+        BundleQuantity.getValueFactory().setValue(0);
+
+        // Re-initialize quantities based on existing order items
+        initializeQuantities();
+    }
+
+    private void setupTablesAndSpinners() {
         // Set up the bundle items table
         BundleItems.setCellValueFactory(cellData -> cellData.getValue().itemNameProperty());
         BundlePrice.setCellValueFactory(cellData -> cellData.getValue().itemPriceProperty());
@@ -96,11 +226,11 @@ if (bundle == null) {
         BundleQuantity.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0));
         BundleQuantity.valueProperty().addListener((obs, oldValue, newValue) -> {
             String result;
-        
+
             if (newValue > 0) {
                 // Try to add the bundle to the order
                 result = Iteration3Controller.addItem(bundle.getName(), String.valueOf(newValue), orderNumber);
-        
+
                 // If the bundle is already in the order, update its quantity instead
                 if (!result.isEmpty()) {
                     result = Iteration3Controller.updateOrderQuantity(bundle.getName(), String.valueOf(newValue), orderNumber);
@@ -109,30 +239,32 @@ if (bundle == null) {
                 // Remove the bundle from the order
                 result = Iteration3Controller.deleteItem(bundle.getName(), orderNumber);
             }
-        
+
             if (result.isEmpty()) {
                 errorLabel.setText(""); // Clear any error messages
             } else {
                 errorLabel.setText(result); // Display the error message
             }
         });
-        
-
-        // Initialize quantities based on existing order items
-        initializeQuantities();
     }
 
     private void loadBundleItems() {
         bundleItemEntries = FXCollections.observableArrayList();
-    
+
+        if (bundle == null) {
+            // No bundle to load
+            TableViewBundles.setItems(bundleItemEntries);
+            return;
+        }
+
         List<TOBundleItem> allBundleItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName());
-    
+
         for (TOBundleItem bundleItem : allBundleItems) {
             String itemPurchaseLevel = bundleItem.getLevel();
             if (isLevelIncluded(itemPurchaseLevel, orderLevel)) {
                 String itemName = bundleItem.getItemName();
                 TOItem item = CoolSuppliesFeatureSet3Controller.getItem(itemName);
-    
+
                 if (item != null) {
                     String itemPrice = String.valueOf(item.getPrice());
                     String discount = String.valueOf(bundle.getDiscount());
@@ -140,24 +272,22 @@ if (bundle == null) {
                 }
             }
         }
-    
+
         TableViewBundles.setItems(bundleItemEntries);
     }
-    
 
     private boolean isLevelIncluded(String itemLevel, String orderLevel) {
         List<String> levels = Arrays.asList("Mandatory", "Recommended", "Optional");
         int itemLevelIndex = levels.indexOf(itemLevel);
         int orderLevelIndex = levels.indexOf(orderLevel);
-    
+
         if (itemLevelIndex == -1 || orderLevelIndex == -1) {
             System.out.println("Invalid levels: itemLevel=" + itemLevel + ", orderLevel=" + orderLevel);
             return false;
         }
-    
+
         return itemLevelIndex <= orderLevelIndex;
     }
-    
 
     private void loadItems() {
         itemEntries = FXCollections.observableArrayList();
@@ -180,9 +310,22 @@ if (bundle == null) {
             return;
         }
 
+        // Update studentGrade and orderLevel from currentOrder
+        studentGrade = currentOrder.getLevel();
+        orderLevel = currentOrder.getLevel();
+
+        // Update UI elements
+        gradeInput.setValue(currentOrder.getStudentName());
+        if ("Mandatory".equalsIgnoreCase(orderLevel)) {
+            mandatoryButton.setSelected(true);
+        } else if ("Recommended".equalsIgnoreCase(orderLevel)) {
+            recommendedButton.setSelected(true);
+        } else if ("Optional".equalsIgnoreCase(orderLevel)) {
+            optionalButton.setSelected(true);
+        }
+
         // Get existing items in the order and set quantities in the spinners
         List<TOOrderItem> orderItems = currentOrder.getItems();
-
 
         for (ItemEntry itemEntry : itemEntries) {
             boolean foundInOrder = false;
@@ -217,13 +360,13 @@ if (bundle == null) {
     private void addSpinner() {
         columnQuantity.setCellFactory(column -> new TableCell<ItemEntry, Integer>() {
             private final Spinner<Integer> spinner = new Spinner<>(0, Integer.MAX_VALUE, 0);
-    
+
             {
                 spinner.setEditable(true);
                 spinner.valueProperty().addListener((obs, oldValue, newValue) -> {
                     ItemEntry itemEntry = getTableView().getItems().get(getIndex());
                     String result;
-    
+
                     if (newValue > 0) {
                         if (!itemEntry.isInOrder()) {
                             // Item is not in order, add it
@@ -232,8 +375,6 @@ if (bundle == null) {
                                 itemEntry.setInOrder(true);
                                 itemEntry.setQuantity(newValue);
                                 errorLabel.setText("");
-                                // Optionally refresh the table view
-                                // TableViewItems.refresh();
                             } else {
                                 errorLabel.setText(result);
                             }
@@ -243,8 +384,6 @@ if (bundle == null) {
                             if (result.isEmpty()) {
                                 itemEntry.setQuantity(newValue);
                                 errorLabel.setText("");
-                                // Optionally refresh the table view
-                                // TableViewItems.refresh();
                             } else {
                                 errorLabel.setText(result);
                             }
@@ -256,19 +395,17 @@ if (bundle == null) {
                             itemEntry.setInOrder(false);
                             itemEntry.setQuantity(0);
                             errorLabel.setText("");
-                            // Optionally refresh the table view
-                            // TableViewItems.refresh();
                         } else {
                             errorLabel.setText(result);
                         }
                     }
                 });
             }
-    
+
             @Override
             protected void updateItem(Integer value, boolean empty) {
                 super.updateItem(value, empty);
-    
+
                 if (empty) {
                     setGraphic(null);
                 } else {
@@ -277,11 +414,10 @@ if (bundle == null) {
                 }
             }
         });
-    
+
         columnQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
     }
-    
-    
+
     // Inner class for bundle items
     public static class BundleItemEntry {
         private SimpleStringProperty itemName;
@@ -329,14 +465,10 @@ if (bundle == null) {
         public void setPrice(String price) { this.price.set(price); }
         public SimpleStringProperty priceProperty() { return price; }
 
-        // public int getQuantity() { return quantity.get(); }
-        // public void setQuantity(int quantity) { this.quantity.set(quantity); }
-        // public SimpleIntegerProperty quantityProperty() { return quantity; }
-
         public boolean isInOrder() {
             return isInOrder;
         }
-    
+
         public void setInOrder(boolean inOrder) {
             this.isInOrder = inOrder;
         }
@@ -344,19 +476,13 @@ if (bundle == null) {
         public int getQuantity() {
             return quantity.get();
         }
-    
+
         public void setQuantity(int quantity) {
             this.quantity.set(quantity);
         }
-    
+
         public SimpleIntegerProperty quantityProperty() {
             return quantity;
         }
-    }
-
-    private void refreshTable() {
-        // Reload items and quantities
-        loadItems();
-        initializeQuantities();
     }
 }
