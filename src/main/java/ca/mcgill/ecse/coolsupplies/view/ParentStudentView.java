@@ -151,7 +151,7 @@ public class ParentStudentView {
 
       if (err.isEmpty()) {
         associatedList.remove(student);
-        allList.add(student);
+        updateLists();
       }
     });
 
@@ -189,7 +189,6 @@ public class ParentStudentView {
       CoolSuppliesFxmlView.handleErr(err);
       if (err.isEmpty()) {
         associatedList.add(student);
-        allList.remove(student);
         updateLists();
       }
     });
@@ -228,11 +227,12 @@ public class ParentStudentView {
    * @brief Filters out the associated students from the list of students
    */
   private void updateLists() {
-    allList = FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
+    allList.setAll(CoolSuppliesFeatureSet2Controller.getStudents());
 
     List<TOStudent> newList =
         allList.stream()
             .filter(s -> !studentHasParent(s.getName())).collect(Collectors.toList());
+          
 
     allList.clear();
     allList.setAll(newList);
