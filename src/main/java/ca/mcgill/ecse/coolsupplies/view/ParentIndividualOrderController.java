@@ -2,7 +2,6 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOBundleItem;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet5Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
@@ -60,9 +59,12 @@ public class ParentIndividualOrderController {
   private Button editOrder;
   private boolean bundleWasSet = false;
 
-
+  /**
+  * @author Kenny-Alexander Joseph
+  * @return void
+  * This method initializes the individual order view for the parent user.
+  */
   @FXML
-  //public void initialize(String orderNumber) {
   public void initialize() {
     TOOrder order = ViewOrdersParent.getOrder();
    

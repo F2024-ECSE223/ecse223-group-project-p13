@@ -63,7 +63,6 @@ public class AdminIndividualOrderController {
   * This method initializes the individual order view for the admin user.
   */
   @FXML
-  //public void initialize(String orderNumber) {
   public void initialize() {
     TOOrder order = ViewOrdersAdmin.getOrder();
    
