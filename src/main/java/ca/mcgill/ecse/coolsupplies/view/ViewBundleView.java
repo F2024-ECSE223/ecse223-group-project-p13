@@ -65,12 +65,34 @@ public class ViewBundleView {
    @FXML
    public void newBundle(ActionEvent event) {
     try {
-        Stage stage = CoolSuppliesFxmlView.newWindowStage("AddBundle.fxml", "Add a New Bundle");
-        // Do not close the main window
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/AddBundle.fxml"));
+        Parent root = loader.load();
+
+        // Get the controller instance
+        AddBundleController controller = loader.getController();
+
+        // **Pass the ViewBundleView reference to AddBundleController**
+        controller.initData(this);
+
+        // Show the window
+        Stage stage = new Stage();
+        stage.setTitle("Add a New Bundle");
+        stage.setScene(new Scene(root));
+        stage.show();
+
         clearError();
     } catch (Exception e) {
         displayError("Failed to open the new bundle page: " + e.getMessage());
+        e.printStackTrace();
     }
+    
+    // try {
+    //     Stage stage = CoolSuppliesFxmlView.newWindowStage("AddBundle.fxml", "Add a New Bundle");
+    //     // Do not close the main window
+    //     clearError();
+    // } catch (Exception e) {
+    //     displayError("Failed to open the new bundle page: " + e.getMessage());
+    // }
 
    }
 
@@ -137,7 +159,7 @@ public class ViewBundleView {
    }
 
 
-   private void refreshTable() {
+   public void refreshTable() {
        // Get all bundles
     List<TOGradeBundle> allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
 
