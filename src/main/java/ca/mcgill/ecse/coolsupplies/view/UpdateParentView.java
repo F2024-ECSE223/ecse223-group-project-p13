@@ -6,10 +6,7 @@ import atlantafx.base.theme.Styles;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
-
-import java.awt.event.ActionEvent;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 
 public class UpdateParentView {
@@ -100,30 +97,32 @@ public class UpdateParentView {
    **/
 
     @FXML
-    public void saveButtonClickedUpdateParent(javafx.event.ActionEvent event)
-    {
+    public void saveButtonClickedUpdateParent(javafx.event.ActionEvent event) {
         String oldPassword = oldPasswordUpdateParent.getText();
         String email = emailUpdateParent.getValue();
         String name = nameUpdateParent.getText();
         String phoneNumber = phoneUpdateParent.getText();
-        int phone = Integer.parseInt(phoneNumber);
-        String password = passwordUpdateParent.getText();
+        try {
+            int phone = Integer.parseInt(phoneNumber);
 
-        if (oldPassword.equals(CoolSuppliesFeatureSet1Controller.getParent(email).getPassword())){
-            String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name,phone);
-            errorMessageUpdateParent.setText(message);
+            String password = passwordUpdateParent.getText();
 
-            if (message.isEmpty()){
-                emailUpdateParent.getSelectionModel().clearSelection();;
-                nameUpdateParent.setText("");
-                phoneUpdateParent.setText("");
-                passwordUpdateParent.setText("");
-                oldPasswordUpdateParent.setText("");
+            if (oldPassword.equals(CoolSuppliesFeatureSet1Controller.getParent(email).getPassword())) {
+                String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name, phone);
+                errorMessageUpdateParent.setText(message);
+
+                if (message.isEmpty()) {
+                    emailUpdateParent.getSelectionModel().clearSelection();;
+                    nameUpdateParent.setText("");
+                    phoneUpdateParent.setText("");
+                    passwordUpdateParent.setText("");
+                    oldPasswordUpdateParent.setText("");
+                }
+            } else {
+                errorMessageUpdateParent.setText("This email is not yours.");
             }
-        } else {
-            errorMessageUpdateParent.setText("This email is not yours.");
+        } catch (NumberFormatException e) {
+            errorMessageUpdateParent.setText("Please enter a phone number");
         }
-
     }
-
 }

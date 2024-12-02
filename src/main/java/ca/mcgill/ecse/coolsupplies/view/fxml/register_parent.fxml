@@ -16,41 +16,41 @@
             <Separator layoutY="46.0" prefHeight="14.0" prefWidth="600.0" />
             <Label layoutX="175.0" layoutY="14.0" text="Register New Parent ">
                <font>
-                  <Font name="Rockwell" size="26.0" />
+                  <Font size="26.0" />
                </font>
             </Label>
             <Label layoutX="310.0" layoutY="110.0" prefHeight="27.0" prefWidth="261.0" text="Enter email address ">
                <font>
-                  <Font name="Rockwell" size="22.0" />
+                  <Font size="22.0" />
                </font>
             </Label>
             <TextField fx:id="emailRegisterParent" layoutX="310.0" layoutY="137.0" prefHeight="26.0" prefWidth="219.0" />
             <Label layoutX="31.0" layoutY="110.0" prefHeight="27.0" prefWidth="274.0" text="Enter name ">
                <font>
-                  <Font name="Rockwell" size="22.0" />
+                  <Font size="22.0" />
                </font>
             </Label>
             <TextField fx:id="nameRegisterParent" layoutX="31.0" layoutY="137.0" prefHeight="26.0" prefWidth="209.0" />
             <Label layoutX="31.0" layoutY="204.0" prefHeight="27.0" prefWidth="474.0" text="Enter phone number  ">
                <font>
-                  <Font name="Rockwell" size="22.0" />
+                  <Font size="22.0" />
                </font>
             </Label>
             <TextField fx:id="phoneRegisterParent" layoutX="31.0" layoutY="231.0" prefHeight="26.0" prefWidth="209.0" />
             <Label layoutX="305.0" layoutY="204.0" prefHeight="27.0" prefWidth="286.0" text="Enter password ">
                <font>
-                  <Font name="Rockwell" size="22.0" />
+                  <Font size="22.0" />
                </font>
             </Label>
             <PasswordField fx:id="passwordRegisterParent" layoutX="305.0" layoutY="232.0" prefHeight="26.0" prefWidth="226.0" />
-            <Button id="buttonSaveRegisterParent" fx:id="buttonSaveRegisterParent" layoutX="441.0" layoutY="302.0" mnemonicParsing="false" onAction="#saveButtonClickedRegisterParent" text="SAVE">
+            <Button id="buttonSaveRegisterParent" fx:id="buttonSaveRegisterParent" layoutX="441.0" layoutY="302.0" mnemonicParsing="false" onAction="#saveButtonClickedRegisterParent" text="Save">
                <font>
-                  <Font name="Rockwell" size="22.0" />
+                  <Font size="22.0" />
                </font>
             </Button>
             <Label fx:id="errorMessageRegisterParent" layoutX="31.0" layoutY="313.0" prefHeight="19.0" prefWidth="394.0" textFill="#c71313">
                <font>
-                  <Font name="Rockwell" size="16.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
          </children>
