@@ -68,9 +68,6 @@ public class StudentManagementView {
     addButton.getStyleClass().add(Styles.SUCCESS);
     gradeInput.setItems(FXCollections.observableArrayList(getGradeLevels()));
 
-
-
-    // Configure table columns
     columnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     columnGrade.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeLevel()));
     parent.setCellValueFactory(cellData -> {
@@ -78,10 +75,9 @@ public class StudentManagementView {
         return new SimpleStringProperty(parentName.isEmpty() ? "" : parentName);
     });
 
-    // Add action buttons to the table
     addActionButtonsToTable();
 
-    // Load initial data into the table
+ 
     refreshTable();
 }
 

@@ -13,9 +13,9 @@
                 <TableColumn fx:id="orderNo" text="Number" />
                 <TableColumn fx:id="orderParent" prefWidth="117.59998321533203" text="Parent" />
                 <TableColumn fx:id="orderStudent" prefWidth="108.79998779296875" text="Student" />
-                <TableColumn fx:id="dateOrdered" minWidth="-Infinity" prefWidth="143.20001220703125" text="Date" />
-                <TableColumn fx:id="orderStatus" prefWidth="147.99996948242188" text="Status" />
-                <TableColumn fx:id="actionColumn" prefWidth="196.00003662109373" text="Actions" />
+                <TableColumn fx:id="dateOrdered" minWidth="-Infinity" prefWidth="127.20001220703125" text="Date" />
+                <TableColumn fx:id="orderStatus" prefWidth="131.99993896484375" text="Status" />
+                <TableColumn fx:id="actionColumn" prefWidth="230.39990234375" text="Actions" />
             </columns>
         </TableView>
     </children>

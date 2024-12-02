@@ -13,29 +13,24 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ItemManagementView">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="834.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ItemManagementView">
    <top>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0" prefWidth="609.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0" prefWidth="741.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="TableViewBundles" layoutX="-38.0" layoutY="137.0" prefHeight="83.0" prefWidth="427.0">
+            <TableView fx:id="TableViewBundles" layoutX="-26.0" layoutY="137.0" prefHeight="171.0" prefWidth="554.0">
               <columns>
                 <TableColumn fx:id="BundleItems" prefWidth="196.0" text="Items" />
                 <TableColumn fx:id="BundlePrice" prefWidth="107.19992065429688" text="Price" />
+                  <TableColumn fx:id="BundleAmount" prefWidth="128.0" text="Amount" />
                   <TableColumn fx:id="BundleDiscount" prefWidth="128.0" text="Discount" />
               </columns>
             </TableView>
-            <Label alignment="CENTER" layoutX="454.0" layoutY="161.0" prefHeight="18.0" prefWidth="65.0" text="Quantity" />
-            <Spinner fx:id="BundleQuantity" layoutX="560.0" layoutY="157.0" prefHeight="26.0" prefWidth="72.0" />
-            <Label alignment="CENTER" layoutX="-38.0" layoutY="86.0" prefHeight="28.0" prefWidth="76.0" text="Bundle">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
+            <Label alignment="CENTER" layoutX="534.0" layoutY="205.0" prefHeight="18.0" prefWidth="65.0" text="Quantity" />
+            <Spinner fx:id="BundleQuantity" layoutX="638.0" layoutY="201.0" prefHeight="26.0" prefWidth="72.0" />
             <HBox layoutX="60.0" layoutY="14.0" prefHeight="100.0" prefWidth="490.0">
                <children>
                   <AnchorPane prefHeight="100.0" prefWidth="538.0">
                      <children>
-                        <ComboBox fx:id="gradeInput" layoutX="-83.0" layoutY="37.0" prefWidth="150.0" />
                         <RadioButton fx:id="optionalButton" layoutX="375.0" layoutY="41.0" mnemonicParsing="false" text="Optional">
                            <padding>
                               <Insets right="20.0" />
@@ -51,41 +46,41 @@
                               <Insets right="20.0" />
                            </padding>
                         </RadioButton>
+                        <ComboBox fx:id="BundleChoice" layoutX="-75.0" layoutY="83.0" prefWidth="150.0" />
                      </children>
                   </AnchorPane>
                </children>
             </HBox>
+            <ComboBox fx:id="gradeInput" layoutX="-16.0" layoutY="44.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
    </top>
-   <left>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="129.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+   <right>
+      <AnchorPane prefHeight="271.0" prefWidth="1566.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane minWidth="-Infinity" prefHeight="35.0" prefWidth="600.0">
+            <VBox layoutX="14.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="82.0" prefWidth="600.0">
                <children>
-                  <TableView fx:id="TableViewItems" layoutY="45.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="257.0" prefWidth="750.0">
-                    <columns>
-                      <TableColumn fx:id="columnName" prefWidth="356.7999694943428" text="Name" />
-                      <TableColumn fx:id="columnPrice" prefWidth="239.20001220703125" text="Price" />
-                        <TableColumn fx:id="columnQuantity" prefWidth="155.20001220703125" text="Quantity" />
-                    </columns>
-                  </TableView>
-                  <Label layoutX="32.0" text="Available Items to purchase">
+                  <Label text="Available Items to purchase">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-               </children></AnchorPane>
-         </children>
-      </VBox>
-   </left>
-   <right>
-      <AnchorPane prefHeight="271.0" prefWidth="1566.0" BorderPane.alignment="CENTER" />
+               </children>
+            </VBox>
+         </children></AnchorPane>
    </right>
    <bottom>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="301.0" prefWidth="684.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="302.0" prefWidth="737.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="errorLabel" layoutX="26.0" layoutY="92.0" prefHeight="18.0" prefWidth="433.0" />
+            <Label fx:id="errorLabel" layoutX="42.0" layoutY="276.0" prefHeight="18.0" prefWidth="433.0" />
+            <AnchorPane layoutX="140.0" layoutY="258.0" minWidth="-Infinity" prefHeight="35.0" prefWidth="600.0" />
+            <TableView fx:id="TableViewItems" layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="258.0" prefWidth="834.0">
+              <columns>
+                <TableColumn fx:id="columnName" prefWidth="356.7999694943428" text="Name" />
+                <TableColumn fx:id="columnPrice" prefWidth="268.0000305175781" text="Price" />
+                  <TableColumn fx:id="columnQuantity" prefWidth="207.99993896484375" text="Quantity" />
+              </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </bottom>

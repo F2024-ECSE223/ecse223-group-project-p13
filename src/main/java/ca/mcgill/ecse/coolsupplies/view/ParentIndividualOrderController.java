@@ -66,50 +66,67 @@ public class ParentIndividualOrderController {
   * This method initializes the individual order view for the parent user.
   */
   @FXML
-  public void initialize() {
-    TOOrder order = ViewOrdersParent.getOrder();
-   
+    public void initialize() {
+        TOOrder order = ViewOrdersParent.getOrder();
 
-    date_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
-    level_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLevel()));
-    parent_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getParentEmail()));
-    student_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStudentName()));
-    status_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
-    auth_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAuthCode()));
-    penalty_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPenaltyAuthCode()));
-    orderTitle.setText("Order Number: "+order.getNumber());
-    
-    name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-    price_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
-
-    bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
-    bundleQuantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
-    bundleLevel_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLevel())));
-    
-    total_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
-
-    // Load order info from controller
-    dateList.add(order);
-    
-    for (TOOrderItem orderitem : order.getItems()) {
-      if (orderitem.getGradeBundle() == null || orderitem.getGradeBundle().isEmpty()) individualItemList.add(orderitem);
-      else {
-        if (!bundleWasSet) {
-          bundleTitle.setText("Bundle: "+orderitem.getGradeBundle()+"    Discount: $"+orderitem.getDiscount());
-          bundleWasSet = true;
+        if (order == null) {
+            // Handle null order appropriately
+            
+            editOrder.setVisible(false);
+            return;
         }
-        bundleItemList.addAll(CoolSuppliesFeatureSet5Controller.getBundleItems(orderitem.getGradeBundle()).stream().filter(g -> g.getLevel().equals(order.getLevel())).collect(Collectors.toList()));
+
+        // Set the visibility of the editOrder button based on the order's status
+        editOrder.setVisible("Started".equalsIgnoreCase(order.getStatus()));
+
+        // Rest of your initialization code...
+        date_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
+        level_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLevel()));
+        parent_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getParentEmail()));
+        student_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStudentName()));
+        status_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
+        auth_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAuthCode()));
+        penalty_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPenaltyAuthCode()));
+        orderTitle.setText("Order Number: " + order.getNumber());
+
+        name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        price_col.setCellValueFactory(cellData -> new SimpleStringProperty("$" + String.valueOf(cellData.getValue().getPrice())));
+
+        bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
+        bundleQuantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
+        bundleLevel_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLevel())));
+
+        total_col.setCellValueFactory(cellData -> new SimpleStringProperty("$" + String.valueOf(order.getPrice())));
+
+        // Load order info from controller
+        dateList.add(order);
+
+        for (TOOrderItem orderitem : order.getItems()) {
+            if (orderitem.getGradeBundle() == null || orderitem.getGradeBundle().isEmpty()) {
+                individualItemList.add(orderitem);
+            } else {
+                if (!bundleWasSet) {
+                    bundleTitle.setText("Bundle: " + orderitem.getGradeBundle() + "    Discount: $" + orderitem.getDiscount());
+                    bundleWasSet = true;
+                }
+                bundleItemList.addAll(
+                    CoolSuppliesFeatureSet5Controller.getBundleItems(orderitem.getGradeBundle())
+                    .stream()
+                    .filter(g -> g.getLevel().equals(order.getLevel()))
+                    .collect(Collectors.toList())
+                );
+            }
+        }
+
+        // Set the items for the tables
+        first_row.setItems(dateList);
+        second_row.setItems(dateList);
+        item_table.setItems(individualItemList);
+        bundle_table.setItems(bundleItemList);
+
+        // Set up the editOrder button action
+        editOrder.setOnAction(e -> {
+            CoolSuppliesFxmlView.newWindow("AddItem.fxml", "Edit Order");
+        });
     }
-  }
-
-    // Set the items for the table
-    first_row.setItems(dateList);
-    second_row.setItems(dateList);
-    item_table.setItems(individualItemList);
-    bundle_table.setItems(bundleItemList);
-
-    editOrder.setOnAction(e -> {
-      CoolSuppliesFxmlView.newWindow("AddItem.fxml", "Edit Order");
-    });
-  }
 }
