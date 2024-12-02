@@ -138,9 +138,28 @@ public class ViewBundleView {
 
 
    private void refreshTable() {
-       bundleList.setAll(CoolSuppliesFeatureSet4Controller.getBundles());
-       bundlesTable.setItems(bundleList);
-       bundlesTable.refresh();
+       // Get all bundles
+    List<TOGradeBundle> allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
+
+    // Iterate over each bundle
+    for (TOGradeBundle bundle : allBundles) {
+        // Get the number of items in the bundle
+        int nbItems = CoolSuppliesFeatureSet5Controller.getBundleItems(bundle.getName()).size();
+        // If the bundle has fewer than 2 items and discount is not zero
+        if (nbItems < 2 && bundle.getDiscount() != 0) {
+            // Set the discount to zero
+            String result = CoolSuppliesFeatureSet4Controller.updateBundle(bundle.getName(), bundle.getName(), 0, bundle.getGradeLevel());
+            if (!result.isEmpty()) {
+                // Handle any error messages
+                displayError("Error updating bundle discount: " + result);
+            }
+        }
+    }
+
+    // After updating discounts, refresh the bundle list
+    bundleList.setAll(CoolSuppliesFeatureSet4Controller.getBundles());
+    bundlesTable.setItems(bundleList);
+    bundlesTable.refresh();
    }
 }
 
