@@ -12,12 +12,12 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.GradeManagerView">
    <children>
-      <ScrollPane prefHeight="388.0" prefWidth="600.0">
+      <ScrollPane prefHeight="388.0" prefWidth="655.0">
          <content>
-            <TableView fx:id="grade_pane" prefHeight="330.0" prefWidth="583.0">
+            <TableView fx:id="grade_pane" prefHeight="318.0" prefWidth="583.0">
               <columns>
-                <TableColumn fx:id="grade_col" prefWidth="378.0" text="Grade" />
-                <TableColumn fx:id="options_col" prefWidth="204.0" text="Options" />
+                <TableColumn fx:id="grade_col" prefWidth="410.0" text="Grade" />
+                <TableColumn fx:id="options_col" prefWidth="169.0" text="Options" />
               </columns>
             </TableView>
          </content>
@@ -36,6 +36,6 @@
             </Button>
          </children>
       </HBox>
-      <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="81.0" prefWidth="600.0" />
+      <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="81.0" prefWidth="600.0" textFill="RED"/>
    </children>
 </VBox>

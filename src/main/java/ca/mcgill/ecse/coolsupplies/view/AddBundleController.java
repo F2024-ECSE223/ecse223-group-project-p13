@@ -79,6 +79,13 @@ public class AddBundleController {
             // Close the current window
             Stage currentStage = (Stage) nextButton.getScene().getWindow();
             currentStage.close();
+
+            // **Add listener to refresh the table when the EditBundleView window is closed**
+            stage.setOnHidden(e -> {
+                if (viewBundleView != null) {
+                    viewBundleView.refreshTable();
+                }
+            });
     
             clearError();
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import java.util.List;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -59,18 +60,25 @@ public class AdminManagerView extends ManagerView {
       String status = CoolSuppliesApplication.schoolYearStarted ? "ended" : "started";
 
       List<TOOrder> orders = Iteration3Controller.viewAllOrders();
+      String result = "";
 
       for (TOOrder order : orders) {
         if (!CoolSuppliesApplication.schoolYearStarted) {
-          String result = Iteration3Controller.startSchoolYear(order.getNumber());
+          result = Iteration3Controller.startSchoolYear(order.getNumber());
           CoolSuppliesFxmlView.handleErr(result);
-        }
-        else {
-          // TODO: Do we have even have an end schoolYear controller method?
         }
       }
 
+      if (!result.isEmpty()) {
+        return;
+      }
+
       CoolSuppliesApplication.schoolYearStarted = !CoolSuppliesApplication.schoolYearStarted;
+
+      if (result.isEmpty()) {
+        System.out.println("Firing event");
+        Event.fireEvent(mainContent, new Event(CoolSuppliesFxmlView.START_SCHOOL_YEAR_EVENT));
+      }
 
       String action = CoolSuppliesApplication.schoolYearStarted ? "End" : "Start";
       AdminManagerView.schoolYearButton.setText(action + " school year");

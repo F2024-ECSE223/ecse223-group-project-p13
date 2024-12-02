@@ -2,8 +2,8 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOBundleItem;
+import java.text.DecimalFormat;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet5Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrderItem;
@@ -57,9 +57,12 @@ public class AdminIndividualOrderController {
   private TableColumn<TOOrder, String> total_col;
   private boolean bundleWasSet = false;
 
-
+  /**
+  * @author Kenny-Alexander Joseph
+  * @return void
+  * This method initializes the individual order view for the admin user.
+  */
   @FXML
-  //public void initialize(String orderNumber) {
   public void initialize() {
     TOOrder order = ViewOrdersAdmin.getOrder();
    
@@ -73,14 +76,23 @@ public class AdminIndividualOrderController {
     penalty_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPenaltyAuthCode()));
     orderTitle.setText("Order Number: "+order.getNumber());
     
+    
     name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-    price_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
+    price_col.setCellValueFactory(cellData -> {
+      double price = Double.parseDouble(cellData.getValue().getPrice());
+      String formattedPrice = new DecimalFormat("#.00").format(price);
+      return new SimpleStringProperty("$" + formattedPrice);
+    });
 
     bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
     bundleQuantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
     bundleLevel_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLevel())));
     
-    total_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
+    total_col.setCellValueFactory(cellData -> {
+      double price = cellData.getValue().getPrice();
+      String formattedPrice = new DecimalFormat("#.00").format(price);
+      return new SimpleStringProperty("$" + formattedPrice);
+    });
 
     // Load order info from controller
     dateList.add(order);
@@ -93,8 +105,9 @@ public class AdminIndividualOrderController {
           bundleWasSet = true;
         }
         bundleItemList.addAll(CoolSuppliesFeatureSet5Controller.getBundleItems(orderitem.getGradeBundle()));
+      }
     }
-  }
+    if (!bundleWasSet) bundleTitle.setText("Bundle: No Bundle Selected");
 
     // Set the items for the table
     first_row.setItems(dateList);

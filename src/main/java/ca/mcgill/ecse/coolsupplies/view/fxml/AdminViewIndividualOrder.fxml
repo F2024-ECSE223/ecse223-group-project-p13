@@ -8,41 +8,41 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.AdminIndividualOrderController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="877.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.AdminIndividualOrderController">
    <children>
       <AnchorPane prefHeight="30.0" prefWidth="600.0">
          <children>
-            <Label fx:id="orderTitle" alignment="CENTER" prefHeight="29.0" prefWidth="600.0" style="-fx-background-color: #5c80bc;" text="Order Number:" textAlignment="CENTER">
+            <Label fx:id="orderTitle" alignment="CENTER" prefHeight="40.0" prefWidth="877.0" style="-fx-background-color: #5c80bc;" text="Order Number:" textAlignment="CENTER">
                <font>
                   <Font name="Rockwell" size="20.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <TableView fx:id="first_row" prefHeight="200.0" prefWidth="600.0">
+      <TableView fx:id="first_row" prefHeight="200.0" prefWidth="877.0">
          <columns>
-            <TableColumn fx:id="date_col" prefWidth="136.0" text="Date" />
-            <TableColumn fx:id="parent_col" prefWidth="161.0" text="Parent" />
-            <TableColumn fx:id="student_col" prefWidth="155.0" text="Student" />
-            <TableColumn fx:id="status_col" prefWidth="147.0" text="Status" />
+            <TableColumn fx:id="date_col" prefWidth="178.0" text="Date" />
+            <TableColumn fx:id="parent_col" prefWidth="255.0" text="Parent" />
+            <TableColumn fx:id="student_col" prefWidth="194.0" text="Student" />
+            <TableColumn fx:id="status_col" prefWidth="248.0" text="Status" />
          </columns>
       </TableView>
       <TableView fx:id="second_row" prefHeight="205.0" prefWidth="600.0">
          <columns>
-            <TableColumn fx:id="level_col" prefWidth="139.0" text="Level" />
-            <TableColumn fx:id="auth_col" minWidth="0.0" prefWidth="160.0" text="Authorization code" />
-            <TableColumn fx:id="penalty_col" prefWidth="196.0" text="Penalty Auth. code" />
-            <TableColumn fx:id="total_col" prefWidth="104.0" text="Total Price" />
+            <TableColumn fx:id="level_col" prefWidth="222.0" text="Level" />
+            <TableColumn fx:id="auth_col" minWidth="0.0" prefWidth="227.0" text="Authorization code" />
+            <TableColumn fx:id="penalty_col" prefWidth="277.0" text="Penalty Auth. code" />
+            <TableColumn fx:id="total_col" prefWidth="149.0" text="Total Price" />
          </columns>
       </TableView>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox prefHeight="17.0" prefWidth="877.0">
          <children>
-            <Label alignment="CENTER" prefHeight="24.0" prefWidth="255.0" style="-fx-border-color: #000000; -fx-border-width: 1;" text="Items" HBox.hgrow="ALWAYS">
+            <Label alignment="CENTER" prefHeight="34.0" prefWidth="392.0" style="-fx-border-color: #000000; -fx-border-width: 1;" text="Items" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Rockwell" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="bundleTitle" alignment="CENTER" prefHeight="24.0" prefWidth="349.0" style="-fx-border-color: #000000; -fx-border-radius: 2;" text="Bundle: " HBox.hgrow="ALWAYS">
+            <Label fx:id="bundleTitle" alignment="CENTER" prefHeight="34.0" prefWidth="486.0" style="-fx-border-color: #000000; -fx-border-radius: 2;" text="Bundle: " HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Rockwell" size="16.0" />
                </font>
@@ -53,15 +53,15 @@
          <children>
             <TableView fx:id="item_table" prefHeight="212.0" prefWidth="507.0">
                <columns>
-                  <TableColumn fx:id="name_col" prefWidth="168.0" text="Name" />
-                  <TableColumn fx:id="price_col" prefWidth="85.0" text="Price" />
+                  <TableColumn fx:id="name_col" prefWidth="267.0" text="Name" />
+                  <TableColumn fx:id="price_col" prefWidth="122.0" text="Price" />
                </columns>
             </TableView>
             <TableView fx:id="bundle_table" prefHeight="292.0" prefWidth="600.0">
                <columns>
                   <TableColumn fx:id="bundleName_col" prefWidth="194.0" text="Item Name" />
-                  <TableColumn fx:id="bundleQuantity_col" prefWidth="71.0" text="Quantity" />
-                  <TableColumn fx:id="bundleLevel_col" prefWidth="80.5" text="Level" />
+                  <TableColumn fx:id="bundleQuantity_col" prefWidth="96.0" text="Quantity" />
+                  <TableColumn fx:id="bundleLevel_col" prefWidth="192.5" text="Level" />
                </columns>
             </TableView>
          </children>
