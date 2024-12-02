@@ -1,13 +1,19 @@
 package ca.mcgill.ecse.coolsupplies.controller;
 
 /* Project Imports */
-import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
-import ca.mcgill.ecse.coolsupplies.model.*;
-import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
-
-/* Util Imports */
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.model.BundleItem;
+import ca.mcgill.ecse.coolsupplies.model.CoolSupplies;
+import ca.mcgill.ecse.coolsupplies.model.GradeBundle;
+import ca.mcgill.ecse.coolsupplies.model.InventoryItem;
+import ca.mcgill.ecse.coolsupplies.model.Item;
+import ca.mcgill.ecse.coolsupplies.model.Order;
+import ca.mcgill.ecse.coolsupplies.model.OrderItem;
+import ca.mcgill.ecse.coolsupplies.model.Student;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 public class Iteration3Controller {
   private static CoolSupplies coolSupplies = CoolSuppliesApplication.getCoolSupplies();
@@ -353,11 +359,11 @@ public class Iteration3Controller {
       return "Cannot pay penalty for a " + order.getStatusFullName().toLowerCase() + " order";
     }
 
-    if (authCode.isEmpty()) {
+    if (authCode.isEmpty() || authCode.length() < 4) {
       return "Authorization code is invalid";
     }
 
-    if (penaltyAuthCode.isEmpty()) {
+    if (penaltyAuthCode.isEmpty() || penaltyAuthCode.length() < 4) {
       return "Penalty authorization code is invalid";
     }
 

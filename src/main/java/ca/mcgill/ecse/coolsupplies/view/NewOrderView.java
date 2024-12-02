@@ -68,11 +68,20 @@ public class NewOrderView {
     add.setOnAction((e) -> {
       try {
         int orderNum = Integer.parseInt(orderID.getText());
-       errMsgText.setText(CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
-            java.sql.Date.valueOf(datePicker.getValue()), orderLevel, parentEmail.get(),
-            selectedStudent));
-
-        dialog.hide();
+        String result =CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
+        java.sql.Date.valueOf(datePicker.getValue()), orderLevel, parentEmail.get(),
+        selectedStudent);
+      
+          if (result == null || result.isEmpty()){
+            dialog.hide();
+          }
+          else {
+            errMsgText.setText(result);
+          }
+       
+       
+        
+        
       } catch (NumberFormatException err) {
         errMsgText.setText("Please enter a number");
       }

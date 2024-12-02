@@ -44,8 +44,6 @@ public class ViewOrdersAdmin {
             private final Button viewButton = new Button("View");
             private final HBox buttons = new HBox(10, viewButton, cancelButton);
             
-            viewButton.getStyleClass().add(Styles.DANGER);
-
           {
             cancelButton.setOnAction(event -> {
                 TOOrder myOrder = getTableView().getItems().get(getIndex());
