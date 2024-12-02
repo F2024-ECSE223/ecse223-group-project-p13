@@ -2,6 +2,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -47,7 +48,8 @@ public class ViewOrdersAdmin {
         super.updateItem(item, empty);
         Button cancelButton = new Button("Cancel");
         Button viewButton = new Button("View");
-        HBox buttons = new HBox(10, viewButton, cancelButton);
+        Button pickupButton = new Button("Pickup");
+        HBox buttons = new HBox(10, viewButton, pickupButton, cancelButton);
 
         cancelButton.setOnAction(event -> {
           TOOrder myOrder = getTableView().getItems().get(getIndex());
@@ -62,6 +64,11 @@ public class ViewOrdersAdmin {
           CoolSuppliesFxmlView.newWindow("AdminViewIndividualOrder.fxml", "Order");
         });
 
+        pickupButton.setOnAction(event -> {
+          errorLabel.setText(Iteration3Controller
+              .pickUpOrder(getTableView().getItems().get(getIndex()).getNumber()));
+          fetchOrders();
+        });
 
         if (empty) {
           setGraphic(null);
@@ -69,6 +76,13 @@ public class ViewOrdersAdmin {
           setGraphic(buttons);
         }
       }
+    });
+
+    Platform.runLater(() -> {
+      ordersTable.getScene().getRoot().addEventHandler(CoolSuppliesFxmlView.START_SCHOOL_YEAR_EVENT, event -> {
+        System.out.println("Event handled");
+        fetchOrders();
+      });
     });
   }
 
