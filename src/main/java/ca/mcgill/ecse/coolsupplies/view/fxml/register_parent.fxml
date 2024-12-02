@@ -14,7 +14,7 @@
       <AnchorPane prefHeight="409.0" prefWidth="600.0">
          <children>
             <Separator layoutY="46.0" prefHeight="14.0" prefWidth="600.0" />
-            <Label layoutX="175.0" layoutY="14.0" text="Register New Parent " textFill="#023c40">
+            <Label layoutX="175.0" layoutY="14.0" text="Register New Parent ">
                <font>
                   <Font name="Rockwell" size="26.0" />
                </font>
