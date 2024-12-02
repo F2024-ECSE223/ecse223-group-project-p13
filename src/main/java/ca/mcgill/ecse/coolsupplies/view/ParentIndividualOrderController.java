@@ -3,6 +3,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import ca.mcgill.ecse.coolsupplies.controller.TOBundleItem;
+import java.util.stream.Collectors;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet5Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrderItem;
@@ -97,7 +98,7 @@ public class ParentIndividualOrderController {
           bundleTitle.setText("Bundle: "+orderitem.getGradeBundle()+"    Discount: $"+orderitem.getDiscount());
           bundleWasSet = true;
         }
-        bundleItemList.addAll(CoolSuppliesFeatureSet5Controller.getBundleItems(orderitem.getGradeBundle()));
+        bundleItemList.addAll(CoolSuppliesFeatureSet5Controller.getBundleItems(orderitem.getGradeBundle()).stream().filter(g -> g.getLevel().equals(order.getLevel())).collect(Collectors.toList()));
     }
   }
 
