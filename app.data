@@ -525,19 +525,6 @@
           },
           {
             "@reference": "../../students/Student/parent/students/Student[2]/orders/Order/orderItems/OrderItem/item/bundleItems/BundleItem/item/bundleItems/BundleItem[3]/bundle/bundleItems/BundleItem[2]/item"
-          },
-          {
-            "name": "ss",
-            "orderItems": [
-              ""
-            ],
-            "price": 1,
-            "coolSupplies": {
-              "@reference": "../../.."
-            },
-            "bundleItems": [
-              ""
-            ]
           }
         ]
       }
