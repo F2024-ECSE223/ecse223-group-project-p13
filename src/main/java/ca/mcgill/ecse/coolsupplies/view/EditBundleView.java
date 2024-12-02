@@ -258,17 +258,27 @@ public class EditBundleView {
     try {
         // Update bundle details
         String updateResult = CoolSuppliesFeatureSet4Controller.updateBundle(bundle.getName(), newBundleName, newDiscount, newGradeLevel);
+
         if (!updateResult.isEmpty()) {
-            showAlert("Failed to update bundle: " + updateResult);
-            return;
+            if (updateResult.equals("A bundle already exists for the grade.") && newGradeLevel.equals(bundle.getGradeLevel())) {
+                // Since the grade hasn't changed, we can proceed
+            } else if (updateResult.equals("The name must be unique.") && newBundleName.equals(bundle.getName())) {
+                // Since the name hasn't changed, we can proceed
+            } else {
+                showAlert("Failed to update bundle: " + updateResult);
+                return;
+            }
         }
 
-        // Update items in the bundle
-        Set<String> existingItemNames = new HashSet<>();
+        // **Refresh the bundle and bundle items after update**
+        bundle = CoolSuppliesFeatureSet4Controller.getBundle(newBundleName);
+        bundleItems = CoolSuppliesFeatureSet5Controller.getBundleItems(newBundleName);
+        existingItemNames = new HashSet<>();
         for (TOBundleItem bi : bundleItems) {
             existingItemNames.add(bi.getItemName());
         }
 
+        // Update items in the bundle
         for (ItemEntry entry : itemEntries) {
             if (entry.getQuantity() > 0) {
                 if (existingItemNames.contains(entry.getItemName())) {
@@ -301,11 +311,14 @@ public class EditBundleView {
 
         // Show success message
         showAlert("Bundle updated successfully.");
+        // Close the window after saving
+        saveButton.getScene().getWindow().hide();
 
     } catch (Exception e) {
         // Handle exceptions
         showAlert("Failed to update bundle: " + e.getMessage());
     }
+    
     }
 
     @FXML
@@ -328,6 +341,9 @@ public class EditBundleView {
             showAlert("Failed to delete bundle: " + e.getMessage());
         }
     }
+
+        deleteButton.getScene().getWindow().hide();
+
     }
 
     private void showAlert(String message) {
