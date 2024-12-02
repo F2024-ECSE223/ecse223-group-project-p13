@@ -36,14 +36,15 @@ public class ParentStudentView {
   /**
    * @author Trevor Piltch
    * @param mainContent - The content to add this to 
-   * Creates a new view for the user to manage their students
+   * @brief Creates a new view for the user to manage their students
    */
   public ParentStudentView(StackPane mainContent) {
     this.mainContent = mainContent;
     this.associatedList = FXCollections.observableArrayList(
         CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail.get()));
-    this.allList =
-        FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
+
+    allList = FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
+    updateLists();
     ListView<TOStudent> associatedListView = new ListView<>(associatedList);
     this.createAssociatedList(associatedListView);
     ListView<TOStudent> fullList = this.createFullList();
@@ -224,16 +225,36 @@ public class ParentStudentView {
 
   /**
    * @author Trevor piltch
-   * @brief Filters out the associated students from the list of students 
+   * @brief Filters out the associated students from the list of students
    */
   private void updateLists() {
-    List<TOStudent> newList = allList.stream()
-        .filter(student -> associatedList.stream()
-            .noneMatch(associatedStudent -> associatedStudent.getName().equals(student.getName())))
-        .collect(Collectors.toList());
+    allList = FXCollections.observableArrayList(CoolSuppliesFeatureSet2Controller.getStudents());
 
+    List<TOStudent> newList =
+        allList.stream()
+            .filter(s -> !studentHasParent(s.getName())).collect(Collectors.toList());
 
     allList.clear();
     allList.setAll(newList);
+  }
+
+  /**
+   * @author Trevor Piltch
+   * @param studentName - The student to check if they have a parent
+   * @return boolean indicating whether the student has a parent or not
+   * @brief Checks if the student with the given name has a parent by iterating through the system parents and checking their associated students.
+   */
+  private boolean studentHasParent(String studentName) {
+    boolean result = false;
+
+    for (TOParent parent : CoolSuppliesFeatureSet1Controller.getParents()) {
+      result = CoolSuppliesFeatureSet6Controller.getStudentOfParent(studentName, parent.getEmail()) != null;
+
+      if (result) {
+        break;
+      }
+    }
+
+    return result;
   }
 }
