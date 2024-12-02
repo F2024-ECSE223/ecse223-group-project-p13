@@ -183,11 +183,19 @@ if (bundle == null) {
 
 
         for (ItemEntry itemEntry : itemEntries) {
+            boolean foundInOrder = false;
             for (TOOrderItem orderItem : orderItems) {
                 if (orderItem.getName().equals(itemEntry.getName())) {
-                    itemEntry.setQuantity(Integer.parseInt(orderItem.getQuantity()));
+                    int qty = Integer.parseInt(orderItem.getQuantity());
+                    itemEntry.setQuantity(qty);
+                    itemEntry.setInOrder(true); // Mark as in order
+                    foundInOrder = true;
                     break;
                 }
+            }
+            if (!foundInOrder) {
+                itemEntry.setQuantity(0);
+                itemEntry.setInOrder(false); // Not in order
             }
         }
 
@@ -215,24 +223,42 @@ if (bundle == null) {
                     String result;
     
                     if (newValue > 0) {
-                        // If old value was 0, add the item to the order
-                        if (oldValue == 0) {
-                            errorLabel.setText("Adding item to order: " + itemEntry.getName() + ", Quantity: " + newValue);
+                        if (!itemEntry.isInOrder()) {
+                            // Item is not in order, add it
                             result = Iteration3Controller.addItem(itemEntry.getName(), String.valueOf(newValue), orderNumber);
+                            if (result.isEmpty()) {
+                                itemEntry.setInOrder(true);
+                                itemEntry.setQuantity(newValue);
+                                errorLabel.setText("");
+                                // Optionally refresh the table view
+                                // TableViewItems.refresh();
+                            } else {
+                                errorLabel.setText(result);
+                            }
                         } else {
-                            errorLabel.setText("Updating item quantity in order: " + itemEntry.getName() + ", Quantity: " + newValue);
+                            // Item is already in order, update quantity
                             result = Iteration3Controller.updateOrderQuantity(itemEntry.getName(), String.valueOf(newValue), orderNumber);
+                            if (result.isEmpty()) {
+                                itemEntry.setQuantity(newValue);
+                                errorLabel.setText("");
+                                // Optionally refresh the table view
+                                // TableViewItems.refresh();
+                            } else {
+                                errorLabel.setText(result);
+                            }
                         }
                     } else {
-                         errorLabel.setText("Removing item from order: " + itemEntry.getName());
+                        // Remove item from order
                         result = Iteration3Controller.deleteItem(itemEntry.getName(), orderNumber);
-                    }
-    
-                    // Handle result
-                    if (result.isEmpty()) {
-                        errorLabel.setText(""); // Clear error
-                    } else {
-                        errorLabel.setText(result); // Display error message
+                        if (result.isEmpty()) {
+                            itemEntry.setInOrder(false);
+                            itemEntry.setQuantity(0);
+                            errorLabel.setText("");
+                            // Optionally refresh the table view
+                            // TableViewItems.refresh();
+                        } else {
+                            errorLabel.setText(result);
+                        }
                     }
                 });
             }
@@ -252,6 +278,7 @@ if (bundle == null) {
     
         columnQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
     }
+    
     
     // Inner class for bundle items
     public static class BundleItemEntry {
@@ -283,11 +310,13 @@ if (bundle == null) {
         private SimpleStringProperty name;
         private SimpleStringProperty price;
         private SimpleIntegerProperty quantity;
+        private boolean isInOrder; // New field
 
         public ItemEntry(String name, String price, int quantity) {
             this.name = new SimpleStringProperty(name);
             this.price = new SimpleStringProperty(price);
             this.quantity = new SimpleIntegerProperty(quantity);
+            this.isInOrder = quantity > 0;
         }
 
         public String getName() { return name.get(); }
@@ -298,8 +327,34 @@ if (bundle == null) {
         public void setPrice(String price) { this.price.set(price); }
         public SimpleStringProperty priceProperty() { return price; }
 
-        public int getQuantity() { return quantity.get(); }
-        public void setQuantity(int quantity) { this.quantity.set(quantity); }
-        public SimpleIntegerProperty quantityProperty() { return quantity; }
+        // public int getQuantity() { return quantity.get(); }
+        // public void setQuantity(int quantity) { this.quantity.set(quantity); }
+        // public SimpleIntegerProperty quantityProperty() { return quantity; }
+
+        public boolean isInOrder() {
+            return isInOrder;
+        }
+    
+        public void setInOrder(boolean inOrder) {
+            this.isInOrder = inOrder;
+        }
+
+        public int getQuantity() {
+            return quantity.get();
+        }
+    
+        public void setQuantity(int quantity) {
+            this.quantity.set(quantity);
+        }
+    
+        public SimpleIntegerProperty quantityProperty() {
+            return quantity;
+        }
+    }
+
+    private void refreshTable() {
+        // Reload items and quantities
+        loadItems();
+        initializeQuantities();
     }
 }

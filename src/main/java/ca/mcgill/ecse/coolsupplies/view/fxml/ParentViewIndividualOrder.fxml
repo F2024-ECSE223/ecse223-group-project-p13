@@ -9,36 +9,32 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ParentIndividualOrderController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="ca.mcgill.ecse.coolsupples.view.ParentIndividualOrderController">
    <children>
       <AnchorPane prefHeight="30.0" prefWidth="600.0">
          <children>
-      <AnchorPane prefHeight="30.0" prefWidth="600.0">
-         <children>
-            <Label alignment="CENTER" prefHeight="29.0" prefWidth="600.0" style="-fx-background-color: #5c80bc;" text="Order Information" textAlignment="CENTER">
+            <Label fx:id="orderTitle" alignment="CENTER" prefHeight="29.0" prefWidth="600.0" style="-fx-background-color: #5c80bc;" text="Order Number:" textAlignment="CENTER">
                <font>
                   <Font name="Rockwell" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="pay_button" mnemonicParsing="false" prefHeight="26.0" prefWidth="73.0" text="Pay" translateX="40.0" translateY="1.5" />
-            <Button fx:id="additem_button" layoutX="472.0" layoutY="1.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="73.0" text="Add item" />
+            <Button fx:id="editOrder" layoutX="454.0" layoutY="1.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="79.0" text="Edit Order" />
          </children>
       </AnchorPane>
       <TableView fx:id="first_row" prefHeight="200.0" prefWidth="600.0">
          <columns>
             <TableColumn fx:id="date_col" prefWidth="136.0" text="Date" />
-            <TableColumn fx:id="level_col" prefWidth="130.0" text="Level" />
-            <TableColumn fx:id="parent_col" prefWidth="114.0" text="Parent" />
-            <TableColumn fx:id="student_col" prefWidth="123.0" text="Student" />
-            <TableColumn fx:id="status_col" prefWidth="96.0" text="Status" />
+            <TableColumn fx:id="parent_col" prefWidth="161.0" text="Parent" />
+            <TableColumn fx:id="student_col" prefWidth="155.0" text="Student" />
+            <TableColumn fx:id="status_col" prefWidth="147.0" text="Status" />
          </columns>
       </TableView>
       <TableView fx:id="second_row" prefHeight="205.0" prefWidth="600.0">
          <columns>
-            <TableColumn fx:id="order_col" prefWidth="174.0" text="Order Number" />
-            <TableColumn fx:id="auth_col" minWidth="0.0" prefWidth="169.0" text="Authorization code" />
-            <TableColumn fx:id="penalty_col" prefWidth="168.0" text="Penalty Auth. code" />
-            <TableColumn fx:id="total_col" prefWidth="88.0" text="Total Price" />
+            <TableColumn fx:id="level_col" prefWidth="139.0" text="Level" />
+            <TableColumn fx:id="auth_col" minWidth="0.0" prefWidth="160.0" text="Authorization code" />
+            <TableColumn fx:id="penalty_col" prefWidth="196.0" text="Penalty Auth. code" />
+            <TableColumn fx:id="total_col" prefWidth="104.0" text="Total Price" />
          </columns>
       </TableView>
       <HBox prefHeight="100.0" prefWidth="200.0">
@@ -48,27 +44,26 @@
                   <Font name="Rockwell" size="16.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" prefHeight="24.0" prefWidth="349.0" style="-fx-border-color: #000000; -fx-border-radius: 2;" text="Bundles" HBox.hgrow="ALWAYS">
+            <Label fx:id="bundleTitle" alignment="CENTER" prefHeight="24.0" prefWidth="349.0" style="-fx-border-color: #000000; -fx-border-radius: 2;" text="Bundle: " HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Rockwell" size="16.0" />
                </font>
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="346.0" prefWidth="600.0">
+      <HBox prefHeight="298.0" prefWidth="600.0">
          <children>
             <TableView fx:id="item_table" prefHeight="212.0" prefWidth="507.0">
                <columns>
-                  <TableColumn fx:id="viewItemContent_col" prefWidth="54.5" text="Menu" />
-                  <TableColumn fx:id="name_col" prefWidth="197.0" text="Name" />
+                  <TableColumn fx:id="name_col" prefWidth="168.0" text="Name" />
+                  <TableColumn fx:id="price_col" prefWidth="85.0" text="Price" />
                </columns>
             </TableView>
             <TableView fx:id="bundle_table" prefHeight="292.0" prefWidth="600.0">
                <columns>
-                  <TableColumn fx:id="viewBundleContent_col" prefWidth="54.0" text="Menu" />
-                  <TableColumn fx:id="bundleName_col" prefWidth="142.0" text="Bundle Name" />
-                  <TableColumn fx:id="discount_col" prefWidth="68.0" text="Discount" />
-                  <TableColumn fx:id="bundlePrice_col" prefWidth="81.0" text="Price" />
+                  <TableColumn fx:id="bundleName_col" prefWidth="194.0" text="Item Name" />
+                  <TableColumn fx:id="bundleQuantity_col" prefWidth="71.0" text="Quantity" />
+                  <TableColumn fx:id="bundleLevel_col" prefWidth="80.5" text="Level" />
                </columns>
             </TableView>
          </children>
