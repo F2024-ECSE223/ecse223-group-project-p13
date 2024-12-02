@@ -2,7 +2,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet2Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
@@ -58,6 +58,7 @@ public class StudentManagementView {
 
   @FXML
   public void initialize(){
+      addButton.getStyleClass().add(Styles.SUCCESS);
      gradeInput.setItems(FXCollections.observableArrayList(getGradeLevels()));
 
 
@@ -104,35 +105,30 @@ private List<String> getGradeLevels() {
     
   private void addActionButtonsToTable() {
     columnActions.setCellFactory(param -> new TableCell<>() {
-        private final Button deleteButton = new Button("Delete");
+        private final Button deleteButton = new Button("Remove");
         private final Button updateButton = new Button("Update");
-        private final Button saveButton = new Button("Save");
-        private final TextField newNameInput = new TextField("");
-        private final ComboBox<String> newGradeInput = new ComboBox<>();
         private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default buttons
-        private final HBox saveFunction = new HBox(10, saveButton);
 
         {
             deleteButton.setPrefWidth(80);
             deleteButton.setPrefHeight(30);
             updateButton.setPrefWidth(80);
             updateButton.setPrefHeight(30);
-            saveButton.setPrefWidth(80);
-            saveButton.setPrefHeight(30);
 
             // Configure delete button
             deleteButton.setOnAction(event -> {
                 TOStudent student = getTableView().getItems().get(getIndex());
                 deleteStudent(student.getName());
             });
+            deleteButton.getStyleClass().add(Styles.DANGER);
 
             // Configure update button
             updateButton.setOnAction(event -> {
                 TOStudent student = getTableView().getItems().get(getIndex());
                 makeUpdateWindow(student);
             });
-
-        
+            updateButton.getStyleClass().add(Styles.ACCENT);
+            updateButton.getStyleClass().add(Styles.BUTTON_OUTLINED);
         }
 
         @Override

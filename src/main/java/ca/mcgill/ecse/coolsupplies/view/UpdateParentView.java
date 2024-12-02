@@ -2,6 +2,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import atlantafx.base.theme.Styles;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -57,6 +58,7 @@ public class UpdateParentView {
 
     @FXML
     public void initialize(){
+        buttonSaveUpdateParent.getStyleClass().add(Styles.SUCCESS);
         emailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
         infoEmailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
 

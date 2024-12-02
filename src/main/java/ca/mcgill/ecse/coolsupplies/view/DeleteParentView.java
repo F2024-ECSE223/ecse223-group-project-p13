@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.awt.event.ActionEvent;
+import atlantafx.base.theme.Styles;
 
 public class DeleteParentView {
     @FXML
@@ -81,6 +82,7 @@ public class DeleteParentView {
                     TOParent parent = getTableView().getItems().get(getIndex());
                     DeleteClickedDeleteParent(parent.getEmail());
                 });
+                removeButtonRemoveParent.getStyleClass().add(Styles.DANGER);
             }
 
             @Override

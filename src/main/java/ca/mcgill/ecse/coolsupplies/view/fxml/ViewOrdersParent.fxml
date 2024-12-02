@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="567.0" prefWidth="688.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.viewordersparent.HelloController">
+<VBox alignment="CENTER" prefHeight="567.0" prefWidth="688.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ViewOrdersParent">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -23,7 +23,7 @@
                         <TableView fx:id="ordersTable" layoutX="2.0" layoutY="5.0" prefHeight="329.0" prefWidth="512.0">
                            <columns>
                               <TableColumn fx:id="orderNo" prefWidth="103.99993586540222" text="Order Number " />
-                              <TableColumn fx:id="OrderStudent" prefWidth="111.20001220703125" text="Student " />
+                              <TableColumn fx:id="orderStudent" prefWidth="111.20001220703125" text="Student " />
                               <TableColumn fx:id="dateOrdered" prefWidth="104.80000305175781" text="Date Ordered " />
                               <TableColumn fx:id="orderStatus" prefWidth="98.4000244140625" text="Status " />
                               <TableColumn fx:id="actionColumn" prefWidth="90.39996337890625" text="Actions " />
@@ -34,7 +34,7 @@
                </content>
             </ScrollPane>
             <Label fx:id="errorLabel" layoutX="158.0" layoutY="452.0" prefHeight="55.0" prefWidth="433.0" />
-            <Button layoutX="499.0" layoutY="29.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="128.0" text="Add New Order" />
+            <Button fx:id="addOrder" layoutX="499.0" layoutY="29.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="128.0" text="Add New Order" />
          </children>
       </AnchorPane>
    </children>
