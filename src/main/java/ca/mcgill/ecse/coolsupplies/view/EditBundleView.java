@@ -260,15 +260,15 @@ public class EditBundleView {
         String updateResult = CoolSuppliesFeatureSet4Controller.updateBundle(bundle.getName(), newBundleName, newDiscount, newGradeLevel);
 
         if (!updateResult.isEmpty()) {
-            if (updateResult.equals("A bundle already exists for the grade.") && newGradeLevel.equals(bundle.getGradeLevel())) {
-                // Since the grade hasn't changed, we can proceed
-            } else if (updateResult.equals("The name must be unique.") && newBundleName.equals(bundle.getName())) {
-                // Since the name hasn't changed, we can proceed
-            } else {
+            // if (updateResult.equals("A bundle already exists for the grade.") && newGradeLevel.equals(bundle.getGradeLevel())) {
+            //     // Since the grade hasn't changed, we can proceed
+            // } else if (updateResult.equals("The name must be unique.") && newBundleName.equals(bundle.getName())) {
+            //     // Since the name hasn't changed, we can proceed
+            // } else {
                 showAlert("Failed to update bundle: " + updateResult);
                 return;
             }
-        }
+        //}
 
         // **Refresh the bundle and bundle items after update**
         bundle = CoolSuppliesFeatureSet4Controller.getBundle(newBundleName);
@@ -308,6 +308,8 @@ public class EditBundleView {
                 // If quantity is zero and item is not in the bundle, do nothing
             }
         }
+
+        
 
         // Show success message
         showAlert("Bundle updated successfully.");
