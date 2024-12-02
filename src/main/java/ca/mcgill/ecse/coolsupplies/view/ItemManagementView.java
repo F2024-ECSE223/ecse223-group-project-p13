@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class ItemManagementView {
 
@@ -32,6 +33,8 @@ public class ItemManagementView {
     @FXML private ComboBox<String> BundleChoice;
 
     @FXML private Label errorLabel;
+
+    @FXML private Button saveButton; // Declare the Save button
 
     private ToggleGroup levelToggleGroup;
 
@@ -245,12 +248,10 @@ public class ItemManagementView {
                     result = Iteration3Controller.updateOrderQuantity(bundle.getName(), String.valueOf(newValue), orderNumber);
                 }
                 bundleQuantity = newValue;
-                loadBundleItems(); // Reload bundle items to update amounts
             } else {
                 // Remove the bundle from the order
                 result = Iteration3Controller.deleteItem(bundle.getName(), orderNumber);
                 bundleQuantity = 0;
-                loadBundleItems(); // Reload bundle items to update amounts
             }
 
             if (result.isEmpty()) {
@@ -284,10 +285,8 @@ public class ItemManagementView {
 
                     // Get the per-bundle amount
                     int amountPerBundle = bundleItem.getQuantity(); // Ensure getQuantity() exists and returns int
-                    // Calculate total amount
-                    int totalAmount = amountPerBundle * bundleQuantity;
 
-                    bundleItemEntries.add(new BundleItemEntry(itemName, itemPrice, discount, totalAmount));
+                    bundleItemEntries.add(new BundleItemEntry(itemName, itemPrice, discount, amountPerBundle));
                 }
             }
         }
@@ -530,9 +529,18 @@ public class ItemManagementView {
             // Clear any previous error messages
             errorLabel.setText("");
 
-            // Re-initialize quantities and reload bundle items
-            initializeQuantities();
+            // Reload data based on the new order level
             loadBundleItems();
         }
+    }
+
+    @FXML
+    private void handleSaveButtonAction() {
+        // Perform any necessary save operations here
+        // For example, you might validate inputs or finalize changes
+
+        // Close the pop-up window
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        stage.close();
     }
 }
