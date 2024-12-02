@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import atlantafx.base.theme.Styles;
 //import javax.swing.table.TableColumn;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOItem;
@@ -70,8 +71,8 @@ public class ItemViewController {
     itemList.addAll(CoolSuppliesFeatureSet3Controller.getItems());
 
     item_table_view.setItems(itemList);
-    
 
+    add_item_button.getStyleClass().add(Styles.SUCCESS);
   }
 
   /*
@@ -83,8 +84,13 @@ public class ItemViewController {
       private final Button updateButton = new Button("Update");
       private final Button deleteButton = new Button("Delete");
       private final HBox buttons = new HBox(10, updateButton, deleteButton);
-  
+
       {
+        buttons.setPadding(new Insets(4, 0, 4, 0));
+        updateButton.getStyleClass().add(Styles.BUTTON_OUTLINED);
+        updateButton.getStyleClass().add(Styles.ACCENT);
+        deleteButton.getStyleClass().add(Styles.DANGER);
+
           updateButton.setOnAction(event -> {
               TOItem oldItem = getTableView().getItems().get(getIndex());
               makeUpdateWindow(oldItem);
@@ -169,6 +175,8 @@ public class ItemViewController {
     Button cancelButton = new Button("Cancel");
     Label errorUpdate = new Label("");
     errorUpdate.setTextFill(Color.RED);
+    saveButton.getStyleClass().add(Styles.SUCCESS);
+    cancelButton.getStyleClass().addAll(Styles.DANGER, Styles.BUTTON_OUTLINED);
     
     // actions
     newName.setOnMouseClicked(a -> newName.setText(""));

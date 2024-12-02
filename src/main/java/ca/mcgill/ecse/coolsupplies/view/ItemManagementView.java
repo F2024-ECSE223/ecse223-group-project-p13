@@ -34,7 +34,7 @@ public class ItemManagementView {
 
     @FXML private Label errorLabel;
 
-    @FXML private Button saveButton; // Declare the Save button
+    @FXML private Button Save; // Declare the Save button
 
     private ToggleGroup levelToggleGroup;
 
@@ -217,7 +217,9 @@ public class ItemManagementView {
         loadBundleItems();
 
         // Set the spinner to the current bundle quantity
+   
         BundleQuantity.getValueFactory().setValue(bundleQuantity);
+        BundleQuantity.setVisible(!bundleItemEntries.isEmpty());
     }
 
     private void setupTablesAndSpinners() {
@@ -368,6 +370,7 @@ public class ItemManagementView {
                 break;
             }
         }
+
         BundleQuantity.getValueFactory().setValue(bundleQuantity);
     }
 
@@ -540,7 +543,7 @@ public class ItemManagementView {
         // For example, you might validate inputs or finalize changes
 
         // Close the pop-up window
-        Stage stage = (Stage) saveButton.getScene().getWindow();
+        Stage stage = (Stage) Save.getScene().getWindow();
         stage.close();
     }
 }
