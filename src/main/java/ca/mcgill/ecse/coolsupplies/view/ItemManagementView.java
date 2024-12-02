@@ -1,10 +1,12 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +28,6 @@ public class ItemManagementView {
     @FXML private TableColumn<ItemEntry, Integer> columnQuantity;
 
     @FXML private Label errorLabel;
-    @FXML private Button viewOrder;
 
     private ObservableList<ItemEntry> itemEntries;
     private ObservableList<BundleItemEntry> bundleItemEntries;
@@ -49,8 +50,10 @@ public class ItemManagementView {
     @FXML
     public void initialize() {
         // Ensure order parameters are set
+        TOOrder order = ViewOrdersParent.getOrder();
+
+        setOrderParameters(CoolSuppliesFeatureSet2Controller.getStudents().stream().filter(s -> s.getName() == order.getStudentName()).collect(Collectors.toList()).get(0).getGradeLevel(), order.getLevel(), order.getNumber());
         
-        setOrderParameters("6th", "Mandatory", "2");
         if (studentGrade == null || orderLevel == null || orderNumber == null) {
             errorLabel.setText("Order parameters are not set.");
             return;
@@ -81,7 +84,6 @@ if (bundle == null) {
         columnName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         columnPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
 
-        // Add spinners
         addSpinner();
 
         // Load items
