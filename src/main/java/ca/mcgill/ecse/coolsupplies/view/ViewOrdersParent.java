@@ -1,33 +1,33 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import atlantafx.base.theme.Styles;
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
+import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
+import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
+import ca.mcgill.ecse.coolsupplies.controller.TOParent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.cell.*;
-import ca.mcgill.ecse.coolsupplies.controller.*;
-import ca.mcgill.ecse.coolsupplies.model.Order;
-import ca.mcgill.ecse.coolsupplies.view.*;
-import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
-import java.util.List;
-import atlantafx.base.theme.Styles;
-import java.util.ArrayList;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 public class ViewOrdersParent {
     @FXML
     private ScrollPane ordersScroll;
@@ -133,11 +133,12 @@ public class ViewOrdersParent {
     VBox dialogPane = new VBox();
 
     // create UI elements
-    Label totalCost = new Label(""+pendingOrder.getPrice());
+    Label totalCost = new Label("Total: $"+pendingOrder.getPrice());
     TextField authCode = new TextField("Authorization Code");
     Button payButton = new Button("Pay");
     Button cancelButton = new Button("Cancel");
     Label errorUpdate = new Label("");
+    errorUpdate.setTextFill(Color.RED);
     
     // actions
     authCode.setOnMouseClicked(a -> authCode.setText(""));
@@ -152,6 +153,8 @@ public class ViewOrdersParent {
           if (payMessage.isEmpty()) {
             errorUpdate.setText(payMessage);
             parentOrders.remove(pendingOrder);
+            TOOrder paidOrder = Iteration3Controller.viewOrder(pendingOrder.getNumber());
+            parentOrders.add(paidOrder);
             dialog.close();
           }
           // Error
@@ -189,15 +192,17 @@ public class ViewOrdersParent {
     VBox dialogPane = new VBox();
 
     // create UI elements
-    Label totalCost = new Label(""+latePendingOrder.getPrice());
+    Label totalCost = new Label("Total: $"+latePendingOrder.getPrice());
     TextField authCode = new TextField("Authorization Code");
     TextField lateAuthCode = new TextField("Late Authorization Code");
     Button payButton = new Button("Pay");
     Button cancelButton = new Button("Cancel");
     Label errorUpdate = new Label("");
+    errorUpdate.setTextFill(Color.RED);
     
     // actions
     authCode.setOnMouseClicked(a -> authCode.setText(""));
+    lateAuthCode.setOnMouseClicked(a -> lateAuthCode.setText(""));
     payButton.setOnAction(a -> {
 
       // textt from labels
@@ -210,6 +215,9 @@ public class ViewOrdersParent {
           if (payPenaltyMessage.isEmpty()) {
             errorUpdate.setText(payPenaltyMessage);
             parentOrders.remove(latePendingOrder);
+            TOOrder paidOrder = Iteration3Controller.viewOrder(latePendingOrder.getNumber());
+            parentOrders.add(paidOrder);
+            dialog.close();
           }
           else {
             errorUpdate.setText(payPenaltyMessage);
@@ -229,7 +237,7 @@ public class ViewOrdersParent {
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
-    dialogPane.getChildren().addAll(totalCost, authCode, errorUpdate, payButton, cancelButton);
+    dialogPane.getChildren().addAll(totalCost, authCode, lateAuthCode, errorUpdate, payButton, cancelButton);
     Scene dialogScene = new Scene(dialogPane);
     dialog.setScene(dialogScene);
     dialog.setTitle("Pay Order");
