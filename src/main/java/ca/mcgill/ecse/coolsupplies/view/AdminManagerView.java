@@ -97,7 +97,7 @@ public class AdminManagerView extends ManagerView {
     }
 
     else if (page.equals(ORDERS)) {
-      setMain("AdminViewIndividualOrder.fxml");
+      setMain("ViewOrdersAdmin.fxml");
     }
 
 

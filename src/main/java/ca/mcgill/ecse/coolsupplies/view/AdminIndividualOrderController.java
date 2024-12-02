@@ -61,7 +61,7 @@ public class AdminIndividualOrderController {
   @FXML
   //public void initialize(String orderNumber) {
   public void initialize() {
-    TOOrder order = Iteration3Controller.viewAllOrders().get(0);
+    TOOrder order = ViewOrdersAdmin.getOrder();
    
 
     date_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
