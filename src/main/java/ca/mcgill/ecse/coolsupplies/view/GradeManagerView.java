@@ -37,6 +37,11 @@ public class GradeManagerView {
 
   private ObservableList<TOGrade> gradeList = FXCollections.observableArrayList();
   
+  /**
+  * @author Kenny-Alexander Joseph
+  * @return void
+  * This method initializes the grade management for the admin user.
+  */
   @FXML
   public void initialize() {
     grade_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLevel()));
