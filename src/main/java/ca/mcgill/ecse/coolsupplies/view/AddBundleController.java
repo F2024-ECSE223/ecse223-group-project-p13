@@ -39,6 +39,14 @@ public class AddBundleController {
 
     private ViewBundleView viewBundleView;
 
+
+    
+    
+     /**
+      * loads the grades in the system as options for the combo box and initializes the bundles table 
+      * @author Nil Akkurt 
+        @return void 
+      */
     @FXML
     private void initialize() {
         try {
@@ -57,6 +65,13 @@ public class AddBundleController {
     public void initData(ViewBundleView viewBundleView) {
         this.viewBundleView = viewBundleView;
     }
+
+    /**
+     * helper method that loads the page for editing bundle details and contents once "next" button is clicked 
+     * @author Nil Akkurt 
+     * @param ActionEvent event which triggers moveToNextPage to execute
+     * @return void 
+     */
 
     @FXML
     private void moveToNextPage(ActionEvent event) {
@@ -95,6 +110,13 @@ public class AddBundleController {
     
     }
 
+    /**
+     * Helper method that puts the error message adding bundle method returns in the label to display to user
+     * @author Nil Akkurt 
+     * @return void 
+     * @param String message that is returned by addBundle()
+     */
+
     private void displayError(String message) {
         errorLabel.setText(message);
     }
@@ -126,6 +148,13 @@ public class AddBundleController {
         return true;
         
     }
+
+    /**
+     * onAction method for the next button, which creates a new bundle with the entered information, and opens the edit bundle page
+     * @author Nil Akkurt 
+     * @param ActionEvent event which is the nextButton being pressed
+     * @return void 
+     */
 
     @FXML
     private void nextButton(ActionEvent event) {
