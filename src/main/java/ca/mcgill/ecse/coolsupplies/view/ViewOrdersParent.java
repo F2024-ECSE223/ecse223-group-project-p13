@@ -56,7 +56,7 @@ public class ViewOrdersParent {
     private  List<String> parentEmails = new ArrayList<>();
     private ObservableList<TOOrder> ordersInSystem = FXCollections.observableArrayList(Iteration3Controller.viewAllOrders());
     private ObservableList<TOOrder> parentOrders =  FXCollections.observableArrayList();
-
+    private static TOOrder order = null;
 
     @FXML
     private void initialize() {
@@ -81,7 +81,8 @@ public class ViewOrdersParent {
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button payButton = new Button("Pay");
             private final Button cancelButton = new Button("Cancel");
-            private final HBox buttons = new HBox(10, payButton, cancelButton);
+            private final Button viewButton = new Button("View");
+            private final HBox buttons = new HBox(10, viewButton, payButton, cancelButton);
 
           {
             payButton.setOnAction(event -> {
@@ -101,6 +102,11 @@ public class ViewOrdersParent {
                 TOOrder myOrder = getTableView().getItems().get(getIndex());
                 String attemptCancel = Iteration3Controller.cancelOrder(myOrder.getNumber());
                 errorLabel.setText(attemptCancel);
+            });
+
+            viewButton.setOnAction(event -> {
+              ViewOrdersParent.order = getTableView().getItems().get(getIndex());
+              CoolSuppliesFxmlView.newWindow("ParentViewIndividualOrder.fxml", "Order");
             });
           }
 
@@ -259,5 +265,9 @@ public class ViewOrdersParent {
 
   private void addNewOrder() {
     new NewOrderView().createAddOrder();
+  }
+
+  public static TOOrder getOrder() {
+    return order;
   }
 }
