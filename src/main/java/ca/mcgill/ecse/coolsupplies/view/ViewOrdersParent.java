@@ -12,10 +12,7 @@ import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -23,7 +20,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
@@ -86,6 +82,7 @@ public class ViewOrdersParent {
 
     parents.setOnAction(event -> {
       String selectedEmail = parents.getValue();
+      addOrder.setVisible(true);
       fetchOrders(selectedEmail);
     });
 
@@ -108,7 +105,7 @@ public class ViewOrdersParent {
           statusMap.put(order.getNumber(), status);
           orderChanged.put(order.getNumber(), changed);
           status.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equalsIgnoreCase("started")) {
+            if (!newValue.equalsIgnoreCase("started") && !newValue.equalsIgnoreCase("penalized") || order.getItems().isEmpty()) {
               payButton.setVisible(false);
             }
             if (!newValue.equalsIgnoreCase("started") && !newValue.equalsIgnoreCase("paid")) {
@@ -116,10 +113,11 @@ public class ViewOrdersParent {
             }
           });
          
+          viewButton.getStyleClass().add(Styles.ACCENT);
           viewButton.getStyleClass().add(Styles.BUTTON_OUTLINED);
           payButton.getStyleClass().add(Styles.ACCENT);
           cancelButton.getStyleClass().add(Styles.DANGER);
-          payButton.setVisible(order.getStatus().equalsIgnoreCase("started"));
+          payButton.setVisible((order.getStatus().equalsIgnoreCase("started") || order.getStatus().equalsIgnoreCase("penalized")) && order.hasItems());
           cancelButton.setVisible(order.getStatus().equalsIgnoreCase("started")
               || order.getStatus().equalsIgnoreCase("paid"));
 
@@ -146,27 +144,31 @@ public class ViewOrdersParent {
             } else {
               errorLabel.setText("Cannot pay for this order");
             }
-        });
-        changed.addListener((observable, oldValue, newValue) -> {
-          if (newValue) {
-            status.set(order.getNumber());
-          }
-        });
-      }
-      
+          });
+          changed.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+              status.set(order.getNumber());
+            }
+          });
+        }
+
         if (empty) {
           setGraphic(null);
         } else {
           setGraphic(buttons);
         }
 
+
+      }
+    });
+
     addOrder.getStyleClass().add(Styles.SUCCESS);
     addOrder.setOnAction((e) -> {
       addNewOrder();
     });
-  }
-    });
+    addOrder.setVisible(false);
 }
+
 
   /**
    * @author Dimitri Christopoulos
@@ -219,7 +221,6 @@ public class ViewOrdersParent {
 
     // display the popup window
     int innerPadding = 10;
-    int outerPadding = 100;
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
@@ -279,7 +280,6 @@ public class ViewOrdersParent {
 
     // display the popup window
     int innerPadding = 10;
-    int outerPadding = 100;
     dialogPane.setSpacing(innerPadding);
     dialogPane.setAlignment(Pos.CENTER);
     dialogPane.setPadding(new Insets(innerPadding, innerPadding, innerPadding, innerPadding));
@@ -315,10 +315,10 @@ public class ViewOrdersParent {
         int orderNum = Integer.parseInt(view.orderID.getText());
         String result = CoolSuppliesFeatureSet6Controller.startOrder(orderNum,
             java.sql.Date.valueOf(view.datePicker.getValue()), view.orderLevel,
-            parents.getSelectionModel().getSelectedItem(), view.selectedStudent);
+            parents.getValue(), view.selectedStudent);
 
         if (result == null || result.isEmpty()) {
-          fetchOrders(parents.getSelectionModel().getSelectedItem());
+          fetchOrders(parents.getValue());
           dialog.hide();
         } else {
           view.errMsgText.setText(result);
@@ -328,7 +328,7 @@ public class ViewOrdersParent {
       }
     });
 
-    VBox content = view.createAddOrder(parents.getSelectionModel().getSelectedItem());
+    VBox content = view.createAddOrder(parents.getValue());
 
     dialog.setScene(new Scene(content));
 

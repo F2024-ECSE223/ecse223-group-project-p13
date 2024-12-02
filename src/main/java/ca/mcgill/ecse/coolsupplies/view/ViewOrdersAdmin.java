@@ -1,9 +1,11 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -50,6 +52,18 @@ public class ViewOrdersAdmin {
         Button viewButton = new Button("View");
         Button pickupButton = new Button("Pickup");
         HBox buttons = new HBox(10, viewButton, pickupButton, cancelButton);
+
+        buttons.setPadding(new Insets(4, 0, 4, 0));
+        cancelButton.getStyleClass().add(Styles.DANGER);
+        viewButton.getStyleClass().add(Styles.ACCENT);
+        viewButton.getStyleClass().add(Styles.BUTTON_OUTLINED);
+        pickupButton.getStyleClass().add(Styles.ACCENT);
+
+        if (getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
+          TOOrder order = getTableView().getItems().get(getIndex());
+          pickupButton.setVisible(order.getStatus().equalsIgnoreCase("prepared"));
+          cancelButton.setVisible((order.getStatus().equalsIgnoreCase("started") || order.getStatus().equalsIgnoreCase("paid")));
+        }
 
         cancelButton.setOnAction(event -> {
           TOOrder myOrder = getTableView().getItems().get(getIndex());
