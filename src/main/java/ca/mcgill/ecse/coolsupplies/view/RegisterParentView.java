@@ -64,13 +64,13 @@ public class RegisterParentView {
 
         String message = CoolSuppliesFeatureSet1Controller.addParent(email, password, name, phoneNumber);
         errorMessageRegisterParent.setText(message);
-
-        // clearing the input fields
-        emailRegisterParent.setText("");
-        phoneRegisterParent.setText("");
-        nameRegisterParent.setText("");
-        passwordRegisterParent.setText("");
-        // NEED TO UPDATE THE LIST OF PARENTS ON OTHER PAGE (dans le code d affichage)
+        if (message.isEmpty()){
+             // clearing the input fields
+            emailRegisterParent.setText("");
+            phoneRegisterParent.setText("");
+            nameRegisterParent.setText("");
+            passwordRegisterParent.setText("");
+        }
     }
 
 }

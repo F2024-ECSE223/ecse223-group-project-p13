@@ -113,15 +113,16 @@ public class UpdateParentView {
             String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name,phone);
             errorMessageUpdateParent.setText(message);
 
-            emailUpdateParent.getSelectionModel().clearSelection();;
-            nameUpdateParent.setText("");
-            phoneUpdateParent.setText("");
-            passwordUpdateParent.setText("");
-            oldPasswordUpdateParent.setText("");
+            if (message.isEmpty()){
+                emailUpdateParent.getSelectionModel().clearSelection();;
+                nameUpdateParent.setText("");
+                phoneUpdateParent.setText("");
+                passwordUpdateParent.setText("");
+                oldPasswordUpdateParent.setText("");
+            }
         } else {
             errorMessageUpdateParent.setText("This email is not yours.");
         }
-        
 
     }
 
