@@ -1,22 +1,18 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
 import javafx.scene.control.TableColumn;
 import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
+import ca.mcgill.ecse.coolsupplies.controller.TOBundleItem;
+import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet5Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrderItem;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.Button;
 
 public class ParentIndividualOrderController {
   @FXML
@@ -26,7 +22,7 @@ public class ParentIndividualOrderController {
   @FXML
   private TableView<TOOrderItem> item_table;
   @FXML
-  private TableView<TOOrderItem> bundle_table;
+  private TableView<TOBundleItem> bundle_table;
   @FXML
   private TableColumn<TOOrder, String> date_col;
   private ObservableList<TOOrder> dateList = FXCollections.observableArrayList();
@@ -43,31 +39,32 @@ public class ParentIndividualOrderController {
   @FXML
   private TableColumn<TOOrder, String> penalty_col;
   @FXML
-  private TableColumn<TOOrder, String> order_col;
+  private Label orderTitle;
   @FXML
   private TableColumn<TOOrderItem, String> name_col;
   private ObservableList<TOOrderItem> individualItemList = FXCollections.observableArrayList();
   @FXML
-  private TableColumn<TOOrderItem, String> bundleName_col;
-  private ObservableList<TOOrderItem> bundleItemList = FXCollections.observableArrayList();
+  private TableColumn<TOOrderItem, String> price_col;
   @FXML
-  private TableColumn<TOOrderItem, Void> viewBundleContent_col;
+  private Label bundleTitle;
   @FXML
-  private TableColumn<TOOrderItem, Void> viewItemContent_col;
+  private TableColumn<TOBundleItem, String> bundleName_col;
+  private ObservableList<TOBundleItem> bundleItemList = FXCollections.observableArrayList();
   @FXML
-  private TableColumn<TOOrderItem, String> discount_col;
+  private TableColumn<TOBundleItem, String> bundleQuantity_col;
   @FXML
-  private TableColumn<TOOrderItem, String> bundlePrice_col;
+  private TableColumn<TOBundleItem, String> bundleLevel_col;
   @FXML
   private TableColumn<TOOrder, String> total_col;
+  private Button editOrder;
+  private boolean bundleWasSet = false;
 
 
   @FXML
   //public void initialize(String orderNumber) {
   public void initialize() {
     TOOrder order = Iteration3Controller.viewAllOrders().get(0);
-    System.out.println(order.getPrice());
-    System.out.println(order.hasItems());
+   
 
     date_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
     level_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLevel()));
@@ -76,115 +73,30 @@ public class ParentIndividualOrderController {
     status_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
     auth_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAuthCode()));
     penalty_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPenaltyAuthCode()));
-    order_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNumber()));
+    orderTitle.setText("Order Number: "+order.getNumber());
     
     name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-    bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGradeBundle()));
-    discount_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDiscount()));
-    bundlePrice_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
-    //bundlePrice_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrice()));
+    price_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
+
+    bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
+    bundleQuantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
+    bundleLevel_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLevel())));
     
     total_col.setCellValueFactory(cellData -> new SimpleStringProperty("$"+String.valueOf(cellData.getValue().getPrice())));
 
-    viewBundleContent_col.setCellFactory(new Callback<>() {
-      @Override
-      public TableCell<TOOrderItem, Void> call(final TableColumn<TOOrderItem, Void> param) {
-        final TableCell<TOOrderItem, Void> cell = new TableCell<>() {
-          private final Button viewButton = new Button("View");
-    
-          {
-            viewButton.setOnAction(menuDisplay -> {
-              TOOrderItem orderitem = getTableView().getItems().get(getIndex());
-              Stage display = new Stage();
-              // display.initModality(Modality.APPLICATION_MODAL);
-              // display.setTitle("Bundle Content");
-
-              // TableView<TOOrderItem> content_table = new TableView<>();
-              // ObservableList<TOOrderItem> content = FXCollections.observableArrayList();
-
-              // TableColumn<TOOrderItem, String> itemNameCol = new TableColumn<>("Item Name");
-              // TableColumn<TOOrderItem, String> itemPriceCol = new TableColumn<>("Price");
-              // TableColumn<TOOrderItem, String> itemQuantityCol = new TableColumn<>("Quantity");
-              // itemNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-              // itemPriceCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrice()));
-              // itemQuantityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getQuantity()));
-
-              // content_table.getColumns().addAll(itemNameCol, itemPriceCol, itemQuantityCol);
-              // content_table.setItems(content);
-
-              // Vbox vbox = new Vbox(new Label("Bundle Content"),display);
-              // display.setScene(new Scene(vbox));
-              // display.showAndWait();
-            });
-          }
-    
-          @Override
-          public void updateItem(Void item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty) {
-              setGraphic(null);
-            } else {
-              setGraphic(viewButton);
-            }
-          }
-        };
-        return cell;
-      }
-    });
-
-    viewItemContent_col.setCellFactory(new Callback<>() {
-      @Override
-      public TableCell<TOOrderItem, Void> call(final TableColumn<TOOrderItem, Void> param) {
-        final TableCell<TOOrderItem, Void> cell = new TableCell<>() {
-          private final Button viewButton = new Button("View");
-    
-          {
-            viewButton.setOnAction(menuDisplay -> {
-              TOOrderItem orderitem = getTableView().getItems().get(getIndex());
-              Stage display = new Stage();
-              // display.initModality(Modality.APPLICATION_MODAL);
-              // display.setTitle("Bundle Content");
-
-              // TableView<TOOrderItem> content_table = new TableView<>();
-              // ObservableList<TOOrderItem> content = FXCollections.observableArrayList();
-
-              // TableColumn<TOOrderItem, String> itemNameCol = new TableColumn<>("Item Name");
-              // TableColumn<TOOrderItem, String> itemPriceCol = new TableColumn<>("Price");
-              // TableColumn<TOOrderItem, String> itemQuantityCol = new TableColumn<>("Quantity");
-              // itemNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-              // itemPriceCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrice()));
-              // itemQuantityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getQuantity()));
-
-              // content_table.getColumns().addAll(itemNameCol, itemPriceCol, itemQuantityCol);
-              // content_table.setItems(content);
-
-              // Vbox vbox = new Vbox(new Label("Bundle Content"),display);
-              // display.setScene(new Scene(vbox));
-              // display.showAndWait();
-            });
-          }
-    
-          @Override
-          public void updateItem(Void item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty) {
-              setGraphic(null);
-            } else {
-              setGraphic(viewButton);
-            }
-          }
-        };
-        return cell;
-      }
-    });
-    
     // Load order info from controller
     dateList.add(order);
     
     for (TOOrderItem orderitem : order.getItems()) {
       if (orderitem.getGradeBundle() == null || orderitem.getGradeBundle().isEmpty()) individualItemList.add(orderitem);
-      else bundleItemList.add(orderitem);
+      else {
+        if (!bundleWasSet) {
+          bundleTitle.setText("Bundle: "+orderitem.getGradeBundle()+"    Discount: $"+orderitem.getDiscount());
+          bundleWasSet = true;
+        }
+        bundleItemList.addAll(CoolSuppliesFeatureSet5Controller.getBundleItems(orderitem.getGradeBundle()));
     }
+  }
 
     // Set the items for the table
     first_row.setItems(dateList);
