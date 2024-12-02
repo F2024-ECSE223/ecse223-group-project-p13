@@ -64,15 +64,13 @@ public class ViewBundleView {
 
    @FXML
    public void newBundle(ActionEvent event) {
-       try {
-           CoolSuppliesFxmlView.newWindow("AddBundle.fxml", "Add a New Bundle");
-           clearError();
-       } catch (Exception e) {
-           displayError("Failed to open the new bundle page: " + e.getMessage());
-       }
-
-       //Add action button to table
-       addActionButtonToTable();
+    try {
+        Stage stage = CoolSuppliesFxmlView.newWindowStage("AddBundle.fxml", "Add a New Bundle");
+        // Do not close the main window
+        clearError();
+    } catch (Exception e) {
+        displayError("Failed to open the new bundle page: " + e.getMessage());
+    }
 
    }
 
@@ -86,29 +84,32 @@ public class ViewBundleView {
             // Configure edit button
             editButton.setOnAction(event -> {
                 TOGradeBundle bundle = getTableView().getItems().get(getIndex());
-                try {
-                    // Load the FXML file
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
-                    Parent root = loader.load();
+    try {
+        // Load the FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
+        Parent root = loader.load();
 
-                    // Get the controller instance
-                    EditBundleView controller = loader.getController();
+        // Get the controller instance
+        EditBundleView controller = loader.getController();
 
-                    // Pass the selected bundle to the controller
-                    controller.initData(bundle);
+        // Pass the selected bundle to the controller
+        controller.initData(bundle);
 
-                    // Create a new stage and show the scene
-                    Stage stage = new Stage();
-                    stage.setTitle("Edit a Bundle");
-                    stage.setScene(new Scene(root));
-                    stage.show();
+        // Create a new stage and show the scene
+        Stage stage = new Stage();
+        stage.setTitle("Edit a Bundle");
+        stage.setScene(new Scene(root));
+        stage.show();
 
-                    clearError();
-                } catch (Exception e) {
-                    displayError("Failed to open the edit bundle page: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            });
+        // **Add listener to refresh the table when the window is closed**
+        stage.setOnHidden(e -> refreshTable());
+
+        clearError();
+    } catch (Exception e) {
+        displayError("Failed to open the edit bundle page: " + e.getMessage());
+        e.printStackTrace();
+    }
+});
         }
 
         @Override
@@ -121,42 +122,8 @@ public class ViewBundleView {
             }
         }
     });
-
-
-
-    // editButton.setCellFactory(param -> new TableCell<TOGradeBundle, Void>() {
-    //     private final Button editButton = new Button("Edit");
-    //     {
-    //         editButton.setPrefWidth(80);
-    //         editButton.setPrefHeight(30);
-
-    //         // Configure edit button
-    //         editButton.setOnAction(event -> {
-    //             TOGradeBundle bundle = getTableView().getItems().get(getIndex());
-    //             try {
-    //                 // Pass the bundle to the edit window or controller
-    //                 CoolSuppliesFxmlView.newWindow("EditBundle.fxml", "Edit a Bundle");
-    //                 clearError();
-    //             } catch (Exception e) {
-    //                 displayError("Failed to open the edit bundle page: " + e.getMessage());
-    //             }
-    //         });
-    //     }
-
-    //     @Override
-    //     protected void updateItem(Void item, boolean empty) {
-    //         super.updateItem(item, empty);
-    //         if (empty) {
-    //             setGraphic(null);
-    //         } else {
-    //             setGraphic(editButton);
-    //         }
-    //     }
-    // });
+    
 }
-
-
-
 
   // Method to display error messages
    private void displayError(String message) {
@@ -173,6 +140,7 @@ public class ViewBundleView {
    private void refreshTable() {
        bundleList.setAll(CoolSuppliesFeatureSet4Controller.getBundles());
        bundlesTable.setItems(bundleList);
+       bundlesTable.refresh();
    }
 }
 

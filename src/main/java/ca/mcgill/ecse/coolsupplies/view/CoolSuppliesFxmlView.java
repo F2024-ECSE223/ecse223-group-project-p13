@@ -305,4 +305,24 @@ public class CoolSuppliesFxmlView extends Application {
         System.out.println("Error showing new window: " + e.getLocalizedMessage());
     }
   }
+
+  public static Stage newWindowStage(String fxml, String title) {
+    Stage stage = null;
+    try {
+        FXMLLoader loader = new FXMLLoader(CoolSuppliesFxmlView.class.getResource("fxml/" + fxml));
+        Parent root = loader.load();
+
+        stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root));
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Error loading FXML file: " + e.getLocalizedMessage());
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error showing new window: " + e.getLocalizedMessage());
+    }
+    return stage;
+}
 }

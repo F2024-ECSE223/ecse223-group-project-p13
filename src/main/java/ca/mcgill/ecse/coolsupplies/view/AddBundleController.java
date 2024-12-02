@@ -10,9 +10,11 @@ import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOGrade;
+import ca.mcgill.ecse.coolsupplies.controller.TOGradeBundle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,10 @@ public class AddBundleController {
     @FXML
     private Label errorLabel;
 
+    private TOGradeBundle newBundle;
+
+    private ViewBundleView viewBundleView;
+
     @FXML
     private void initialize() {
         try {
@@ -46,6 +52,10 @@ public class AddBundleController {
         } catch (Exception e) {
             displayError("Failed to load grades: " + e.getMessage());
         }
+    }
+
+    public void initData(ViewBundleView viewBundleView) {
+        this.viewBundleView = viewBundleView;
     }
 
     @FXML
@@ -89,7 +99,7 @@ public class AddBundleController {
     }
 
 
-    private void addBundle() {
+    private boolean addBundle() {
         String bundleName = bundleNameText.getText();
         String discount = discountValue.getText();
         String grade = gradeOptions.getValue();
@@ -98,18 +108,28 @@ public class AddBundleController {
         try {
             discountInt = Integer.parseInt(discount);
         } catch (Exception e) {
-            displayError("Discount value must be an integer." + e.getMessage());
+            displayError("Discount value must be an integer.");
+            return false;
         }
 
         String attemptAddBundle = CoolSuppliesFeatureSet4Controller.addBundle(bundleName, discountInt, grade);
         if (!attemptAddBundle.trim().isEmpty()) {
             displayError(attemptAddBundle);
+            return false;
         }
+        // Retrieve the newly added bundle
+        newBundle = CoolSuppliesFeatureSet4Controller.getBundle(bundleName);
+        return true;
+        
     }
 
     @FXML
     private void nextButton(ActionEvent event) {
-        addBundle();
+        boolean bundleAdded = addBundle();
+    if (bundleAdded) {
         moveToNextPage(event);
+    } else {
+        // Do not proceed
+    }
     }
 }
