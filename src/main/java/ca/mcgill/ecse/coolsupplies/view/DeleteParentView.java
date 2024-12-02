@@ -21,6 +21,9 @@ public class DeleteParentView {
     private TableColumn <TOParent, String> parentEmailRemoveParent;
 
     @FXML
+    private TableColumn <TOParent, String> nameRemoveParent;
+
+    @FXML
     private TableColumn <TOParent, Void> removeRemoveParent;
 
     @FXML
@@ -28,15 +31,32 @@ public class DeleteParentView {
 
     private ObservableList<TOParent> parentList = FXCollections.observableArrayList();
     @FXML
+
+    /**
+   * This method initializes the Delete Parent Page.
+   * 
+   * @author Lune Letailleur
+   * @param none
+   * @return void
+   **/
     public void initialize ()
     {
         // need to initialize the grid
         // need to initialize the number of rows we need in our table (ie. nb of parents in the list)
         parentEmailRemoveParent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+        nameRemoveParent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
         addRemoveButton(); // need to update by adding the "remove" button
         updateTable(); // need to update the table with the list of parents
     }
+
+     /**
+   * This method updates the table by removing the selected parent.
+   * 
+   * @author Lune Letailleur
+   * @param none
+   * @return void
+   **/
 
     private void updateTable(){
         // Need to update the list if parents in the table when go in the page
@@ -45,6 +65,13 @@ public class DeleteParentView {
 
     }
 
+     /**
+   * This method adds the remove buttons in the table
+   * 
+   * @author Lune Letailleur
+   * @param none
+   * @return void
+   **/
     private void addRemoveButton(){
         // need to add a Remove button for each (set id and OnAction)
         removeRemoveParent.setCellFactory(column -> new TableCell<>(){
@@ -70,7 +97,13 @@ public class DeleteParentView {
         // need a protected void UpdateItem () ?????
     }
 
-
+     /**
+   * This method deletes the selected parent from the parent list.
+   * 
+   * @author Lune Letailleur
+   * @param String email, the selected parent's email.
+   * @return void
+   **/
     public void DeleteClickedDeleteParent (String email)
     {
         String message = CoolSuppliesFeatureSet1Controller.deleteParent(email);

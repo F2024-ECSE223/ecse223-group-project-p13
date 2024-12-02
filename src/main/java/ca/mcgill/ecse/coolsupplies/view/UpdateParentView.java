@@ -45,6 +45,17 @@ public class UpdateParentView {
     private Label infoPhoneUpdateParent;
 
     @FXML
+    private Label infoPasswordUpdateParent;
+
+     /**
+   * This method initializes the Update Parent page.
+   * 
+   * @author Lune Letailleur
+   * @param none
+   * @return void
+   **/
+
+    @FXML
     public void initialize(){
         emailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
         infoEmailUpdateParent.setItems(FXCollections.observableArrayList(getParentEmails()));
@@ -57,9 +68,18 @@ public class UpdateParentView {
             if (this.selectedParent != null) {
                 infoNameUpdateParent.setText(this.selectedParent.getName());
                 infoPhoneUpdateParent.setText(Integer.toString(this.selectedParent.getPhoneNumber()));
+                infoPasswordUpdateParent.setText(this.selectedParent.getPassword());
             }
         });
     }
+
+     /**
+   * This method gets the list of Parent Emails.
+   * 
+   * @author Lune Letailleur
+   * @param none
+   * @return List<String> parent emails, a list of each parent's email.
+   **/
 
     private List<String> getParentEmails(){
         List<String> parentEmails = new ArrayList<>();
@@ -69,7 +89,14 @@ public class UpdateParentView {
         return parentEmails;
     }
 
-    // ADD A CHECK FOR OLD PASSWORD TO SEE IF RIGHT PARENT 
+     /**
+   * This method implements the svaing action of the Save button.
+   * 
+   * @author Lune Letailleur
+   * @param ActionEvent event which represents the on going event.
+   * @return void
+   **/
+
     @FXML
     public void saveButtonClickedUpdateParent(javafx.event.ActionEvent event)
     {
@@ -83,16 +110,17 @@ public class UpdateParentView {
         if (oldPassword.equals(CoolSuppliesFeatureSet1Controller.getParent(email).getPassword())){
             String message = CoolSuppliesFeatureSet1Controller.updateParent(email, password, name,phone);
             errorMessageUpdateParent.setText(message);
+
+            emailUpdateParent.getSelectionModel().clearSelection();;
+            nameUpdateParent.setText("");
+            phoneUpdateParent.setText("");
+            passwordUpdateParent.setText("");
+            oldPasswordUpdateParent.setText("");
         } else {
             errorMessageUpdateParent.setText("This email is not yours.");
         }
         
-        
-        emailUpdateParent.getSelectionModel().clearSelection();;
-        nameUpdateParent.setText("");
-        phoneUpdateParent.setText("");
-        passwordUpdateParent.setText("");
-        oldPasswordUpdateParent.setText("");
+
     }
 
 }

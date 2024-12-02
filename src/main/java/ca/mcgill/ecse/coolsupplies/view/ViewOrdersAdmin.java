@@ -1,3 +1,4 @@
+
 package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.beans.property.SimpleStringProperty;

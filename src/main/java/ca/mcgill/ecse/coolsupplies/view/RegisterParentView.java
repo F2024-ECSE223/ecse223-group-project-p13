@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.awt.event.ActionEvent;
+import atlantafx.base.theme.Styles;
 
 public class RegisterParentView {
     @FXML
@@ -31,6 +32,20 @@ public class RegisterParentView {
 
     @FXML
     private Label errorMessageRegisterParent;
+
+
+    @FXML
+    public void initialize() {
+        this.buttonSaveRegisterParent.getStyleClass().add(Styles.SUCCESS);
+    }
+     
+     /**
+   * This method implements the saving actions when Save is pressed.
+   * 
+   * @author Lune Letailleur
+   * @param ActionEvent event corresponding to teh event happening.
+   * @return void
+   **/
 
     @FXML
     public void saveButtonClickedRegisterParent (javafx.event.ActionEvent event)

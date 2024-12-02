@@ -195,6 +195,7 @@ public class CoolSuppliesFxmlView extends Application {
 
         Button back = new Button("Back");
         back.setOnAction((e) -> splashScreen());
+        back.getStyleClass().add(Styles.DANGER);
 
         header.getChildren().addAll(back, spacer);
 
