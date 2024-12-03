@@ -99,7 +99,6 @@ private List<String> getGradeLevels() {
  * This methods adds a student with the name and grade level inputted by the userto the list of students when the add button is pressed 
  * @author Clara Dupuis
  * @param AddStudent an OnAction event of the add button 
- * @retrun void
  */
   @FXML
   private void AddStudent(ActionEvent AddStudent){
@@ -121,7 +120,6 @@ private List<String> getGradeLevels() {
    * This methods adds the update and delete buttons to the table
    * @author Clara Dupuis
    * @parameters: none
-   * @returns: void
    */
   private void addActionButtonsToTable() {
     columnActions.setCellFactory(param -> new TableCell<>() {
@@ -175,7 +173,7 @@ private void makeUpdateWindow(TOStudent oldStudent) {
     dialog.initModality(Modality.APPLICATION_MODAL);
     VBox dialogPane = new VBox();
 
-    // create UI elements
+   
     
     TextField newName = new TextField(oldStudent.getName());
     ComboBox<String> newGrade = new ComboBox<>();
@@ -187,16 +185,15 @@ private void makeUpdateWindow(TOStudent oldStudent) {
 
     newGrade.getSelectionModel().select(getGradeLevels().indexOf(oldStudent.getGradeLevel()));
     
-    // actions
+    
     newName.setOnMouseClicked(a -> newName.setText(""));
     
     saveButton.setOnAction(a -> {
 
-    // textt from labels
+  
     String newNameString = newName.getText();
     String newGradeLevl = newGrade.getValue();
 
-    // add updated name as new, remove old
     
     String result = CoolSuppliesFeatureSet2Controller.updateStudent(oldStudent.getName(),newNameString, newGradeLevl);
     try {
@@ -220,7 +217,6 @@ private void makeUpdateWindow(TOStudent oldStudent) {
     
     cancelButton.setOnAction(a -> dialog.close());
 
-    // display the popup window
     int innerPadding = 10;
     
     dialogPane.setSpacing(innerPadding);
@@ -234,27 +230,38 @@ private void makeUpdateWindow(TOStudent oldStudent) {
   }
 
 
-
-
-
-    private void deleteStudent(String name) {
-        // Call the backend function and display the error or success message
-        String result = CoolSuppliesFeatureSet2Controller.deleteStudent(name);
-        if (result.isEmpty()) {
-            errorLabel.setText("");
-            refreshTable();
-        } else {
-            errorLabel.setText(result); // Use the error message from the backend
-        }
+/**
+ * this method cancels a student and is called when the delete button is pressed
+ * @author Clara Dupuis
+ * @param: a string name that represents the student that should be deleted
+ **/
+private void deleteStudent(String name) {
+       
+    String result = CoolSuppliesFeatureSet2Controller.deleteStudent(name);
+    if (result.isEmpty()) {
+        errorLabel.setText("");
+        refreshTable();
+    } else {
+        errorLabel.setText(result); 
     }
+}
 
-   
+   /**
+    * this methods refreshes the table so that it auto refreshes when a student is added, updated or removed
+    * @author Clara Dupuis
+    *@param none
+    */
     private void refreshTable() {
       studentList.setAll(CoolSuppliesFeatureSet2Controller.getStudents());
       tableView.setItems(studentList);
   }
 
 
+  /**
+   * @author Clara Dupuis
+   * @param studentName a string representing the name of the student
+   * @return the parent's email (string) or an empty string if the parent could not be found 
+   */
   private String getParentOfStudent(String studentName){
 
     List<TOParent> parents = CoolSuppliesFeatureSet1Controller.getParents();

@@ -48,45 +48,50 @@ public class ItemManagementView {
     private String orderLevel;
     private String orderNumber;
 
-    private List<TOStudent> toParentStudents;
+    private List<TOStudent> ListParents;
 
-    private int bundleQuantity = 0; // Variable to keep track of bundle quantity
+    private int bundleQuantity = 0; 
 
-    // Method to set parameters from the previous UI
+    /**
+     * this method sets the parameters of the UI
+     * @author Clara Dupuis
+     * @param studentGrade a string that represents the name of the student 
+     * @param orderLevel a string that represents the order Level
+     * @param orderNumber a string that represents the order id
+     */
     public void setOrderParameters(String studentGrade, String orderLevel, String orderNumber) {
         this.studentGrade = studentGrade;
         this.orderLevel = orderLevel;
         this.orderNumber = orderNumber;
     }
 
+    /**
+     * this method initializes the view by setting the tables and filling them with the items and the appropriate bundle. It also initializes the radio buttons, the student and the bundle drop down menus
+     * @author Clara Dupuis
+     */
     @FXML
     public void initialize() {
 
-        // Get the current order
+      
         TOOrder order = ViewOrdersParent.getOrder();
-
-        // Get the parent's email from the order
         String parentEmail = order.getParentEmail();
+        ListParents = CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail);
 
-        // Get the students associated with the parent
-        toParentStudents = CoolSuppliesFeatureSet6Controller.getStudentsOfParent(parentEmail);
-
-        if (toParentStudents.isEmpty()) {
+        if (ListParents.isEmpty()) {
             errorLabel.setText("No students found for the parent.");
             return;
         }
 
-        // Initialize the studentComboBox with the parent's students
-        List<String> studentNames = toParentStudents.stream()
+   
+        List<String> studentNames = ListParents.stream()
                                       .map(TOStudent::getName)
                                       .collect(Collectors.toList());
         gradeInput.setItems(FXCollections.observableArrayList(studentNames));
 
-        // Set the current student in the ComboBox
+  
         gradeInput.setValue(order.getStudentName());
 
-        // Initialize order parameters
-        TOStudent student = toParentStudents.stream()
+        TOStudent student = ListParents.stream()
                                 .filter(s -> s.getName().equals(order.getStudentName()))
                                 .findFirst()
                                 .orElse(null);
@@ -103,13 +108,12 @@ public class ItemManagementView {
             return;
         }
 
-        // Set up the RadioButtons
+        
         levelToggleGroup = new ToggleGroup();
         mandatoryButton.setToggleGroup(levelToggleGroup);
         recommendedButton.setToggleGroup(levelToggleGroup);
         optionalButton.setToggleGroup(levelToggleGroup);
 
-        // Select the current level
         if ("Mandatory".equalsIgnoreCase(orderLevel)) {
             mandatoryButton.setSelected(true);
         } else if ("Recommended".equalsIgnoreCase(orderLevel)) {
@@ -118,35 +122,29 @@ public class ItemManagementView {
             optionalButton.setSelected(true);
         }
 
-        // Fetch all bundles
         allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
 
-        // Extract bundle names
+    
         List<String> bundleNames = allBundles.stream()
                                   .map(TOGradeBundle::getName)
                                   .collect(Collectors.toList());
 
-        // Set the items in the ComboBox
         BundleChoice.setItems(FXCollections.observableArrayList(bundleNames));
 
-        // Proceed with setting up tables and spinners
         setupTablesAndSpinners();
 
-        // Optionally, set a default value
         if (!bundleNames.isEmpty()) {
             BundleChoice.setValue(bundleNames.get(0));
-            // Set the initial bundle
+       
             bundle = allBundles.get(0);
-            // Initialize quantities before loading bundle items
             initializeQuantities();
-            // Load bundle items for the initial bundle
+          
             updateBundle();
         }
 
-        // Add listener to BundleChoice ComboBox
         BundleChoice.valueProperty().addListener((obs, oldBundleName, newBundleName) -> {
             if (newBundleName != null && !newBundleName.equals(oldBundleName)) {
-                // Find the bundle with the selected name
+              
                 bundle = allBundles.stream()
                                    .filter(b -> b.getName().equals(newBundleName))
                                    .findFirst()
@@ -154,12 +152,11 @@ public class ItemManagementView {
 
                 if (bundle == null) {
                     errorLabel.setText("Selected bundle not found.");
-                    // Clear bundle items
+               
                     bundleItemEntries.clear();
                     TableViewBundles.setItems(bundleItemEntries);
                 } else {
                     errorLabel.setText("");
-                    // Initialize quantities and update bundle items
                     initializeQuantities();
                     updateBundle();
                 }
@@ -168,7 +165,6 @@ public class ItemManagementView {
 
         addListeners();
 
-        // Add a listener to respond to changes in the levelToggleGroup
         levelToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle != null) {
                 RadioButton selectedButton = (RadioButton) newToggle;
@@ -178,20 +174,20 @@ public class ItemManagementView {
         });
     }
 
+    /**
+     * This method adds listeners to get the grade when the student is selected 
+     * @author Clara Dupuis
+     */
     private void addListeners() {
-        // Listener for student changes
         gradeInput.valueProperty().addListener((obs, oldStudent, newStudent) -> {
             if (newStudent != null && !newStudent.equals(oldStudent)) {
-                // Update the order's student in the backend
                 String result = Iteration3Controller.updateOrder(orderLevel, newStudent, orderNumber);
                 if (!result.isEmpty()) {
                     errorLabel.setText(result);
-                    // Revert to old student
                     gradeInput.setValue(oldStudent);
                 } else {
                     errorLabel.setText("");
-                    // Update studentGrade
-                    TOStudent newStudentObj = toParentStudents.stream()
+                    TOStudent newStudentObj = ListParents.stream()
                                               .filter(s -> s.getName().equals(newStudent))
                                               .findFirst()
                                               .orElse(null);
@@ -203,6 +199,10 @@ public class ItemManagementView {
         });
     }
 
+    /**
+     * this method updates the bundle according to the bundle inputed in the drop down menu
+     * @author Clara Dupuis
+     */
     private void updateBundle() {
         if (bundle == null) {
             errorLabel.setText("No bundle selected.");
@@ -222,36 +222,39 @@ public class ItemManagementView {
         BundleQuantity.setVisible(!bundleItemEntries.isEmpty());
     }
 
-    private void setupTablesAndSpinners() {
-        // Set up the bundle items table
-        BundleItems.setCellValueFactory(cellData -> cellData.getValue().itemNameProperty());
-        BundlePrice.setCellValueFactory(cellData -> cellData.getValue().itemPriceProperty());
-        BundleDiscount.setCellValueFactory(cellData -> cellData.getValue().discountProperty());
-        BundleAmount.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
+    /**
+     * This method sets ups the tables and the spinners used to add items/bundles to the order
+     * @author Clara Dupuis
+     */
 
-        // Set up the items table
-        columnName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        columnPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
+    private void setupTablesAndSpinners() {
+     
+        BundleItems.setCellValueFactory(cellData -> cellData.getValue().itemName());
+        BundlePrice.setCellValueFactory(cellData -> cellData.getValue().itemPrice());
+        BundleDiscount.setCellValueFactory(cellData -> cellData.getValue().discountBundle());
+        BundleAmount.setCellValueFactory(cellData -> cellData.getValue().amount().asObject());
+
+     
+        columnName.setCellValueFactory(cellData -> cellData.getValue().name());
+        columnPrice.setCellValueFactory(cellData -> cellData.getValue().price());
 
         addSpinner();
 
-        // Load items
         loadItems();
 
-        // Set up BundleQuantity spinner
+    
         BundleQuantity.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0));
         BundleQuantity.valueProperty().addListener((obs, oldValue, newValue) -> {
             String result;
 
             if (newValue > 0) {
-                // Try to add or update the bundle in the order
+              
                 result = Iteration3Controller.addItem(bundle.getName(), String.valueOf(newValue), orderNumber);
                 if (!result.isEmpty()) {
                     result = Iteration3Controller.updateOrderQuantity(bundle.getName(), String.valueOf(newValue), orderNumber);
                 }
                 bundleQuantity = newValue;
             } else {
-                // Remove the bundle from the order
                 result = Iteration3Controller.deleteItem(bundle.getName(), orderNumber);
                 bundleQuantity = 0;
             }
@@ -264,11 +267,16 @@ public class ItemManagementView {
         });
     }
 
+    /**
+     * This method loads the items of the bundle according to the bundle selected in the drop down menu
+     * @author Clara Dupuis
+     */
+
     private void loadBundleItems() {
         bundleItemEntries = FXCollections.observableArrayList();
 
         if (bundle == null) {
-            // No bundle to load
+    
             TableViewBundles.setItems(bundleItemEntries);
             return;
         }
@@ -285,8 +293,7 @@ public class ItemManagementView {
                     String itemPrice = String.valueOf(item.getPrice());
                     String discount = String.valueOf(bundle.getDiscount());
 
-                    // Get the per-bundle amount
-                    int amountPerBundle = bundleItem.getQuantity(); // Ensure getQuantity() exists and returns int
+                    int amountPerBundle = bundleItem.getQuantity(); 
 
                     bundleItemEntries.add(new BundleItemEntry(itemName, itemPrice, discount, amountPerBundle));
                 }
@@ -295,6 +302,14 @@ public class ItemManagementView {
 
         TableViewBundles.setItems(bundleItemEntries);
     }
+
+    /**
+     * This method verifys what items to display in the bundle table according to the order level inputted in the radio button
+     * @author Clara Dupuis
+     * @param itemLevel
+     * @param orderLevel
+     * @return boolean to determine if item is in bundle or not 
+     */
 
     private boolean isLevelIncluded(String itemLevel, String orderLevel) {
         List<String> levels = Arrays.asList("Mandatory", "Recommended", "Optional");
@@ -309,6 +324,10 @@ public class ItemManagementView {
         return itemLevelIndex <= orderLevelIndex;
     }
 
+    /**
+     * This method loads all of the items available to purchase in the application
+     * @author Clara Dupuis
+     */
     private void loadItems() {
         itemEntries = FXCollections.observableArrayList();
 
@@ -321,8 +340,12 @@ public class ItemManagementView {
         TableViewItems.setItems(itemEntries);
     }
 
+    /**
+     * this method initializes the values in the spinners to be those of the number of items already in the order
+     * @author Clara Dupuis
+     */
     private void initializeQuantities() {
-        // Fetch the order
+ 
         TOOrder currentOrder = Iteration3Controller.viewOrder(orderNumber);
 
         if (currentOrder == null) {
@@ -330,7 +353,6 @@ public class ItemManagementView {
             return;
         }
 
-        // Update UI elements
         gradeInput.setValue(currentOrder.getStudentName());
         if ("Mandatory".equalsIgnoreCase(orderLevel)) {
             mandatoryButton.setSelected(true);
@@ -340,7 +362,6 @@ public class ItemManagementView {
             optionalButton.setSelected(true);
         }
 
-        // Get existing items in the order and set quantities in the spinners
         List<TOOrderItem> orderItems = currentOrder.getItems();
 
         for (ItemEntry itemEntry : itemEntries) {
@@ -362,7 +383,6 @@ public class ItemManagementView {
 
         TableViewItems.refresh();
 
-        // Set the quantity for the selected bundle
         bundleQuantity = 0;
         for (TOOrderItem orderItem : orderItems) {
             if (orderItem.getName().equals(bundle.getName())) {
@@ -374,6 +394,10 @@ public class ItemManagementView {
         BundleQuantity.getValueFactory().setValue(bundleQuantity);
     }
 
+    /**
+     * this method adds spinners in the table with all of the items 
+     * @author Clara Dupuis 
+     */
     private void addSpinner() {
         columnQuantity.setCellFactory(column -> new TableCell<ItemEntry, Integer>() {
             private final Spinner<Integer> spinner = new Spinner<>(0, Integer.MAX_VALUE, 0);
@@ -386,7 +410,7 @@ public class ItemManagementView {
 
                     if (newValue > 0) {
                         if (!itemEntry.isInOrder()) {
-                            // Item is not in order, add it
+                       
                             result = Iteration3Controller.addItem(itemEntry.getName(), String.valueOf(newValue), orderNumber);
                             if (result.isEmpty()) {
                                 itemEntry.setInOrder(true);
@@ -396,7 +420,7 @@ public class ItemManagementView {
                                 errorLabel.setText(result);
                             }
                         } else {
-                            // Item is already in order, update quantity
+                            
                             result = Iteration3Controller.updateOrderQuantity(itemEntry.getName(), String.valueOf(newValue), orderNumber);
                             if (result.isEmpty()) {
                                 itemEntry.setQuantity(newValue);
@@ -406,7 +430,7 @@ public class ItemManagementView {
                             }
                         }
                     } else {
-                        // Remove item from order
+                    
                         result = Iteration3Controller.deleteItem(itemEntry.getName(), orderNumber);
                         if (result.isEmpty()) {
                             itemEntry.setInOrder(false);
@@ -435,15 +459,24 @@ public class ItemManagementView {
             }
         });
 
-        columnQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
+        columnQuantity.setCellValueFactory(cellData -> cellData.getValue().quantity().asObject());
     }
 
-    // Inner class for bundle items
+  
     public static class BundleItemEntry {
         private SimpleStringProperty itemName;
         private SimpleStringProperty itemPrice;
         private SimpleStringProperty discount;
         private SimpleIntegerProperty amount;
+
+        /**
+         * this method sets the parameters for the BundleItemEntry class
+         * @author
+         * @param itemName a string representing the name of the student
+         * @param itemPrice a string representing tge price of the item
+         * @param discount a string representing the discount of the bundle
+         * @param amount a string representing the number of items bought
+         */
 
         public BundleItemEntry(String itemName, String itemPrice, String discount, int amount) {
             this.itemName = new SimpleStringProperty(itemName);
@@ -452,30 +485,104 @@ public class ItemManagementView {
             this.amount = new SimpleIntegerProperty(amount);
         }
 
-        public String getItemName() { return itemName.get(); }
-        public void setItemName(String itemName) { this.itemName.set(itemName); }
-        public SimpleStringProperty itemNameProperty() { return itemName; }
+        /**
+         * This methods gets the name of the item in the bundle
+         * @author Clara Dupuis
+         * @return string representing the name of the item
+         */
+        public String getItemName() { 
+            return itemName.get(); }
 
+        /**
+         * This method sets the name of an item in the bundle 
+         * @author Clara Dupuis
+         * @param itemName a string representing the name that the item is given
+         */
+        public void setItemName(String itemName) { 
+            this.itemName.set(itemName); }
+        
+        /**
+         * This method returns a simpleStringProperty representing the name of the item in the bundle
+         * @author Clara Dupuis
+         * @return a SimpleStringProperty for the name of the item
+         */
+        public SimpleStringProperty itemName() { return itemName; }
+
+        /**
+         * This method returns a String representing the price of the item in the bundle
+         * @author Clara Dupuis
+         * @return a String for the price of the item
+         */
         public String getItemPrice() { return itemPrice.get(); }
+
+        /**
+         * This method sets the price of the item 
+         * @author Clara Dupuis
+         */
         public void setItemPrice(String itemPrice) { this.itemPrice.set(itemPrice); }
-        public SimpleStringProperty itemPriceProperty() { return itemPrice; }
 
+        /**
+         * This method returns a simpleStringProperty representing the price of the item in the bundle
+         * @author Clara Dupuis
+         * @return a SimpleStringProperty for the price of the item
+         */
+        public SimpleStringProperty itemPrice() { return itemPrice; }
+
+        /**
+         * This method returns a String representing the discount of the item in the bundle
+         * @author Clara Dupuis
+         * @return a String for the discount of the item
+         */
         public String getDiscount() { return discount.get(); }
-        public void setDiscount(String discount) { this.discount.set(discount); }
-        public SimpleStringProperty discountProperty() { return discount; }
 
+        /**
+         * This method sets the discount of the item in the bundle
+         * @author Clara Dupuis
+         */
+        public void setDiscount(String discount) { this.discount.set(discount); }
+
+        /**
+         * This method returns a simpleStringProperty representing the discount of the item in the bundle
+         * @author Clara Dupuis
+         * @return a SimpleStringProperty for the discount of the item
+         */
+        public SimpleStringProperty discountBundle() { return discount; }
+
+        /**
+         * This method returns a integer representing the number of items ordering
+         * @author Clara Dupuis
+         * @return an integer for the number of items ordering 
+         */
         public int getAmount() { return amount.get(); }
+
+        /**
+         * This method sets the amount of items ordering
+         * @author Clara Dupuis
+         */
         public void setAmount(int amount) { this.amount.set(amount); }
-        public SimpleIntegerProperty amountProperty() { return amount; }
+
+       /**
+         * This method returns a simpleStringProperty representing the amount of the item in the bundle
+         * @author Clara Dupuis
+         * @return a SimpleStringProperty for the amount of the item
+         */
+        public SimpleIntegerProperty amount() { return amount; }
     }
 
-    // Inner class for items
     public static class ItemEntry {
         private SimpleStringProperty name;
         private SimpleStringProperty price;
         private SimpleIntegerProperty quantity;
         private boolean isInOrder;
 
+
+        /** 
+         * his method sets the parameters for the ItemEntry class
+         * @author Clara Dupuis
+         * @param name a string representing the name of the item
+         * @param price a string representing the price of the item
+         * @param quantity an integer representing the number of that item that is ordered
+         */
         public ItemEntry(String name, String price, int quantity) {
             this.name = new SimpleStringProperty(name);
             this.price = new SimpleStringProperty(price);
@@ -483,66 +590,127 @@ public class ItemManagementView {
             this.isInOrder = quantity > 0;
         }
 
+        /**
+         * This method returns the name of the student
+         * @author Clara Dupuis
+         * @return a string representing the name of the item
+         */
         public String getName() { return name.get(); }
+
+        /**
+         * This method sets the name of the student 
+         * @author Clara Dupuis
+         * @param name a string representing the name of the student 
+         */
         public void setName(String name) { this.name.set(name); }
-        public SimpleStringProperty nameProperty() { return name; }
 
+        /**
+         * This method returns a simpleStringProperty representing the discount of the name of the item
+         * @author Clara Dupuis
+         * @return SimpleStringProperty representing the name of the item
+         */
+        public SimpleStringProperty name() { return name; }
+
+        /**
+         * This method returns the price of the student
+         * @author Clara Dupuis
+         * @return a string representing the price of the item
+         */
         public String getPrice() { return price.get(); }
-        public void setPrice(String price) { this.price.set(price); }
-        public SimpleStringProperty priceProperty() { return price; }
 
+        /**
+         * This method sets the price of the student 
+         * @author Clara Dupuis
+         * @param name a string representing the price of the student 
+         */
+        public void setPrice(String price) { this.price.set(price); }
+
+        /**
+         * This method returns a simpleStringProperty representing the price of the item
+         * @author Clara Dupuis
+         * @return SimpleStringProperty representing the price of the item
+         */
+        public SimpleStringProperty price() { return price; }
+
+        /**
+         * this method returns true if the item is in the order
+         * @author Clara Dupuis
+         * @return boolean isInOrder
+         */
         public boolean isInOrder() {
             return isInOrder;
         }
 
+        /**
+         * this method sets the item to be in order
+         * @author Clara Dupuis
+         */
         public void setInOrder(boolean inOrder) {
             this.isInOrder = inOrder;
         }
 
+        /**
+         * this method returns an int representing the number of items in the order 
+         * @author Clara Dupuis
+         * @return integer representing the quantity of the item
+         */
         public int getQuantity() {
             return quantity.get();
         }
 
+        /**
+         * this method sets the quantity of the item in the order 
+         * @author Clara Dupuis
+         * @param quantity
+         */
         public void setQuantity(int quantity) {
             this.quantity.set(quantity);
         }
 
-        public SimpleIntegerProperty quantityProperty() {
+        /**
+         * this method returns a simplestringproperty representing the quantity of the item in the order
+         * @author Clara Dupuis
+         * @return SimpleStrinIntegerProperty representing quantity
+         */
+        public SimpleIntegerProperty quantity() {
             return quantity;
         }
     }
 
+    /**
+     * this method handles the case where the order level specified is changed 
+     * @author Clara Dupuis
+     * @param newOrderLevel a string representing the new order level
+     */
     private void handleOrderLevelChange(String newOrderLevel) {
-        // Save the old order level in case of rollback
         String oldOrderLevel = orderLevel;
         orderLevel = newOrderLevel;
         String result = Iteration3Controller.updateOrder(orderLevel, gradeInput.getValue(), orderNumber);
 
         if (!result.isEmpty()) {
-            // If there is an error, revert to the old order level and display the error
             errorLabel.setText(result);
             orderLevel = oldOrderLevel;
 
-            // Reset the selected toggle to the previous one
             levelToggleGroup.getToggles().stream()
                     .filter(toggle -> ((RadioButton) toggle).getText().equalsIgnoreCase(oldOrderLevel))
                     .findFirst()
                     .ifPresent(levelToggleGroup::selectToggle);
         } else {
-            // Clear any previous error messages
+            
             errorLabel.setText("");
 
-            // Reload data based on the new order level
             loadBundleItems();
         }
     }
 
+
+    /**
+     * this method closes the pop up windows when the save button is pressed
+     * @author Clara Dupuis
+     */
     @FXML
     private void handleSaveButtonAction() {
-        // Perform any necessary save operations here
-        // For example, you might validate inputs or finalize changes
-
-        // Close the pop-up window
+       
         Stage stage = (Stage) Save.getScene().getWindow();
         stage.close();
     }
