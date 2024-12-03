@@ -231,14 +231,22 @@ public class ItemManagementView {
     private void setupTablesAndSpinners() {
      
         BundleItems.setCellValueFactory(cellData -> cellData.getValue().itemName());
-        BundlePrice.setCellValueFactory(cellData -> cellData.getValue().itemPrice());
-        BundleDiscount.setCellValueFactory(cellData -> cellData.getValue().discountBundle());
+        BundlePrice.setCellValueFactory(cellData -> {
+            String price = cellData.getValue().getItemPrice();
+            return new SimpleStringProperty("$" + price); // Add dollar sign
+        });
+        BundleDiscount.setCellValueFactory(cellData -> {
+            String discount = cellData.getValue().getDiscount();
+            return new SimpleStringProperty(discount + "%"); // Add percentage sign
+        });
         BundleAmount.setCellValueFactory(cellData -> cellData.getValue().amount().asObject());
 
      
         columnName.setCellValueFactory(cellData -> cellData.getValue().name());
-        columnPrice.setCellValueFactory(cellData -> cellData.getValue().price());
-
+        columnPrice.setCellValueFactory(cellData -> {
+            String price = cellData.getValue().getPrice();
+            return new SimpleStringProperty("$" + price); // Add dollar sign
+        });
         addSpinner();
 
         loadItems();
