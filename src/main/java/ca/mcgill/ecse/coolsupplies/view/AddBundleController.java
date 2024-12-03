@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet7Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOGrade;
@@ -39,9 +38,6 @@ public class AddBundleController {
 
     private ViewBundleView viewBundleView;
 
-
-    
-    
      /**
       * loads the grades in the system as options for the combo box and initializes the bundles table 
       * @author Nil Akkurt 
@@ -62,6 +58,11 @@ public class AddBundleController {
         }
     }
 
+    /**
+     * @author Nil Akkurt
+     * @param viewBundleView View to load when viewing the bundle
+     * @brief Sets the view that is triggered when user wants to view bundle
+     */
     public void initData(ViewBundleView viewBundleView) {
         this.viewBundleView = viewBundleView;
     }
@@ -121,10 +122,19 @@ public class AddBundleController {
         errorLabel.setText(message);
     }
 
+    /**
+     * @author Nil Akkurt
+     * @brief Clears the error from the application
+     */
     private void clearError() {
         errorLabel.setText("");
     }
 
+    /**
+     * @author Nil Akkurt
+     * @return Boolean representing whether the bundle was added
+     * @brief Adds the bundle to the system and returns a boolean representing the success.
+     */
     private boolean addBundle() {
         String bundleName = bundleNameText.getText();
         String discount = discountValue.getText();

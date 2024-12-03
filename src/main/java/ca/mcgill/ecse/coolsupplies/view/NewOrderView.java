@@ -10,7 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -21,7 +20,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class NewOrderView {
   public String selectedStudent = "";
@@ -33,6 +31,11 @@ public class NewOrderView {
   public TextField orderID = new TextField("");
   public Label errMsgText = new Label("");
 
+  /**
+   * @author Trevor Piltch
+   * @param parentEmail - The parent for which we are adding an order
+   * @return The view to create a new order as a VBox
+   */
   public VBox createAddOrder(String parentEmail) {
     VBox content = new VBox(16);
     content.setPadding(new Insets(16, 16, 16, 16));
@@ -62,6 +65,11 @@ public class NewOrderView {
   }
 
   // MARK: Helper methods
+  /**
+   * @author Trevor Piltch
+   * @param parentEmail - The parent from which we are selecting the student
+   * @return A drop down menu of the students for the given parent
+   */
   private ComboBox<TOStudent> selectStudent(String parentEmail) {
     ComboBox<TOStudent> studentBox = new ComboBox<>();
     studentBox.setPromptText("Student");
@@ -96,6 +104,11 @@ public class NewOrderView {
     return studentBox;
   }
 
+  /**
+   * @author Trevor Piltch
+   * @return The three levels as buttons in an HBox
+   * @brief Creates three radio buttons for the order levels in an HBox
+   */
   private HBox createOrderLevel() {
     HBox hbox = new HBox(16);
     hbox.setAlignment(Pos.CENTER_LEFT);

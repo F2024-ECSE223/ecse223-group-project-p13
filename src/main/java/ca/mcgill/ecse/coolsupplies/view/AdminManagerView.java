@@ -6,9 +6,7 @@ import ca.mcgill.ecse.coolsupplies.controller.Iteration3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOOrder;
 import javafx.event.Event;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
@@ -29,11 +27,22 @@ public class AdminManagerView extends ManagerView {
 
   public static Button schoolYearButton;
 
+  /**
+   * @author Trevor Piltch
+   * @param root - The root of the view to add upon
+   * @param mainContent - The main content (non sidebar) view
+   * @brief Initializes a new admin view
+   */
   public AdminManagerView(BorderPane root, StackPane mainContent) {
     this.root = root;
     this.mainContent = mainContent;
   }
 
+  /**
+   * @author Trevor Piltch 
+   * @param page - The page for which we are updating the content
+   * @brief Adds a specific page to the main view depending on which tab was selected
+   */
   @Override
   public void updateContent(String page) {
     if (!page.equals(YEAR)) {
@@ -118,6 +127,11 @@ public class AdminManagerView extends ManagerView {
     }
   }
 
+  /**
+   * @author Trevor Piltch
+   * @return Array of strings respresenting the tabs
+   * @brief Returns an array of strings for the tab names
+   */
   @Override
   public String[] getTabs() {
     return new String[] {ACCOUNT, PARENTS, STUDENTS, GRADES, ITEMS, BUNDLES, ORDERS, YEAR};

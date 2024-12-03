@@ -14,6 +14,7 @@ import ca.mcgill.ecse.coolsupplies.model.Parent;
 import ca.mcgill.ecse.coolsupplies.model.SchoolAdmin;
 import ca.mcgill.ecse.coolsupplies.model.Student;
 
+// This was given to us from class so remains undocumented...
 public class DemoFileCreator {
 	public static void createDemoData() {
 		// root
