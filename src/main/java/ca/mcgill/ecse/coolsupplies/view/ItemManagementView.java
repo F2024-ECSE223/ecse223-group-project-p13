@@ -34,7 +34,7 @@ public class ItemManagementView {
 
     @FXML private Label errorLabel;
 
-    @FXML private Button Save; // Declare the Save button
+    @FXML private Button Save; 
 
     private ToggleGroup levelToggleGroup;
 
@@ -214,10 +214,9 @@ public class ItemManagementView {
             errorLabel.setText("");
         }
 
-        // Load bundle items
+        
         loadBundleItems();
 
-        // Set the spinner to the current bundle quantity
    
         BundleQuantity.getValueFactory().setValue(bundleQuantity);
         BundleQuantity.setVisible(!bundleItemEntries.isEmpty());
@@ -233,11 +232,11 @@ public class ItemManagementView {
         BundleItems.setCellValueFactory(cellData -> cellData.getValue().itemName());
         BundlePrice.setCellValueFactory(cellData -> {
             String price = cellData.getValue().getItemPrice();
-            return new SimpleStringProperty("$" + price); // Add dollar sign
+            return new SimpleStringProperty("$" + price); 
         });
         BundleDiscount.setCellValueFactory(cellData -> {
             String discount = cellData.getValue().getDiscount();
-            return new SimpleStringProperty(discount + "%"); // Add percentage sign
+            return new SimpleStringProperty(discount + "%"); 
         });
         BundleAmount.setCellValueFactory(cellData -> cellData.getValue().amount().asObject());
 
@@ -245,7 +244,7 @@ public class ItemManagementView {
         columnName.setCellValueFactory(cellData -> cellData.getValue().name());
         columnPrice.setCellValueFactory(cellData -> {
             String price = cellData.getValue().getPrice();
-            return new SimpleStringProperty("$" + price); // Add dollar sign
+            return new SimpleStringProperty("$" + price); 
         });
         addSpinner();
 

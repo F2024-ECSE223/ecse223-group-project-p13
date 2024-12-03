@@ -59,8 +59,6 @@ public class StudentManagementView {
   
     /**this method initializes the view by setting the columns and adds the buttons to the table 
      * @author Clara Dupuis
-     * @param none
-     * @return void
      */
     
   @FXML
@@ -119,13 +117,12 @@ private List<String> getGradeLevels() {
   /**
    * This methods adds the update and delete buttons to the table
    * @author Clara Dupuis
-   * @parameters: none
    */
   private void addActionButtonsToTable() {
     columnActions.setCellFactory(param -> new TableCell<>() {
         private final Button deleteButton = new Button("Remove");
         private final Button updateButton = new Button("Update");
-        private final HBox buttons = new HBox(10, updateButton, deleteButton); // Default buttons
+        private final HBox buttons = new HBox(10, updateButton, deleteButton); 
 
         {
             deleteButton.setPrefWidth(80);
@@ -133,7 +130,6 @@ private List<String> getGradeLevels() {
             updateButton.setPrefWidth(80);
             updateButton.setPrefHeight(30);
 
-            // Configure delete button
             deleteButton.setOnAction(event -> {
                 TOStudent student = getTableView().getItems().get(getIndex());
                 deleteStudent(student.getName());
@@ -249,7 +245,6 @@ private void deleteStudent(String name) {
    /**
     * this methods refreshes the table so that it auto refreshes when a student is added, updated or removed
     * @author Clara Dupuis
-    *@param none
     */
     private void refreshTable() {
       studentList.setAll(CoolSuppliesFeatureSet2Controller.getStudents());
@@ -277,8 +272,6 @@ private void deleteStudent(String name) {
 
     }
 
-
-    
 
 
   
