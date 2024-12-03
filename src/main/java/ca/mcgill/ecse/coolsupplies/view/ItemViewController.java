@@ -1,7 +1,6 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import atlantafx.base.theme.Styles;
-//import javax.swing.table.TableColumn;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet3Controller;
 import ca.mcgill.ecse.coolsupplies.controller.TOItem;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +22,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-/*
+/**
+ * Controller for the item management page of the admin
+ * 
  * @author Dimitri Christopoulos
  */
 public class ItemViewController {
@@ -54,28 +55,40 @@ public class ItemViewController {
 
   private ObservableList<TOItem> itemList;
 
-  /*
+  /**
+   * Sets up the scroll table menu by adding items to the itemList. 
+   * Creates the columns for name, priice and calls method to create buttons column.
+   * 
+   * @param None
+   * @return void
    * @author Dimitri Christopoulos
    */
   @FXML
   public void initialize() {
 
+    // Initialize list of items for the sroll table
     itemList = FXCollections.observableArrayList();
 
 
+    // Add item and price, and buttons ccolumns 
     item_name_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
     item_price_column.setCellValueFactory(data -> new SimpleStringProperty(""+data.getValue().getPrice()));
-    
     addButtonsColumn();
 
+    // Add items from model to view using controller 
     itemList.addAll(CoolSuppliesFeatureSet3Controller.getItems());
-
     item_table_view.setItems(itemList);
 
     add_item_button.getStyleClass().add(Styles.SUCCESS);
   }
 
-  /*
+  /**
+   * Private method to create a third column with two buttons.
+   * The first button is to display a popup menu to update the item
+   * The second button is to delete the item from the table
+   * 
+   * @param None
+   * @return void
    * @author Dimitri Christopoulos
    */
   @FXML
@@ -117,7 +130,12 @@ public class ItemViewController {
     
 }
 
-  /*
+  /**
+   * When the add item button is pressed, this method is called.
+   * Adds item to system and updated the table in the View.
+   * 
+   * @param event (ActionEvent) action event which is from when the user presses the Add Item button.
+   * @return void
    * @author Dimitri Christopoulos
    */
   @FXML
@@ -140,7 +158,11 @@ public class ItemViewController {
     }
   }
 
-  /*
+  /**
+   * When the user presses the new item text field, the text disappears, making it easier for the user to type.
+   * 
+   * @param None
+   * @return void
    * @author Dimitri Christopoulos
    */
   // Clear text when user clicks text field
@@ -149,7 +171,11 @@ public class ItemViewController {
     new_item_name_text_field.setText("");
   }
 
-  /*
+  /**
+   * When the user presses the new price text field, the text disappears, making it easier for the user to type.
+   * 
+   * @param None
+   * @return void
    * @author Dimitri Christopoulos
    */
   // Clear text when user clicks text field
@@ -160,7 +186,12 @@ public class ItemViewController {
   
 
 
-  /*
+  /**
+   * Privte method used when the user presses the update button.
+   * Creates a new window for the user to update the selected itemm.
+   * 
+   * @param oldItem (TOItem) selected item to be updated
+   * @return void
    * @author Dimitri Christopoulos
    */
   private void makeUpdateWindow(TOItem oldItem) {
