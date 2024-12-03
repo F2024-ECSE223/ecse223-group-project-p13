@@ -8,7 +8,7 @@ As the parent / school admin, I want to get an order from the system
       | dad@gmail.com |     1234 | John |     1234567 |
     Given the following grade entities exist in the system
       | level |
-      |   5th |
+      |   5th |the following bundle item entities exist in the system
       |   6th |
     Given the following student entities exist in the system
       | name  | gradeLevel |

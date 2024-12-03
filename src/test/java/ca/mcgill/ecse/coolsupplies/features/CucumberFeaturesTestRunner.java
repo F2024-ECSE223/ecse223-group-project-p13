@@ -18,7 +18,7 @@ import io.cucumber.junit.CucumberOptions;
   "src/test/resources/UpdateStudent.feature",
   "src/test/resources/DeleteStudent.feature",
   "src/test/resources/GetStudent.feature",
-  
+  // 
   // Feature 3
   "src/test/resources/AddItem.feature",
   "src/test/resources/UpdateItem.feature",
@@ -50,9 +50,8 @@ import io.cucumber.junit.CucumberOptions;
   "src/test/resources/UpdateGrade.feature",
 
   // Iteration3
-  // "src/test/resources/GetOrder.feature",
-  // "src/test/resources/ProcessOrder.feature"
-  
+  "src/test/resources/GetOrder.feature",
+  "src/test/resources/ProcessOrder.feature"
 },
     glue = "ca.mcgill.ecse.coolsupplies.features")
 public class CucumberFeaturesTestRunner {

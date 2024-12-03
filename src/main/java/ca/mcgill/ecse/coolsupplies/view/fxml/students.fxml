@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="652.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.StudentManagementView">
+   <children>
+      <TableView fx:id="tableView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="652.0" VBox.vgrow="ALWAYS">
+         <columns>
+            <TableColumn id="columnName" fx:id="columnName" prefWidth="157.59998166561127" text="Name" />
+            <TableColumn id="columnGrade" fx:id="columnGrade" minWidth="-Infinity" prefWidth="176.800048828125" text="Grade" />
+            <TableColumn fx:id="parent" prefWidth="139.20001220703125" text="Parent" />
+            <TableColumn id="columnAction" fx:id="columnActions" minWidth="-Infinity" prefWidth="176.00003051757812" text="Actions" />
+         </columns>
+      </TableView>
+      <HBox alignment="CENTER_LEFT" prefHeight="146.0" prefWidth="642.0" spacing="10.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="53.0" text="Name:" HBox.hgrow="ALWAYS" />
+            <TextField id="nameInput" fx:id="nameInput">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="64.0" text="Grade: " HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+            <ComboBox id="gradeInputCombo" fx:id="gradeInput" prefWidth="150.0" />
+            <Button id="addButton" fx:id="addButton" mnemonicParsing="false" onAction="#AddStudent" prefHeight="26.0" prefWidth="56.0" text="Add">
+               <HBox.margin>
+                  <Insets left="80.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+      <AnchorPane prefHeight="62.0" prefWidth="652.0">
+         <children>
+            <Label fx:id="errorLabel" alignment="CENTER" layoutY="13.0" prefHeight="18.0" prefWidth="652.0" textFill="#fc0000" />
+         </children>
+      </AnchorPane>
+   </children>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
+</VBox>

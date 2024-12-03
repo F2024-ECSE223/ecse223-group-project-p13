@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.model.*;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 public class CoolSuppliesFeatureSet1Controller {
   /**
@@ -16,27 +17,34 @@ public class CoolSuppliesFeatureSet1Controller {
    **/
   public static String updateAdmin(String password) {
     // checking for lower and upper case
-    boolean hasLower = false;
-    boolean hasUpper = false;
+    try {
+      boolean hasLower = false;
+     boolean hasUpper = false;
 
-    for (char c : password.toCharArray()) {
-      if (Character.isLowerCase(c)) {
-        hasLower = true;
+      for (char c : password.toCharArray()) {
+        if (Character.isLowerCase(c)) {
+          hasLower = true;
+        }
+        if (Character.isUpperCase(c)) {
+          hasUpper = true;
+        }
       }
-      if (Character.isUpperCase(c)) {
-        hasUpper = true;
-      }
-    }
 
-    if (password.length() < 4) {
-      return "Password must be at least four characters long.";
-    } else if (!(password.contains("!") || password.contains("#") || password.contains("$"))
-        || !hasLower || !hasUpper) {
-      return "Password must contain a special character out of !#$, an upper case character, and a lower case character.";
-    } else if (!CoolSuppliesApplication.getCoolSupplies().hasAdmin()) {
-      return "The admin does not exist.";
+      if (password.length() < 4) {
+        return "Password must be at least four characters long.";
+      } else if (!(password.contains("!") || password.contains("#") || password.contains("$"))
+          || !hasLower || !hasUpper) {
+        return "Password must contain a special character out of !#$, an upper case character, and a lower case character.";
+      } else if (!CoolSuppliesApplication.getCoolSupplies().hasAdmin()) {
+        return "The admin does not exist.";
+      }
+      CoolSuppliesApplication.getCoolSupplies().getAdmin().setPassword(password);
+
+      //autosave
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
     }
-    CoolSuppliesApplication.getCoolSupplies().getAdmin().setPassword(password);
     return "";
   }
 
@@ -51,26 +59,33 @@ public class CoolSuppliesFeatureSet1Controller {
    * @return String: the exit status message corresponding to the right situation.
    **/
   public static String addParent(String email, String password, String name, int phoneNumber) {
-    if (User.hasWithEmail(email)) {
-      return "The email must be unique.";
-    } else if (email.contains(" ")) {
-      return "The email must not contain spaces.";
-    } else if (email == null || email.equals("")) {
-      return "The email must not be empty.";
-    } else if (email.equals("admin@cool.ca")) {
-      return "The email must not be admin@cool.ca.";
-    } else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@")
-        || email.indexOf("@") >= (email.lastIndexOf(".") - 1)
-        || email.lastIndexOf(".") >= (email.length() - 1)) {
-      return "The email must be well-formed.";
-    } else if (name == null || name.equals("")) {
-      return "The name must not be empty.";
-    } else if (password == null || password.equals("")) {
-      return "The password must not be empty.";
-    } else if (phoneNumber <= 999999 || phoneNumber >= 10000000) {
-      return "The phone number must be seven digits.";
+    try {
+      if (User.hasWithEmail(email)) {
+        return "The email must be unique.";
+      } else if (email.contains(" ")) {
+        return "The email must not contain spaces.";
+      } else if (email == null || email.equals("")) {
+        return "The email must not be empty.";
+      } else if (email.equals("admin@cool.ca")) {
+        return "The email must not be admin@cool.ca.";
+      } else if (email.indexOf("@") <= 0 || email.indexOf("@") != email.lastIndexOf("@")
+          || email.indexOf("@") >= (email.lastIndexOf(".") - 1)
+          || email.lastIndexOf(".") >= (email.length() - 1)) {
+        return "The email must be well-formed.";
+      } else if (name == null || name.equals("")) {
+        return "The name must not be empty.";
+      } else if (password == null || password.equals("")) {
+        return "The password must not be empty.";
+      } else if (phoneNumber <= 999999 || phoneNumber >= 10000000) {
+        return "The phone number must be seven digits.";
+      }
+      new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
+
+      //autosave
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
     }
-    new Parent(email, password, name, phoneNumber, CoolSuppliesApplication.getCoolSupplies());
     return "";
   }
 
@@ -85,29 +100,32 @@ public class CoolSuppliesFeatureSet1Controller {
    * @param newPhoneNumber: an integer corresponding to the parent's new phone number
    * @return String: the exit status message corresponding to the right situation.
    **/
-  public static String updateParent(String email, String newPassword, String newName,
-                                    int newPhoneNumber) {
-
-    // checking all constraints of the parent's attributes
-    if (newName == null || newName.equals("")){
-      return "The name must not be empty.";
-    } else if (newPassword == null || newPassword.equals("")) {
-      return "The password must not be empty.";
-    } else if (newPhoneNumber <= 999999 || newPhoneNumber >= 10000000) {
-      return "The phone number must be seven digits.";
-    } else if (!User.hasWithEmail(email)) {
-      return "The parent does not exist.";
-    }
-
-    // finding the Parent withing the Parents list and setting the attributes
-    for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
-      if (parent.getEmail().equals(email)) {
-        parent.setName(newName);
-        parent.setPassword(newPassword);
-        parent.setPhoneNumber(newPhoneNumber);
+  public static String updateParent(String email, String newPassword, String newName, int newPhoneNumber) {
+    try {
+      // checking all constraints of the parent's attributes
+      if (newName == null || newName.equals("")){
+        return "The name must not be empty.";
+      } else if (newPassword == null || newPassword.equals("")) {
+        return "The password must not be empty.";
+      } else if (newPhoneNumber <= 999999 || newPhoneNumber >= 10000000) {
+        return "The phone number must be seven digits.";
+      } else if (!User.hasWithEmail(email)) {
+        return "The parent does not exist.";
       }
-    }
 
+      // finding the Parent withing the Parents list and setting the attributes
+      for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
+        if (parent.getEmail().equals(email)) {
+          parent.setName(newName);
+          parent.setPassword(newPassword);
+          parent.setPhoneNumber(newPhoneNumber);
+        }
+      }  
+      //autosave
+      CoolSuppliesPersistence.save();
+    } catch (RuntimeException e) {
+      return e.getMessage();
+    }
     return "";
   }
 
@@ -119,15 +137,21 @@ public class CoolSuppliesFeatureSet1Controller {
    * @return String: the exit status message corresponding to the right situation.
    **/
   public static String deleteParent(String email) {
-    for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
-      if (parent.getEmail().equals(email)) {
-        parent.delete();
-        return "";
+    try {
+      for (Parent parent : CoolSuppliesApplication.getCoolSupplies().getParents()) {
+        if (parent.getEmail().equals(email)) {
+          parent.delete();
+          //autosave
+          CoolSuppliesPersistence.save();
+          return "";
+        }
       }
+      return "The parent does not exist.";
+    } catch (RuntimeException e) {
+      return e.getMessage();
     }
-
-    return "The parent does not exist.";
   }
+
 
   /**
    * This method creates the transfer object, TO, for a certain parent of a given email

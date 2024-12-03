@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse.coolsupplies.model.Grade;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
+import ca.mcgill.ecse.coolsupplies.persistence.CoolSuppliesPersistence;
 
 public class CoolSuppliesFeatureSet7Controller {
   /**
@@ -18,8 +19,11 @@ public class CoolSuppliesFeatureSet7Controller {
    if (!level.equals("")) {
     try {
       new Grade(level,CoolSuppliesApplication.getCoolSupplies());
+      //autosave
+      CoolSuppliesPersistence.save();
     } catch (RuntimeException e) {
       if (e.getMessage().equals("Cannot create due to duplicate level. See https://manual.umple.org?RE003ViolationofUniqueness.html")) return "The level must be unique.";
+      else return e.getMessage();
     }
     return "";
    } else return "The level must not be empty.";
@@ -38,6 +42,12 @@ public class CoolSuppliesFeatureSet7Controller {
     if (!newLevel.equals("")){
       if (Grade.getWithLevel(level) != null) {
         if (!Grade.getWithLevel(level).setLevel(newLevel)) return "The level must be unique.";
+        try {
+          //autosave
+          CoolSuppliesPersistence.save();
+        } catch (RuntimeException e) {
+          return e.getMessage();
+        }
         return "";
       } else return "The grade does not exist.";
     }
@@ -55,6 +65,12 @@ public class CoolSuppliesFeatureSet7Controller {
     if (!level.equals("")) {
       if (Grade.getWithLevel(level) != null) {
         Grade.getWithLevel(level).delete();
+        try {
+          //autosave
+          CoolSuppliesPersistence.save();
+        } catch (RuntimeException e) {
+          return e.getMessage();
+        }
         return "";
       } else return "The grade does not exist.";
       
