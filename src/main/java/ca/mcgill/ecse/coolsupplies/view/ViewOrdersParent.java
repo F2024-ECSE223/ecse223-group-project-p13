@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet6Controller;
@@ -65,6 +66,14 @@ public class ViewOrdersParent {
   private final Map<String, SimpleStringProperty> statusMap = new HashMap<>();
   private final Map<String, SimpleBooleanProperty> orderChanged = new HashMap<>();
 
+
+  /**
+   * initializes the table view for the orders of the parent and makes sure only the buttons for legal actions are visible 
+   * @author Nil Akkurt 
+   * @author Trevor Piltch 
+   * @return void 
+   * @param none 
+   */
   @FXML
   private void initialize() {
     orderNo.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -122,6 +131,7 @@ public class ViewOrdersParent {
               || order.getStatus().equalsIgnoreCase("paid"));
 
           viewButton.setOnAction(event -> {
+            fetchOrders(parents.getValue());
             ViewOrdersParent.order = getTableView().getItems().get(getIndex());
             CoolSuppliesFxmlView.newWindow("ParentViewIndividualOrder.fxml", "Order");
           });
@@ -148,6 +158,7 @@ public class ViewOrdersParent {
           changed.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
               status.set(order.getNumber());
+
             }
           });
         }
@@ -171,6 +182,11 @@ public class ViewOrdersParent {
 
 
   /**
+   * Create new window to pay for an order (not penalized)
+   * Handles functionality of payment: enter auth code, check for error handling, then remove from table if successful
+   * 
+   * @param pendingOrder (TOOrder) order to be paid by the parent
+   * @return void
    * @author Dimitri Christopoulos
    */
   private void paymentWindow(TOOrder pendingOrder) {
@@ -231,7 +247,12 @@ public class ViewOrdersParent {
     dialog.show();
   }
 
-  /*
+  /**
+   * Create window to pay for a penalized order.
+   * Handles logic to handle the payment: enter auth code, enter late auth code, error handling, then delet order from table if successful
+   * 
+   * @param latePendingOrder (TOOrder) penalized order to be paid by the parent
+   * @return void
    * @author Dimitri Christopoulos
    */
   private void latePaymentWindow(TOOrder latePendingOrder) {

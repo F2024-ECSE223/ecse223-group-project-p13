@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import ca.mcgill.ecse.coolsupplies.controller.TOBundleItem;
 import java.util.stream.Collectors;
@@ -96,7 +97,12 @@ public class ParentIndividualOrderController {
             double totalPrice = Double.parseDouble(cellData.getValue().getPrice());
             int quantity = Integer.parseInt(cellData.getValue().getQuantity());
             String unitPrice = quantity > 0 ? String.format("$%.2f", totalPrice / quantity) : "$0.00";
-            return new SimpleStringProperty(unitPrice);
+            SimpleStringProperty price = new SimpleStringProperty(unitPrice);
+            price.addListener((observable, oldValue, newValue) -> {
+                System.out.println("Listener triggered");
+                this.initialize();
+            });
+            return price;
         });
 
         quantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
@@ -139,6 +145,7 @@ public class ParentIndividualOrderController {
 
         // Set up the editOrder button action
         editOrder.setOnAction(e -> {
+            ((Stage) editOrder.getScene().getWindow()).close();
             CoolSuppliesFxmlView.newWindow("AddItem.fxml", "Edit Order");
         });
     }
