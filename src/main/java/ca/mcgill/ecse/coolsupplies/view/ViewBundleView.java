@@ -40,6 +40,14 @@ public class ViewBundleView {
 
     private ObservableList<TOGradeBundle> bundleList = FXCollections.observableArrayList();
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * This method initializes the view by setting up table columns, adding action buttons,
+    * refreshing the table, and styling the "new bundle" button.
+    * 
+    * @return void
+    */
     @FXML
     public void initialize() {
         bundleName.setCellValueFactory(
@@ -56,6 +64,15 @@ public class ViewBundleView {
         this.newBundles.getStyleClass().add(Styles.SUCCESS);
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Opens a new window to add a bundle. Passes the current ViewBundleView instance 
+    * to the AddBundleController for context.
+    * 
+    * @param event The action event triggered by the user clicking the "new bundle" button.
+    * @return void
+    */
     @FXML
     public void newBundle(ActionEvent event) {
         try {
@@ -79,11 +96,18 @@ public class ViewBundleView {
             displayError("Failed to open the new bundle page: " + e.getMessage());
             e.printStackTrace();
         }
-
     }
 
-   private void addActionButtonToTable() {
-    editButton.setCellFactory(param -> new TableCell<TOGradeBundle, Void>() {
+    /**
+    * @author Edouard Dupont
+    * 
+    * Adds an "Edit" button to each row in the table. Clicking the button opens a new
+    * window to edit the selected bundle.
+    * 
+    * @return void
+    */
+    private void addActionButtonToTable() {
+        editButton.setCellFactory(param -> new TableCell<TOGradeBundle, Void>() {
         private final Button editButton = new Button("Edit");
         {
             editButton.setPrefWidth(80);
@@ -96,8 +120,7 @@ public class ViewBundleView {
                 TOGradeBundle bundle = getTableView().getItems().get(getIndex());
                 try {
                     // Load the FXML file
-                    FXMLLoader loader =
-                            new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/EditBundle.fxml"));
                     Parent root = loader.load();
 
                     // Get the controller instance
@@ -132,20 +155,40 @@ public class ViewBundleView {
                 setGraphic(editButton);
             }
         }
-    });
-    
+    });  
 }
 
-    // Method to display error messages
+    /**
+    * @author Edouard Dupont
+    * 
+    * Displays an error message in the error label.
+    * 
+    * @param message The error message to be displayed.
+    * @return void
+    */
     private void displayError(String message) {
         errorLabel.setText(message);
     }
 
-    // Method to clear error messages
+    /**
+    * @author Edouard Dupont
+    * 
+    * Clears the error message from the error label.
+    * 
+    * @return void
+    */
     private void clearError() {
         errorLabel.setText("");
     }
 
+    /**
+    * @author Edouard Dupont
+    * 
+    * Refreshes the bundle table by retrieving all bundles, updating discounts where necessary,
+    * and ensuring the table displays the latest data.
+    * 
+    * @return void
+    */
     public void refreshTable() {
         // Get all bundles
         List<TOGradeBundle> allBundles = CoolSuppliesFeatureSet4Controller.getBundles();
