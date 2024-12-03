@@ -94,10 +94,12 @@ public class ItemViewController {
   @FXML
   private void addButtonsColumn() {
     item_options_column.setCellFactory(col -> new TableCell<>() {
+      // make buttons
       private final Button updateButton = new Button("Update");
       private final Button deleteButton = new Button("Delete");
       private final HBox buttons = new HBox(10, updateButton, deleteButton);
 
+      // update and delete button press logic
       {
         buttons.setPadding(new Insets(4, 0, 4, 0));
         updateButton.getStyleClass().add(Styles.BUTTON_OUTLINED);
@@ -141,10 +143,11 @@ public class ItemViewController {
   @FXML
   public void addItemClicked(ActionEvent event) {
 
+    // Get user input
     String newName = new_item_name_text_field.getText();
     String newPrice = new_price_text_field.getText();
 
-    
+    // Error handling and success handling
     String addMessage = CoolSuppliesFeatureSet3Controller.addItem(newName, Integer.parseInt(newPrice));
     if (addMessage.isEmpty()) {
       new_item_name_text_field.setText("Item name");
