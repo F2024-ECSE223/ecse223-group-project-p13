@@ -65,6 +65,14 @@ public class ViewOrdersParent {
   private final Map<String, SimpleStringProperty> statusMap = new HashMap<>();
   private final Map<String, SimpleBooleanProperty> orderChanged = new HashMap<>();
 
+
+  /**
+   * initializes the table view for the orders of the parent and makes sure only the buttons for legal actions are visible 
+   * @author Nil Akkurt 
+   * @author Trevor Piltch 
+   * @return void 
+   * @param none 
+   */
   @FXML
   private void initialize() {
     orderNo.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -122,6 +130,7 @@ public class ViewOrdersParent {
               || order.getStatus().equalsIgnoreCase("paid"));
 
           viewButton.setOnAction(event -> {
+            fetchOrders(parents.getValue());
             ViewOrdersParent.order = getTableView().getItems().get(getIndex());
             CoolSuppliesFxmlView.newWindow("ParentViewIndividualOrder.fxml", "Order");
           });
@@ -148,6 +157,7 @@ public class ViewOrdersParent {
           changed.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
               status.set(order.getNumber());
+
             }
           });
         }

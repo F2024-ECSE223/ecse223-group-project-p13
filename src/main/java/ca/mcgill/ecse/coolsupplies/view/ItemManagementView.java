@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -174,6 +174,7 @@ public class ItemManagementView {
                 RadioButton selectedButton = (RadioButton) newToggle;
                 String newOrderLevel = selectedButton.getText();
                 handleOrderLevelChange(newOrderLevel);
+                updateBundle();
             }
         });
     }

@@ -32,6 +32,15 @@ public class ViewOrdersAdmin {
 
   private static TOOrder selectedOrder = null;
 
+
+  /**
+   * initializes the table view for all the orders in the system with its details in cells 
+   *  and makes sure that only the buttons for the legal actions are visible, sets up the linking of viewing individual order pages
+   * @author Nil Akkurt 
+   * @author Trevor Piltch 
+   * @return void 
+   * @param none 
+   */
   @FXML
   private void initialize() {
     orderNo.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -99,10 +108,23 @@ public class ViewOrdersAdmin {
       });
     });
   }
+  /**
+   * helper method that loads all the order transfer obejcts into the table
+   * @author Trevor Piltch 
+   * @return void 
+   * @param none 
+   */
 
   private void fetchOrders() {
     ordersTable.setItems(FXCollections.observableArrayList(Iteration3Controller.viewAllOrders()));
   }
+
+  /**
+   * helper method that helps keep track of which order's buttons has been clicked on 
+   * @author Trevor Piltch 
+   * @param none
+   * @return TOOrder selectedorder
+   */
 
   public static TOOrder getOrder() {
     return selectedOrder;
