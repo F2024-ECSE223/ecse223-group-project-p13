@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-//import javafx.scene.image.Image;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableCell;
@@ -40,7 +39,7 @@ public class GradeManagerView {
   /**
   * @author Kenny-Alexander Joseph
   * @return void
-  * This method initializes the grade management for the admin user.
+  * This method initializes the grade management view for the admin user.
   */
   @FXML
   public void initialize() {
@@ -68,11 +67,9 @@ public class GradeManagerView {
               dialog.setTitle("Update Grade");
               dialog.setHeaderText("Update Grade Name");
               dialog.setContentText("Please enter the new grade name:");
-              //if we want to change picture: dialog.getDialogPane().setGraphic(new ImageView(new Image("icon.png")));
-
               Optional<String> result = dialog.showAndWait();
+              
               result.ifPresent(newGrade -> {
-                //call controller
                 String error = CoolSuppliesFeatureSet7Controller.updateGrade(grade.getLevel(),newGrade);
                 
                 if (!error.equals("")) {
@@ -81,9 +78,7 @@ public class GradeManagerView {
                   pause.setOnFinished(wait -> errorLabel.setText(""));
                   pause.play();
                 } else {              
-                  //delete old gradeTO
                   gradeList.remove(grade);
-                  //add new gradeTO
                   TOGrade newGradeTO = new TOGrade(newGrade);
                   gradeList.add(newGradeTO);
                 }
@@ -115,7 +110,13 @@ public class GradeManagerView {
     grade_pane.setItems(gradeList);
     };
 
-  // Event Listener on Button[#addGradeNameButton].onAction
+  // 
+  /**
+  * @author Kenny-Alexander Joseph
+  * @param event action event
+  * @return void
+  * Event Listener on Button[#addGradeNameButton].onAction, This method adds the specfied grade in the text field to the list of grades when the Add button is pressed.
+  */
   @FXML
   public void addGradeNameButton(ActionEvent event) {
     String grade = addGradeNameTextField.getText();
