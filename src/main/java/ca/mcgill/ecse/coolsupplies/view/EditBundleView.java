@@ -448,6 +448,11 @@ public class EditBundleView {
 
     }
 
+    /**
+     * @author Nil Akkurt
+     * @param message - The message to show
+     * @brief Shows an alert with the given message
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);

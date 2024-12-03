@@ -314,6 +314,10 @@ public class ViewOrdersParent {
     ordersTable.setItems(parentOrders);
   }
 
+  /**
+   * @author Trevor Piltch
+   * @brief Creates the new order view and links it to the controller and the current view
+   */
   private void addNewOrder() {
     Stage dialog = new Stage();
     dialog.setTitle("New Order");
@@ -346,6 +350,10 @@ public class ViewOrdersParent {
 
   }
 
+  /**
+   * @author Trevor Piltch
+   * @return The selected order from the table
+   */
   public static TOOrder getOrder() {
     return order;
   }

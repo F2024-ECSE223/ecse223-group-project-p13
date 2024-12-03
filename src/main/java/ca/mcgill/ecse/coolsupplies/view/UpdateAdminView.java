@@ -2,12 +2,7 @@ package ca.mcgill.ecse.coolsupplies.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
-
-import java.awt.event.ActionEvent;
-import java.util.Objects;
 import atlantafx.base.theme.Styles;
 
 public class UpdateAdminView {

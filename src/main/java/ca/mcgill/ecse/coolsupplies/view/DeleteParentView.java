@@ -1,17 +1,12 @@
 package ca.mcgill.ecse.coolsupplies.view;
 
-import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import ca.mcgill.ecse.coolsupplies.controller.CoolSuppliesFeatureSet1Controller;
-
 import ca.mcgill.ecse.coolsupplies.controller.TOParent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.awt.event.ActionEvent;
 import atlantafx.base.theme.Styles;
 
 public class DeleteParentView {
