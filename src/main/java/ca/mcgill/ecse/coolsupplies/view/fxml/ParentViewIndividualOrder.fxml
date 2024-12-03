@@ -57,10 +57,11 @@
       </HBox>
       <HBox prefHeight="298.0" prefWidth="600.0">
          <children>
-            <TableView fx:id="item_table" prefHeight="212.0" prefWidth="507.0">
+            <TableView fx:id="item_table" prefHeight="257.0" prefWidth="508.0">
                <columns>
-                  <TableColumn fx:id="name_col" prefWidth="267.0" text="Name" />
-                  <TableColumn fx:id="price_col" prefWidth="122.0" text="Price" />
+                  <TableColumn fx:id="name_col" prefWidth="123.20001220703125" text="Name" />
+                  <TableColumn fx:id="price_col" prefWidth="138.4000244140625" text="Price" />
+                  <TableColumn fx:id="quantity_col" prefWidth="128.8" text="Quantity" />
                </columns>
             </TableView>
             <TableView fx:id="bundle_table" prefHeight="292.0" prefWidth="600.0">

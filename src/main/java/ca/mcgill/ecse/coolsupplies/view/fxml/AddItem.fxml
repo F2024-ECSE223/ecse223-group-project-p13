@@ -77,9 +77,9 @@
             <AnchorPane layoutX="88.0" layoutY="258.0" minWidth="-Infinity" prefHeight="35.0" prefWidth="600.0" />
             <TableView fx:id="TableViewItems" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="258.0" prefWidth="834.0">
               <columns>
+                <TableColumn fx:id="columnName" prefWidth="356.7999694943428" text="Name" />
                 <TableColumn fx:id="columnPrice" prefWidth="268.0000305175781" text="Price" />
                   <TableColumn fx:id="columnQuantity" prefWidth="207.99993896484375" text="Quantity" />
-                <TableColumn fx:id="columnName" prefWidth="356.7999694943428" text="Name" />
               </columns>
             </TableView>
             <Button fx:id="Save" layoutX="740.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleSaveButtonAction" prefHeight="26.0" prefWidth="63.0" text="Save" AnchorPane.bottomAnchor="4.0" />
