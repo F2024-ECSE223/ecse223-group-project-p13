@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="793.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ViewOrdersAdmin">
+    <children>
+        <Label fx:id="errorLabel" layoutX="158.0" layoutY="452.0" />
+        <TableView fx:id="ordersTable" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="647.0" prefWidth="791.0" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="orderNo" text="Number" />
+                <TableColumn fx:id="orderParent" prefWidth="117.59998321533203" text="Parent" />
+                <TableColumn fx:id="orderStudent" prefWidth="108.79998779296875" text="Student" />
+                <TableColumn fx:id="dateOrdered" minWidth="-Infinity" prefWidth="127.20001220703125" text="Date" />
+                <TableColumn fx:id="orderStatus" prefWidth="131.99993896484375" text="Status" />
+                <TableColumn fx:id="actionColumn" prefWidth="230.39990234375" text="Actions" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

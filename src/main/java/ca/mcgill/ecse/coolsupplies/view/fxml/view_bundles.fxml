@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.ViewBundleView">
+   <children>
+      <HBox spacing="16" HBox.hgrow="ALWAYS">
+         <Label layoutX="43.0" layoutY="36.0" prefHeight="43.0" prefWidth="177.0" text="All Bundles">
+            <font>
+               <Font  size="26.0" />
+            </font>
+         </Label>
+         <Region HBox.hgrow="ALWAYS" />
+         <Button id="newBundles" fx:id="newBundles" layoutX="406.0" layoutY="25.0" mnemonicParsing="false" onAction="#newBundle" text="Add">
+            <font>
+               <Font  size="18.0" />
+            </font>
+         </Button>
+      </HBox>
+         <TableView fx:id="bundlesTable" prefHeight="262.0" prefWidth="540.0">
+            <columns>
+               <TableColumn id="bundleName" fx:id="bundleName" prefWidth="126.5" text="Bundle Name" />
+               <TableColumn id="bundleGrade" fx:id="bundleGrade" prefWidth="144.0" text="Bundle Grade" />
+               <TableColumn id="discount" fx:id="discount" prefWidth="141.0" text="Discount" />
+               <TableColumn id="editButton" fx:id="editButton" prefWidth="127.5" text="Edit" />
+            </columns>
+         </TableView>
+      <Label id="errorLabel" textFill="#fc0000" />
+   </children>
+</VBox>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="929.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.coolsupplies.view.DeleteParentView">
+   <children>
+      <AnchorPane prefHeight="505.0" prefWidth="930.0">
+         <children>
+            <Separator layoutY="55.0" prefHeight="2.0" prefWidth="929.0" />
+            <Label alignment="CENTER" layoutX="293.0" layoutY="7.0" prefHeight="31.0" prefWidth="343.0" text="View Parents">
+               <font>
+                  <Font name="Rockwell" size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="errorMessageRemoveParent" layoutX="272.0" layoutY="359.0" textFill="#d91919">
+               <font>
+                  <Font name="Rockwell" size="22.0" />
+               </font>
+            </Label>
+            <TableView fx:id="tableViewRemoveParent" layoutX="35.0" layoutY="90.0" prefHeight="455.0" prefWidth="869.0">
+              <columns>
+                  <TableColumn fx:id="nameRemoveParent" prefWidth="197.60004425048828" text="Name" />
+                <TableColumn fx:id="parentEmailRemoveParent" prefWidth="359.9999694824219" text="Parent Email" />
+                <TableColumn fx:id="removeRemoveParent" prefWidth="279.199951171875" text="Remove " />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
