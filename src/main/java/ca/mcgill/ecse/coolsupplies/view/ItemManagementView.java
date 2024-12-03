@@ -540,13 +540,10 @@ public class ItemManagementView {
 
     @FXML
     private void handleSaveButtonAction() {
-        Event.fireEvent(Save.getScene().getRoot(), new Event(CoolSuppliesFxmlView.EDIT_BUNDLE));
-        System.out.println("Firing event");
         // Perform any necessary save operations here
         // For example, you might validate inputs or finalize changes
 
         // Close the pop-up window
-        ViewOrdersParent.order = Iteration3Controller.viewOrder(orderNumber);
         Stage stage = (Stage) Save.getScene().getWindow();
         stage.close();
     }

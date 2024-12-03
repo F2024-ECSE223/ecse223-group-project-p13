@@ -122,6 +122,7 @@ public class ViewOrdersParent {
               || order.getStatus().equalsIgnoreCase("paid"));
 
           viewButton.setOnAction(event -> {
+            fetchOrders(parents.getValue());
             ViewOrdersParent.order = getTableView().getItems().get(getIndex());
             CoolSuppliesFxmlView.newWindow("ParentViewIndividualOrder.fxml", "Order");
           });
@@ -148,6 +149,7 @@ public class ViewOrdersParent {
           changed.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
               status.set(order.getNumber());
+
             }
           });
         }
