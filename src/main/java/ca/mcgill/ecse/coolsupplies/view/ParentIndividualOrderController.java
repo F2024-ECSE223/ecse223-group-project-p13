@@ -125,7 +125,7 @@ public class ParentIndividualOrderController {
                         .filter(item -> item.getGradeBundle() != null && item.getGradeBundle().equals(orderitem.getGradeBundle()))
                         .count();
 
-                    bundleTitle.setText("(" + bundleCount + ") Bundle " + orderitem.getGradeBundle() + "    Discount: $" + orderitem.getDiscount());
+                    bundleTitle.setText("(" + bundleCount + ") Bundle " + orderitem.getGradeBundle() + "    Discount: " + orderitem.getDiscount() + "%");
                     bundleWasSet = true;
                 }
                 bundleItemList.addAll(

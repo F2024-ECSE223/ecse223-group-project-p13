@@ -44,11 +44,6 @@ public class RegisterParentView {
         String email = emailRegisterParent.getText();
         String phoneNumberString = phoneRegisterParent.getText();
         
-        // NECESSARY ? THE PARENT ALWAYS INPUTS NUMBER IN DEMO
-        /*if(phoneNumberString.isEmpty()){
-            errorMessageRegisterParent.setText("The phone number must not be empty.");
-        }*/
-
         int phoneNumber = Integer.parseInt(phoneNumberString);
         String name = nameRegisterParent.getText();
         String password = passwordRegisterParent.getText();
