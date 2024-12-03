@@ -46,6 +46,8 @@ public class ParentIndividualOrderController {
   @FXML
   private TableColumn<TOOrderItem, String> price_col;
   @FXML
+  private TableColumn<TOOrderItem, String> quantity_col;
+  @FXML
   private Label bundleTitle;
   @FXML
   private TableColumn<TOBundleItem, String> bundleName_col;
@@ -79,7 +81,7 @@ public class ParentIndividualOrderController {
         // Set the visibility of the editOrder button based on the order's status
         editOrder.setVisible("Started".equalsIgnoreCase(order.getStatus()));
 
-        // Rest of your initialization code...
+        
         date_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
         level_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLevel()));
         parent_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getParentEmail()));
@@ -91,7 +93,9 @@ public class ParentIndividualOrderController {
 
         name_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         price_col.setCellValueFactory(cellData -> new SimpleStringProperty("$" + String.valueOf(cellData.getValue().getPrice())));
-
+        
+        quantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
+        
         bundleName_col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getItemName()));
         bundleQuantity_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
         bundleLevel_col.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLevel())));
@@ -106,7 +110,11 @@ public class ParentIndividualOrderController {
                 individualItemList.add(orderitem);
             } else {
                 if (!bundleWasSet) {
-                    bundleTitle.setText("Bundle: " + orderitem.getGradeBundle() + "    Discount: $" + orderitem.getDiscount());
+                    int bundleCount = (int) order.getItems().stream()
+                        .filter(item -> item.getGradeBundle() != null && item.getGradeBundle().equals(orderitem.getGradeBundle()))
+                        .count();
+
+                    bundleTitle.setText("Bundle ("+bundleCount + "): " + orderitem.getGradeBundle() + "    Discount: $" + orderitem.getDiscount());
                     bundleWasSet = true;
                 }
                 bundleItemList.addAll(
