@@ -30,6 +30,11 @@ public abstract class ManagerView {
   private ImageView imageView = new ImageView();
   public StringProperty schoolYear = new SimpleStringProperty("Start School Year");
 
+  /**
+   * @author Trevor Piltch
+   * @return The sidebar as a VBox
+   * @brief Creates a sidebar with the given tabs and menubar (dependent on the instance)
+   */
   public VBox createSidebar() {
     VBox sidebar = new VBox(10);
     sidebar.setPadding(new Insets(10));
@@ -51,10 +56,21 @@ public abstract class ManagerView {
     return sidebar;
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param signOut - The signout function 
+   * @brief Sets the sign out function for this view. Created because the manager views need some way of telling the application to signout. Without using 
+   * singletons or rearchitecting the dependecy layers, this was an easy workaround I found.
+   */
   public void setSignOut(Function<Void, Void> signOut) {
     this.signOut = signOut;
   }
 
+ /**
+ * @author Trevor Piltch
+ * @return The header view as an HBox
+ * @brief Creates the header for the sidebar
+ */
  private VBox createHeader() {
     VBox header = new VBox(10);
     header.setPadding(new Insets(15));
@@ -82,6 +98,13 @@ public abstract class ManagerView {
     return header;
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param text The button name
+   * @return A button that triggers the instance function to set the view on the main page
+   * @brief Creates a button using the given text to trigger an action given by the instances. Special case for starting the school year the 
+   * application should launch an alert and this should be a different style
+   */
   private Button createNavButton(String text) {
     if (text.equals(AdminManagerView.YEAR)) {
       AdminManagerView.schoolYearButton = new Button(schoolYear.get());
@@ -103,10 +126,24 @@ public abstract class ManagerView {
     return button;
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param page - The page to add
+   * @brief Abstract representation of the method to update the view in the main page
+   */
   abstract void updateContent(String page);
 
+  /**
+   * @author Trevor Piltch
+   * @return Array of strings representing the tabs
+   * @brief Returns an array of strings representing all the tabs to add in the sidebar
+   */
   abstract String[] getTabs();
 
+  /**
+   * @author Trevor Piltch
+   * @brief Creates the menu bar (dark mode + signout) for the manager views
+   */
   private void createMenubar() {
     HBox box = new HBox(16);
     box.setPadding(new Insets(16, 16, 16, 16));
@@ -145,6 +182,11 @@ public abstract class ManagerView {
     this.root.setTop(box);
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param fxml - The path to the FXML file to add to the main page
+   * @brief Helper method to set the view in the main page to that of the fxml file
+   */
   public void setMain(String fxml) {
     try {
       FXMLLoader loader = new FXMLLoader();

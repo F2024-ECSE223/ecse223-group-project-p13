@@ -72,7 +72,8 @@ public class ParentStudentView {
 
   /**
    * @author Trevor Piltch
-   * Create the header view to select the parent from a drop down and update internal state
+   * @return The dropdown list for selecting a parent as an HBox
+   * @brief Create the header view to select the parent from a drop down and update internal state
    */
   private HBox selectParent() {
     HBox header = new HBox();

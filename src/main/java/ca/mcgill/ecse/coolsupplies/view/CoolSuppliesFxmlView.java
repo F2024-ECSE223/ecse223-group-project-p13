@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,9 +16,6 @@ import atlantafx.base.theme.PrimerLight;
 import atlantafx.base.theme.Styles;
 import ca.mcgill.ecse.coolsupplies.application.CoolSuppliesApplication;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
@@ -43,7 +38,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -71,6 +65,11 @@ public class CoolSuppliesFxmlView extends Application {
   public static final Image darkIcon =
       new Image(CoolSuppliesFxmlView.class.getResourceAsStream("resources/icon_dark.png"));
 
+  /**
+   * @author Trevor Piltch
+   * @param primaryStage - The main page of the app
+   * @breif Creates the application with the given styles
+   */
   @Override
   public void start(Stage primaryStage) {
     Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
@@ -166,6 +165,11 @@ public class CoolSuppliesFxmlView extends Application {
     root.setCenter(mainContent);
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param source - The source of the button push
+   * @biref Updates the view depending on which button the user pushed
+   */
   private void updateTab(String source) {
     if (source.equalsIgnoreCase("parent")) {
       parentManager = new ParentManagerView(root, mainContent);
@@ -210,6 +214,7 @@ public class CoolSuppliesFxmlView extends Application {
   }
 
   /* MARK: Helper Methods */
+  // Following methods were created in the tutorial...
   public void registerRefreshEvent(Node node) {
     refreshableNodes.add(node);
   }
@@ -251,6 +256,12 @@ public class CoolSuppliesFxmlView extends Application {
     }
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param path - The path of the svg icon resource
+   * @return An SVGPath representing the given icon
+   * @brief Loads the file from the given path and converts the contents into an SVGPath (basically an image for the buttons in JavaFX)
+   */
   public static SVGPath getIcon(String path) {
     try {
       InputStream inputStream = CoolSuppliesFxmlView.class.getResourceAsStream(path);
@@ -280,6 +291,11 @@ public class CoolSuppliesFxmlView extends Application {
     return null;
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param err - The error message to display
+   * @brief Opens a new alert in the application displaying the error message
+   */
   public static void handleErr(String err) {
     if (!err.isEmpty()) {
       System.out.println("ERROR: " + err);
@@ -290,6 +306,12 @@ public class CoolSuppliesFxmlView extends Application {
     }
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param fxml - The FXML file to load
+   * @param title - The title of the window
+   * @brief Creates a new window from the given fxml file and title.
+   */
   public static void newWindow(String fxml, String title) {
     try {
         FXMLLoader loader = new FXMLLoader(CoolSuppliesFxmlView.class.getResource("fxml/" + fxml));
@@ -307,24 +329,4 @@ public class CoolSuppliesFxmlView extends Application {
         System.out.println("Error showing new window: " + e.getLocalizedMessage());
     }
   }
-
-  public static Stage newWindowStage(String fxml, String title) {
-    Stage stage = null;
-    try {
-        FXMLLoader loader = new FXMLLoader(CoolSuppliesFxmlView.class.getResource("fxml/" + fxml));
-        Parent root = loader.load();
-
-        stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(new Scene(root));
-        stage.show();
-    } catch (IOException e) {
-        e.printStackTrace();
-        System.out.println("Error loading FXML file: " + e.getLocalizedMessage());
-    } catch (Exception e) {
-        e.printStackTrace();
-        System.out.println("Error showing new window: " + e.getLocalizedMessage());
-    }
-    return stage;
-}
 }

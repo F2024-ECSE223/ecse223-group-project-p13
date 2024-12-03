@@ -9,11 +9,22 @@ public class ParentManagerView extends ManagerView {
   public static final String ORDERS = "Orders";
   public static final String STUDENTS = "Students";
 
+  /**
+   * @author Trevor Piltch
+   * @param root - The root page to link this view to 
+   * @param mainContent - The main page to add this view to 
+   * @brief Initialize this manager view
+   */
   public ParentManagerView(BorderPane root, StackPane mainContent) {
     this.root = root;
     this.mainContent = mainContent;
   }
 
+  /**
+   * @author Trevor Piltch
+   * @param page - The page triggering the update
+   * @brief Changes the main page depending on which button was pressed
+   */
   @Override
   public void updateContent(String page) {
     mainContent.getChildren().clear();
@@ -39,6 +50,11 @@ public class ParentManagerView extends ManagerView {
   }
 
 
+  /**
+   * @author Trevor Piltch
+   * @return Array of strings representing the tabs
+   * @brief Returns an array of strings representing the tabs in the sidebar
+   */
   @Override
   public String[] getTabs() {
     return new String[]{ACCOUNT, ORDERS, STUDENTS};
